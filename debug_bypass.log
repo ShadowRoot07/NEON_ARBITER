@@ -189,3 +189,21 @@
 2026-05-09 23:37:09.998 | DEBUG    | src.api.groq_client:consultar:100 - Modelo: llama-3.1-8b-instant | Agente: SPICA
 2026-05-09 23:37:09.999 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (26868 chars). Recortando a 9000...
 2026-05-09 23:37:15.399 | WARNING  | src.logic.architect_core:procesar_instruccion:48 - Sintaxis JSON compleja detectada. Iniciando modo rescate.
+2026-05-09 23:47:56.242 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 23:47:56.255 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:86 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-09 23:47:56.318 | DEBUG    | src.api.groq_client:consultar:100 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-09 23:47:56.319 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (37365 chars). Recortando a 9000...
+2026-05-09 23:48:01.046 | WARNING  | src.logic.architect_core:procesar_instruccion:48 - Sintaxis JSON compleja detectada. Iniciando modo rescate.
+2026-05-09 23:52:46.122 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 23:52:46.124 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:86 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-09 23:52:46.175 | DEBUG    | src.api.groq_client:consultar:100 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-09 23:52:46.177 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (42529 chars). Recortando a 9000...
+2026-05-09 23:54:01.089 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 23:54:01.092 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:86 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-09 23:54:01.130 | DEBUG    | src.api.groq_client:consultar:100 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-09 23:54:01.131 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (45225 chars). Recortando a 9000...
+2026-05-09 23:55:41.194 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 23:55:41.197 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:86 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-09 23:55:41.234 | DEBUG    | src.api.groq_client:consultar:100 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-09 23:55:41.235 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (44347 chars). Recortando a 9000...
+2026-05-09 23:55:45.921 | WARNING  | src.logic.architect_core:procesar_instruccion:48 - Sintaxis JSON compleja detectada. Iniciando modo rescate.
