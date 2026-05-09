@@ -21,3 +21,171 @@
 2026-05-09 05:32:55.144 | DEBUG    | src.api.groq_client:consultar:87 - Modelo: llama-3.3-70b-versatile | Agente: SPICA
 2026-05-09 05:32:59.965 | SUCCESS  | src.tui.chat:shadow_background_process:376 - 🧠 SPICA: Hecho registrado: has creado en este proyecto hasta ahora ok, recuerda que es unbproyecto de trading que posiblemente duremos desarrollando un mes.
 2026-05-09 05:34:01.825 | INFO     | src.database.manager:shutdown:143 - 📁 DATABASE: Conexiones duales liberadas.
+2026-05-09 05:43:40.358 | DEBUG    | src.tui.app:__init__:51 - ⚙️ APP CONTEXT: Operando en /data/data/com.termux/files/home/BIG-Projects/NEON_ARBITER
+2026-05-09 05:43:40.455 | WARNING  | src.utils.ascii_loader:get_art:16 - Glifo visual no encontrado: splash
+2026-05-09 05:43:58.405 | DEBUG    | src.logic.identity_matrix:validar_acceso:221 - 🧪 [TRACE] Llave Combinada: M1ND...5742
+2026-05-09 05:43:58.406 | DEBUG    | src.logic.identity_matrix:validar_acceso:222 - 🧪 [TRACE] Hash Generado: 1b9976e7a6...
+2026-05-09 05:43:58.408 | DEBUG    | src.logic.identity_matrix:validar_acceso:223 - 🧪 [TRACE] Hash en DB:    1b9976e7a6...
+2026-05-09 05:43:58.410 | SUCCESS  | src.logic.identity_matrix:validar_acceso:228 - ✅ [SAP]: Ritual exitoso.
+2026-05-09 05:44:03.550 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 05:47:44.080 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 05:47:46.143 | DEBUG    | src.api.groq_client:consultar:87 - Modelo: llama-3.3-70b-versatile | Agente: SPICA
+2026-05-09 05:49:16.013 | INFO     | src.database.manager:shutdown:143 - 📁 DATABASE: Conexiones duales liberadas.
+2026-05-09 05:49:30.705 | DEBUG    | src.tui.app:__init__:51 - ⚙️ APP CONTEXT: Operando en /data/data/com.termux/files/home/BIG-Projects/NEON_ARBITER
+2026-05-09 05:49:30.797 | WARNING  | src.utils.ascii_loader:get_art:16 - Glifo visual no encontrado: splash
+2026-05-09 05:49:42.830 | DEBUG    | src.logic.identity_matrix:validar_acceso:221 - 🧪 [TRACE] Llave Combinada: M1ND...5742
+2026-05-09 05:49:42.832 | DEBUG    | src.logic.identity_matrix:validar_acceso:222 - 🧪 [TRACE] Hash Generado: 1b9976e7a6...
+2026-05-09 05:49:42.834 | DEBUG    | src.logic.identity_matrix:validar_acceso:223 - 🧪 [TRACE] Hash en DB:    1b9976e7a6...
+2026-05-09 05:49:42.836 | SUCCESS  | src.logic.identity_matrix:validar_acceso:228 - ✅ [SAP]: Ritual exitoso.
+2026-05-09 05:51:01.361 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 05:51:45.554 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 05:51:46.643 | DEBUG    | src.api.groq_client:consultar:87 - Modelo: llama-3.3-70b-versatile | Agente: SPICA
+2026-05-09 05:53:34.051 | INFO     | src.database.manager:shutdown:143 - 📁 DATABASE: Conexiones duales liberadas.
+2026-05-09 05:53:48.030 | DEBUG    | src.tui.app:__init__:51 - ⚙️ APP CONTEXT: Operando en /data/data/com.termux/files/home/BIG-Projects/NEON_ARBITER
+2026-05-09 05:53:48.118 | WARNING  | src.utils.ascii_loader:get_art:16 - Glifo visual no encontrado: splash
+2026-05-09 05:54:04.630 | DEBUG    | src.logic.identity_matrix:validar_acceso:221 - 🧪 [TRACE] Llave Combinada: M1ND...5742
+2026-05-09 05:54:04.631 | DEBUG    | src.logic.identity_matrix:validar_acceso:222 - 🧪 [TRACE] Hash Generado: 1b9976e7a6...
+2026-05-09 05:54:04.633 | DEBUG    | src.logic.identity_matrix:validar_acceso:223 - 🧪 [TRACE] Hash en DB:    1b9976e7a6...
+2026-05-09 05:54:04.635 | SUCCESS  | src.logic.identity_matrix:validar_acceso:228 - ✅ [SAP]: Ritual exitoso.
+2026-05-09 05:54:09.769 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 05:54:40.526 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 05:54:41.954 | DEBUG    | src.api.groq_client:consultar:87 - Modelo: llama-3.3-70b-versatile | Agente: SPICA
+2026-05-09 05:55:25.054 | INFO     | src.database.manager:shutdown:143 - 📁 DATABASE: Conexiones duales liberadas.
+2026-05-09 05:55:37.636 | DEBUG    | src.tui.app:__init__:51 - ⚙️ APP CONTEXT: Operando en /data/data/com.termux/files/home/BIG-Projects/NEON_ARBITER
+2026-05-09 05:55:37.718 | WARNING  | src.utils.ascii_loader:get_art:16 - Glifo visual no encontrado: splash
+2026-05-09 05:55:49.051 | DEBUG    | src.logic.identity_matrix:validar_acceso:221 - 🧪 [TRACE] Llave Combinada: M1ND...5742
+2026-05-09 05:55:49.052 | DEBUG    | src.logic.identity_matrix:validar_acceso:222 - 🧪 [TRACE] Hash Generado: 1b9976e7a6...
+2026-05-09 05:55:49.054 | DEBUG    | src.logic.identity_matrix:validar_acceso:223 - 🧪 [TRACE] Hash en DB:    1b9976e7a6...
+2026-05-09 05:55:49.055 | SUCCESS  | src.logic.identity_matrix:validar_acceso:228 - ✅ [SAP]: Ritual exitoso.
+2026-05-09 05:55:52.805 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 05:56:04.394 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 05:56:05.448 | DEBUG    | src.api.groq_client:consultar:87 - Modelo: llama-3.3-70b-versatile | Agente: SPICA
+2026-05-09 05:56:35.803 | INFO     | src.database.manager:shutdown:143 - 📁 DATABASE: Conexiones duales liberadas.
+2026-05-09 05:57:58.995 | DEBUG    | src.tui.app:__init__:51 - ⚙️ APP CONTEXT: Operando en /data/data/com.termux/files/home/BIG-Projects/NEON_ARBITER
+2026-05-09 05:57:59.082 | WARNING  | src.utils.ascii_loader:get_art:16 - Glifo visual no encontrado: splash
+2026-05-09 05:58:20.644 | DEBUG    | src.logic.identity_matrix:validar_acceso:221 - 🧪 [TRACE] Llave Combinada: M1ND...5742
+2026-05-09 05:58:20.646 | DEBUG    | src.logic.identity_matrix:validar_acceso:222 - 🧪 [TRACE] Hash Generado: 1b9976e7a6...
+2026-05-09 05:58:20.648 | DEBUG    | src.logic.identity_matrix:validar_acceso:223 - 🧪 [TRACE] Hash en DB:    1b9976e7a6...
+2026-05-09 05:58:20.650 | SUCCESS  | src.logic.identity_matrix:validar_acceso:228 - ✅ [SAP]: Ritual exitoso.
+2026-05-09 05:58:26.311 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 05:58:38.359 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 05:58:39.352 | DEBUG    | src.api.groq_client:consultar:87 - Modelo: llama-3.3-70b-versatile | Agente: SPICA
+2026-05-09 05:59:25.906 | INFO     | src.database.manager:shutdown:143 - 📁 DATABASE: Conexiones duales liberadas.
+2026-05-09 15:30:53.247 | DEBUG    | src.tui.app:__init__:51 - ⚙️ APP CONTEXT: Operando en /data/data/com.termux/files/home/BIG-Projects/NEON_ARBITER
+2026-05-09 15:30:53.340 | WARNING  | src.utils.ascii_loader:get_art:16 - Glifo visual no encontrado: splash
+2026-05-09 15:31:06.287 | DEBUG    | src.logic.identity_matrix:validar_acceso:221 - 🧪 [TRACE] Llave Combinada: M1ND...5742
+2026-05-09 15:31:06.289 | DEBUG    | src.logic.identity_matrix:validar_acceso:222 - 🧪 [TRACE] Hash Generado: 1b9976e7a6...
+2026-05-09 15:31:06.292 | DEBUG    | src.logic.identity_matrix:validar_acceso:223 - 🧪 [TRACE] Hash en DB:    1b9976e7a6...
+2026-05-09 15:31:06.293 | SUCCESS  | src.logic.identity_matrix:validar_acceso:228 - ✅ [SAP]: Ritual exitoso.
+2026-05-09 15:31:30.139 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 15:31:47.115 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 15:31:49.821 | DEBUG    | src.api.groq_client:consultar:95 - Modelo: llama-3.3-70b-versatile | Agente: SPICA
+2026-05-09 15:32:02.357 | INFO     | src.logic.architect_core:__init__:12 - 🏗️ Base del Grimorio: /data/data/com.termux/files/home/BIG-Projects/SHADOW_GRIMORIO
+2026-05-09 15:36:52.920 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 15:36:54.649 | DEBUG    | src.api.groq_client:consultar:95 - Modelo: llama-3.3-70b-versatile | Agente: SPICA
+2026-05-09 15:42:41.617 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 15:42:43.555 | DEBUG    | src.api.groq_client:consultar:95 - Modelo: llama-3.3-70b-versatile | Agente: SPICA
+2026-05-09 15:54:19.581 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 15:54:21.066 | DEBUG    | src.api.groq_client:consultar:95 - Modelo: llama-3.3-70b-versatile | Agente: SPICA
+2026-05-09 15:54:21.067 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (24459 chars). Recortando a 18000...
+2026-05-09 16:00:55.648 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 16:00:57.192 | DEBUG    | src.api.groq_client:consultar:95 - Modelo: llama-3.3-70b-versatile | Agente: SPICA
+2026-05-09 16:00:57.194 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (32929 chars). Recortando a 18000...
+2026-05-09 16:03:03.664 | INFO     | src.database.manager:shutdown:143 - 📁 DATABASE: Conexiones duales liberadas.
+2026-05-09 16:03:22.036 | DEBUG    | src.tui.app:__init__:51 - ⚙️ APP CONTEXT: Operando en /data/data/com.termux/files/home/BIG-Projects/NEON_ARBITER
+2026-05-09 16:03:22.146 | WARNING  | src.utils.ascii_loader:get_art:16 - Glifo visual no encontrado: splash
+2026-05-09 16:03:36.939 | DEBUG    | src.logic.identity_matrix:validar_acceso:221 - 🧪 [TRACE] Llave Combinada: M1ND...5742
+2026-05-09 16:03:36.941 | DEBUG    | src.logic.identity_matrix:validar_acceso:222 - 🧪 [TRACE] Hash Generado: 1b9976e7a6...
+2026-05-09 16:03:36.942 | DEBUG    | src.logic.identity_matrix:validar_acceso:223 - 🧪 [TRACE] Hash en DB:    1b9976e7a6...
+2026-05-09 16:03:36.944 | SUCCESS  | src.logic.identity_matrix:validar_acceso:228 - ✅ [SAP]: Ritual exitoso.
+2026-05-09 16:03:46.137 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 16:03:57.642 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 16:03:59.116 | DEBUG    | src.api.groq_client:consultar:95 - Modelo: llama-3.3-70b-versatile | Agente: SPICA
+2026-05-09 16:03:59.118 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (32929 chars). Recortando a 18000...
+2026-05-09 16:04:25.214 | INFO     | src.database.manager:shutdown:143 - 📁 DATABASE: Conexiones duales liberadas.
+2026-05-09 16:21:45.630 | DEBUG    | src.tui.app:__init__:51 - ⚙️ APP CONTEXT: Operando en /data/data/com.termux/files/home/BIG-Projects/NEON_ARBITER
+2026-05-09 16:21:45.714 | WARNING  | src.utils.ascii_loader:get_art:16 - Glifo visual no encontrado: splash
+2026-05-09 16:21:56.576 | DEBUG    | src.logic.identity_matrix:validar_acceso:221 - 🧪 [TRACE] Llave Combinada: M1ND...5742
+2026-05-09 16:21:56.578 | DEBUG    | src.logic.identity_matrix:validar_acceso:222 - 🧪 [TRACE] Hash Generado: 1b9976e7a6...
+2026-05-09 16:21:56.580 | DEBUG    | src.logic.identity_matrix:validar_acceso:223 - 🧪 [TRACE] Hash en DB:    1b9976e7a6...
+2026-05-09 16:21:56.582 | SUCCESS  | src.logic.identity_matrix:validar_acceso:228 - ✅ [SAP]: Ritual exitoso.
+2026-05-09 16:22:01.233 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 16:22:53.019 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 16:22:53.523 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:87 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-09 16:22:53.580 | DEBUG    | src.api.groq_client:consultar:101 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-09 16:22:53.582 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (32827 chars). Recortando a 12000...
+2026-05-09 16:22:56.737 | INFO     | src.logic.architect_core:__init__:12 - 🏗️ Base del Grimorio: /data/data/com.termux/files/home/BIG-Projects/SHADOW_GRIMORIO
+2026-05-09 16:24:35.216 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 16:24:35.720 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:87 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-09 16:24:35.770 | DEBUG    | src.api.groq_client:consultar:101 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-09 16:24:35.772 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (32851 chars). Recortando a 12000...
+2026-05-09 16:29:53.148 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 16:29:53.653 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:87 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-09 16:29:53.695 | DEBUG    | src.api.groq_client:consultar:101 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-09 16:29:53.697 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (31852 chars). Recortando a 12000...
+2026-05-09 16:30:00.634 | ERROR    | src.logic.architect_core:procesar_instruccion:75 - Error de sintaxis JSON: Invalid control character at: line 6 column 239 (char 1098)
+2026-05-09 16:42:31.327 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 16:42:31.852 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:87 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-09 16:42:31.908 | DEBUG    | src.api.groq_client:consultar:101 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-09 16:42:31.910 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (37031 chars). Recortando a 12000...
+2026-05-09 16:54:21.981 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 16:54:22.485 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:87 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-09 16:54:22.551 | DEBUG    | src.api.groq_client:consultar:101 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-09 16:54:22.552 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (35453 chars). Recortando a 12000...
+2026-05-09 16:54:25.040 | ERROR    | src.api.groq_client:consultar:161 - ❌ Error inesperado: 413
+2026-05-09 16:54:25.045 | INFO     | src.api.groq_client:consultar:122 - ⏳ Reintento 1/3. Esperando 4s...
+2026-05-09 16:54:29.447 | ERROR    | src.api.groq_client:consultar:161 - ❌ Error inesperado: 413
+2026-05-09 16:54:29.453 | INFO     | src.api.groq_client:consultar:122 - ⏳ Reintento 2/3. Esperando 8s...
+2026-05-09 16:54:37.863 | ERROR    | src.api.groq_client:consultar:161 - ❌ Error inesperado: 413
+2026-05-09 16:56:43.560 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 16:56:44.065 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:87 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-09 16:56:44.110 | DEBUG    | src.api.groq_client:consultar:101 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-09 16:56:44.112 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (46215 chars). Recortando a 12000...
+2026-05-09 16:56:49.783 | ERROR    | src.api.groq_client:consultar:161 - ❌ Error inesperado: 413
+2026-05-09 16:56:49.790 | INFO     | src.api.groq_client:consultar:122 - ⏳ Reintento 1/3. Esperando 4s...
+2026-05-09 16:57:09.012 | ERROR    | src.api.groq_client:consultar:161 - ❌ Error inesperado: 413
+2026-05-09 16:57:09.016 | INFO     | src.api.groq_client:consultar:122 - ⏳ Reintento 2/3. Esperando 8s...
+2026-05-09 16:57:23.587 | ERROR    | src.api.groq_client:consultar:161 - ❌ Error inesperado: 413
+2026-05-09 16:57:45.576 | INFO     | src.database.manager:shutdown:143 - 📁 DATABASE: Conexiones duales liberadas.
+2026-05-09 16:59:33.325 | DEBUG    | src.tui.app:__init__:51 - ⚙️ APP CONTEXT: Operando en /data/data/com.termux/files/home/BIG-Projects/NEON_ARBITER
+2026-05-09 16:59:33.407 | WARNING  | src.utils.ascii_loader:get_art:16 - Glifo visual no encontrado: splash
+2026-05-09 16:59:46.906 | DEBUG    | src.logic.identity_matrix:validar_acceso:221 - 🧪 [TRACE] Llave Combinada: M1ND...5742
+2026-05-09 16:59:46.908 | DEBUG    | src.logic.identity_matrix:validar_acceso:222 - 🧪 [TRACE] Hash Generado: 1b9976e7a6...
+2026-05-09 16:59:46.911 | DEBUG    | src.logic.identity_matrix:validar_acceso:223 - 🧪 [TRACE] Hash en DB:    1b9976e7a6...
+2026-05-09 16:59:46.913 | SUCCESS  | src.logic.identity_matrix:validar_acceso:228 - ✅ [SAP]: Ritual exitoso.
+2026-05-09 16:59:51.522 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 17:01:14.045 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 17:01:14.549 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:87 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-09 17:01:14.623 | DEBUG    | src.api.groq_client:consultar:101 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-09 17:01:14.624 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (51767 chars). Recortando a 12000...
+2026-05-09 17:01:17.165 | ERROR    | src.api.groq_client:consultar:161 - ❌ Error inesperado: 413
+2026-05-09 17:01:17.170 | INFO     | src.api.groq_client:consultar:122 - ⏳ Reintento 1/3. Esperando 4s...
+2026-05-09 17:01:21.558 | ERROR    | src.api.groq_client:consultar:161 - ❌ Error inesperado: 413
+2026-05-09 17:01:21.565 | INFO     | src.api.groq_client:consultar:122 - ⏳ Reintento 2/3. Esperando 8s...
+2026-05-09 17:01:30.115 | ERROR    | src.api.groq_client:consultar:161 - ❌ Error inesperado: 413
+2026-05-09 17:01:30.233 | INFO     | src.logic.architect_core:__init__:12 - 🏗️ Base del Grimorio: /data/data/com.termux/files/home/BIG-Projects/SHADOW_GRIMORIO
+2026-05-09 17:01:47.829 | INFO     | src.database.manager:shutdown:143 - 📁 DATABASE: Conexiones duales liberadas.
+2026-05-09 17:02:01.901 | DEBUG    | src.tui.app:__init__:51 - ⚙️ APP CONTEXT: Operando en /data/data/com.termux/files/home/BIG-Projects/NEON_ARBITER
+2026-05-09 17:02:01.979 | WARNING  | src.utils.ascii_loader:get_art:16 - Glifo visual no encontrado: splash
+2026-05-09 17:02:14.180 | INFO     | src.database.manager:shutdown:143 - 📁 DATABASE: Conexiones duales liberadas.
+2026-05-09 23:27:15.794 | DEBUG    | src.tui.app:__init__:51 - ⚙️ APP CONTEXT: Operando en /data/data/com.termux/files/home/BIG-Projects/NEON_ARBITER
+2026-05-09 23:27:15.890 | WARNING  | src.utils.ascii_loader:get_art:16 - Glifo visual no encontrado: splash
+2026-05-09 23:27:27.087 | DEBUG    | src.logic.identity_matrix:validar_acceso:221 - 🧪 [TRACE] Llave Combinada: M1ND...5742
+2026-05-09 23:27:27.089 | DEBUG    | src.logic.identity_matrix:validar_acceso:222 - 🧪 [TRACE] Hash Generado: 1b9976e7a6...
+2026-05-09 23:27:27.091 | DEBUG    | src.logic.identity_matrix:validar_acceso:223 - 🧪 [TRACE] Hash en DB:    1b9976e7a6...
+2026-05-09 23:27:27.093 | SUCCESS  | src.logic.identity_matrix:validar_acceso:228 - ✅ [SAP]: Ritual exitoso.
+2026-05-09 23:27:33.056 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 23:29:25.110 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 23:29:25.113 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:86 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-09 23:29:25.188 | DEBUG    | src.api.groq_client:consultar:100 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-09 23:29:25.189 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (16290 chars). Recortando a 9000...
+2026-05-09 23:29:28.966 | INFO     | src.logic.architect_core:__init__:12 - 🏗️ Base del Grimorio: /data/data/com.termux/files/home/BIG-Projects/SHADOW_GRIMORIO
+2026-05-09 23:32:34.320 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 23:32:34.322 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:86 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-09 23:32:34.364 | DEBUG    | src.api.groq_client:consultar:100 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-09 23:32:34.366 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (19782 chars). Recortando a 9000...
+2026-05-09 23:37:09.958 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-09 23:37:09.960 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:86 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-09 23:37:09.998 | DEBUG    | src.api.groq_client:consultar:100 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-09 23:37:09.999 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (26868 chars). Recortando a 9000...
+2026-05-09 23:37:15.399 | WARNING  | src.logic.architect_core:procesar_instruccion:48 - Sintaxis JSON compleja detectada. Iniciando modo rescate.
