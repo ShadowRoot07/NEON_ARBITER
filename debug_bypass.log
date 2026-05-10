@@ -207,3 +207,29 @@
 2026-05-09 23:55:41.234 | DEBUG    | src.api.groq_client:consultar:100 - Modelo: llama-3.1-8b-instant | Agente: SPICA
 2026-05-09 23:55:41.235 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (44347 chars). Recortando a 9000...
 2026-05-09 23:55:45.921 | WARNING  | src.logic.architect_core:procesar_instruccion:48 - Sintaxis JSON compleja detectada. Iniciando modo rescate.
+2026-05-10 00:03:31.809 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-10 00:03:31.811 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:86 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-10 00:03:31.846 | DEBUG    | src.api.groq_client:consultar:100 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-10 00:03:31.848 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (38992 chars). Recortando a 9000...
+2026-05-10 00:03:33.859 | ERROR    | src.api.groq_client:consultar:164 - 📡 Fallo de conexión en Termux: Cannot connect to host api.groq.com:443 ssl:default [No address associated with hostname]
+2026-05-10 00:03:33.862 | INFO     | src.api.groq_client:consultar:121 - ⏳ Reintento 1/3. Esperando 4s...
+2026-05-10 00:03:37.878 | ERROR    | src.api.groq_client:consultar:164 - 📡 Fallo de conexión en Termux: Cannot connect to host api.groq.com:443 ssl:default [No address associated with hostname]
+2026-05-10 00:03:37.883 | INFO     | src.api.groq_client:consultar:121 - ⏳ Reintento 2/3. Esperando 8s...
+2026-05-10 00:03:45.899 | ERROR    | src.api.groq_client:consultar:164 - 📡 Fallo de conexión en Termux: Cannot connect to host api.groq.com:443 ssl:default [No address associated with hostname]
+2026-05-10 00:04:44.430 | INFO     | src.database.manager:shutdown:143 - 📁 DATABASE: Conexiones duales liberadas.
+2026-05-10 16:59:57.306 | DEBUG    | src.tui.app:__init__:51 - ⚙️ APP CONTEXT: Operando en /data/data/com.termux/files/home/BIG-Projects/NEON_ARBITER
+2026-05-10 16:59:57.400 | WARNING  | src.utils.ascii_loader:get_art:16 - Glifo visual no encontrado: splash
+2026-05-10 17:00:27.137 | DEBUG    | src.logic.identity_matrix:validar_acceso:221 - 🧪 [TRACE] Llave Combinada: M1ND...5742
+2026-05-10 17:00:27.139 | DEBUG    | src.logic.identity_matrix:validar_acceso:222 - 🧪 [TRACE] Hash Generado: 1b9976e7a6...
+2026-05-10 17:00:27.141 | DEBUG    | src.logic.identity_matrix:validar_acceso:223 - 🧪 [TRACE] Hash en DB:    1b9976e7a6...
+2026-05-10 17:00:27.143 | SUCCESS  | src.logic.identity_matrix:validar_acceso:228 - ✅ [SAP]: Ritual exitoso.
+2026-05-10 17:00:38.977 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-10 17:03:05.792 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-10 17:03:05.795 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:86 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-10 17:03:05.867 | DEBUG    | src.api.groq_client:consultar:100 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-10 17:03:05.868 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (28242 chars). Recortando a 9000...
+2026-05-10 17:03:10.823 | INFO     | src.logic.architect_core:__init__:12 - 🏗️ Base del Grimorio: /data/data/com.termux/files/home/BIG-Projects/SHADOW_GRIMORIO
+2026-05-10 17:07:35.222 | WARNING  | src.api.groq_client:_cargar_llave:25 - ⚠️ GROQ_CLIENT: Llave no encontrada en Bóveda. Usando respaldo de Config.
+2026-05-10 17:07:35.224 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:86 - Error de red al listar modelos: name 'payload' is not defined
+2026-05-10 17:07:35.286 | DEBUG    | src.api.groq_client:consultar:100 - Modelo: llama-3.1-8b-instant | Agente: SPICA
+2026-05-10 17:07:35.288 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (26324 chars). Recortando a 9000...
