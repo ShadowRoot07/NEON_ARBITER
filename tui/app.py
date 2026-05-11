@@ -1,54 +1,51 @@
 from textual.app import App, ComposeResult
-from textual.widgets import Header, Static
-from textual.containers import Container
-
-class LogWidget(Static):
-    """Widget para mostrar los logs del bot."""
-    log_content = ""
-
-    def on_mount(self) -> None:
-        self.update(self.log_content if self.log_content else "Esperando logs...")
+from textual.widgets import Header, Footer, RichLog, Static
+from textual.containers import Container, Vertical
 
 class NeonHeader(Static):
-    """Encabezado con estilo Cyberpunk."""
+    """Encabezado Cyberpunk."""
     def on_mount(self) -> None:
-        self.update("NEON ARBITER")
+        self.update(" [bold #00ff00]⚡ NEON ARBITER v1.0[/bold #00ff00] | [cyan]Shadow_Grimorio Edition[/cyan] ")
 
 class NeonApp(App):
-    """Aplicación principal de la TUI."""
-    # Aquí puedes añadir tu CSS más adelante
+    """Interfaz TUI mejorada."""
     CSS = """
     Screen {
-        background: #000000;
+        background: #050505;
     }
     .header {
-        color: #0f0;
-        text-align: center;
-        text-style: bold;
+        color: #00ff00;
         background: #111;
         height: 3;
         content-align: center middle;
-        border: double #0f0;
+        border-bottom: double #00ff00;
+        margin-bottom: 1;
     }
-    .container {
+    RichLog {
+        border: solid #333;
+        background: #000;
+        color: #eee;
         padding: 1;
     }
-    LogWidget {
-        border: solid #00ff00;
-        color: #00ff00;
-        background: #050505;
-        height: 1fr;
-    }
     """
-    
-    BINDINGS = [("q", "quit", "Quit")]
+
+    BINDINGS = [("q", "quit", "Salir"), ("c", "clear", "Limpiar Logs")]
 
     def compose(self) -> ComposeResult:
         yield NeonHeader(classes="header")
-        yield Container(
-            LogWidget(),
+        yield Vertical(
+            RichLog(highlight=True, markup=True, id="main_log"),
             classes="container"
         )
+        yield Footer()
+
+    def on_mount(self) -> None:
+        log = self.query_one(RichLog)
+        log.write("[bold green]SISTEMA INICIADO...[/bold green]")
+        log.write("[blue]Conectando con Oráculo Spica...[/blue]")
+
+    def action_clear(self) -> None:
+        self.query_one(RichLog).clear()
 
 if __name__ == '__main__':
     app = NeonApp()

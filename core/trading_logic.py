@@ -6,46 +6,50 @@ class TradingLogic:
         self.test_mode = initial_test_balance is not None
         self.balance = initial_test_balance if self.test_mode else 0.0
         self.inventory = 0.0
-        self.stop_loss_pct = 0.01
-        self.take_profit_pct = 0.02
+        self.stop_loss_pct = 0.005  # 0.5% (Ajustado para scalping)
+        self.trailing_pct = 0.003   # 0.3% (Distancia del trailing)
         self.active_position = None
 
     def ejecutar_simulacion(self, precio_actual):
-        """Monitorea SL y TP automáticos."""
         if not self.active_position:
-            return None
-
-        pos = self.active_position
-        if precio_actual <= pos['sl'] or precio_actual >= pos['tp']:
-            motivo = "STOP LOSS" if precio_actual <= pos['sl'] else "TAKE PROFIT"
-            self.cerrar_posicion_test(precio_actual, motivo)
-
-    def abrir_posicion_test(self, precio):
-        if self.balance <= 0:
-            self.logger.warning("❌ Saldo insuficiente.")
             return
 
+        pos = self.active_position
+        
+        # --- Lógica de TRAILING STOP ---
+        # Si el precio sube, subimos el Stop Loss para asegurar ganancias
+        nuevo_sl_potencial = precio_actual * (1 - self.trailing_pct)
+        if nuevo_sl_potencial > pos['sl']:
+            pos['sl'] = nuevo_sl_potencial
+            # self.logger.debug(f"📈 Trailing SL subió a: ${pos['sl']:.2f}")
+
+        # Ejecución del Stop (ya sea el inicial o el movido por el trailing)
+        if precio_actual <= pos['sl']:
+            self.cerrar_posicion_test(precio_actual, "TRAILING_STOP")
+
+    def abrir_posicion_test(self, precio):
+        if self.balance <= 0: return
+        
         self.inventory = self.balance / precio
         self.balance = 0.0
         
+        # Stop Loss inicial
         sl = precio * (1 - self.stop_loss_pct)
-        tp = precio * (1 + self.take_profit_pct)
-        self.active_position = {'entry': precio, 'sl': sl, 'tp': tp}
+        self.active_position = {'entry': precio, 'sl': sl}
 
         self.logger.info(f"🛒 COMPRA: {self.inventory:.6f} BTC a ${precio:,.2f}")
-        self.logger.info(f"🛡️ NIVELES: SL: ${sl:,.2f} | TP: ${tp:,.2f}")
+        self.logger.info(f"🛡️ SL INICIAL: ${sl:,.2f} | Trailing: {self.trailing_pct*100}%")
 
     def cerrar_posicion_test(self, precio, motivo="IA"):
-        """Cierra la posición y vuelve a USD."""
         if self.inventory <= 0: return
-
         valor_venta = self.inventory * precio
-        resultado = valor_venta - (self.inventory * self.active_position['entry'])
+        pnl = valor_venta - (self.inventory * self.active_position['entry'])
         
         self.balance = valor_venta
         self.inventory = 0.0
         self.active_position = None
 
-        self.logger.info(f"✅ VENTA ({motivo}): ${precio:,.2f} | PnL: ${resultado:+.2f}")
-        self.logger.info(f"💰 SALDO VIRTUAL: ${self.balance:.2f}")
+        color = "\033[1;32m" if pnl >= 0 else "\033[1;31m"
+        self.logger.info(f"✅ VENTA ({motivo}): ${precio:,.2f} | PnL: {pnl:+.2f}")
+        print(f"{color}>>> RESULTADO: ${pnl:+.2f} ({motivo})\033[0m")
 
