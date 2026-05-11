@@ -1,13 +1,37 @@
 import numpy as np
+
 def calculate_rsi(prices, period=14):
-    delta = np.diff(prices)
-    up, down = delta.copy(), delta.copy()
-    up[up < 0] = 0
-    down[down > 0] = 0
-    roll_up = np.cumsum(up)
-    roll_down = np.cumsum(np.abs(down))
-    rs = roll_up / roll_down
-    rsi = 100.0 - (100.0 / (1.0 + rs))
-    return rsi
+    """Calcula el RSI usando la fórmula de suavizado de Welles Wilder."""
+    if len(prices) < period:
+        return 50.0 # Valor neutral si no hay suficientes datos
+    
+    deltas = np.diff(prices)
+    seed = deltas[:period+1]
+    up = seed[seed >= 0].sum() / period
+    down = -seed[seed < 0].sum() / period
+    rs = up / down
+    rsi = np.zeros_like(prices)
+    rsi[:period] = 100. - 100. / (1. + rs)
+
+    for i in range(period, len(prices)):
+        delta = deltas[i - 1]
+        if delta > 0:
+            upval = delta
+            downval = 0.
+        else:
+            upval = 0.
+            downval = -delta
+
+        up = (up * (period - 1) + upval) / period
+        down = (down * (period - 1) + downval) / period
+        rs = up / down
+        rsi[i] = 100. - 100. / (1. + rs)
+
+    return rsi[-1] # Retornamos solo el valor más reciente
+
 def calculate_moving_average(prices, period=20):
-    return np.convolve(prices, np.ones(period) / period, mode='valid')
+    """Media móvil simple optimizada."""
+    if len(prices) < period:
+        return prices[-1]
+    return np.mean(prices[-period:])
+

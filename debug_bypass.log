@@ -545,3 +545,4 @@
 2026-05-11 08:37:48.424 | ERROR    | src.api.groq_client:obtener_modelos_disponibles:86 - Error de red al listar modelos: name 'payload' is not defined
 2026-05-11 08:37:48.468 | DEBUG    | src.api.groq_client:consultar:100 - Modelo: llama-3.1-8b-instant | Agente: SPICA
 2026-05-11 08:37:48.470 | WARNING  | src.api.groq_client:_recortar_contexto:34 - ⚠️ CONTEXTO EXCESIVO (33348 chars). Recortando a 9000...
+2026-05-11 08:51:21.674 | INFO     | src.database.manager:shutdown:143 - 📁 DATABASE: Conexiones duales liberadas.
