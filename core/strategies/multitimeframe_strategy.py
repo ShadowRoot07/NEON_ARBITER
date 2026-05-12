@@ -34,8 +34,8 @@ class MultiTimeframeStrategy(BaseStrategy):
         # Filtro de seguridad: Solo compra si la confianza es alta
         # Pero permite ventas con confianza media para proteger capital
         if signal == "BUY":
-            return confidence >= 0.75
+            return confidence >= 0.60
         if signal == "SELL":
-            return confidence >= 0.50
+            return confidence >= 0.45
         return False
 

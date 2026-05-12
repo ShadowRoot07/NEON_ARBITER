@@ -13,21 +13,17 @@ logging.basicConfig(
 logger = logging.getLogger("NEON_MAIN")
 
 def main():
-    parser = argparse.ArgumentParser(description="NEON ARBITER - Bot de Trading")
+    parser = argparse.ArgumentParser(description="NEON ARBITER")
     parser.add_argument('comando', choices=['bot_on', 'bot_off', 'tui'])
-    parser.add_argument('--test', type=float, help="Activa modo prueba con saldo inicial (ej: 5.0)")
-    
-    # Manejo simple para no romper la compatibilidad con tu flujo actual
-    args, unknown = parser.parse_known_args()
+    parser.add_argument('--test', type=float)
+    parser.add_argument('--scalper', action='store_true')
+    args, _ = parser.parse_known_args()
 
     if args.comando == 'bot_on':
-        logger.info(f"Iniciando secuencia de arranque...")
-        if args.test:
-            logger.info(f"🧪 MODO TEST ACTIVO: Saldo virtual inicial ${args.test}")
-        
-        bot = Engine(test_balance=args.test)
+        # Pasamos el flag --scalper al Engine
+        bot = Engine(test_balance=args.test, is_scalper=args.scalper)
         bot.start()
-        
+
     elif args.comando == 'bot_off':
         print("Buscando proceso activo para detener...")
         os.system("pkill -f 'python main.py bot_on'")
