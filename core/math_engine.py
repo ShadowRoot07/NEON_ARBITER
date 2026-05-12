@@ -35,3 +35,16 @@ def calculate_moving_average(prices, period=20):
         return prices[-1]
     return np.mean(prices[-period:])
 
+def calcular_monto_seguro(balance_disponible, precio_activo, min_usd=11.0):
+    """
+    Calcula cuánto comprar asegurando que supere el mínimo de Binance (~10 USD).
+    Retorna la cantidad en la moneda base (ej. BTC).
+    """
+    if balance_disponible < min_usd:
+        return 0.0
+    
+    # Usamos un pequeño margen sobre el mínimo (11 USD)
+    monto_a_usar = max(min_usd, balance_disponible * 0.98) # Usar el 98% del balance o el min_usd
+    cantidad = monto_a_usar / precio_activo
+    return cantidad
+
