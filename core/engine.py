@@ -61,8 +61,7 @@ class Engine:
 
             # Limpieza de Markdown si Groq lo incluye
             if "```json" in content:
-                content = content.split("
-```json")[1].split("```")[0]
+                content = content.split("```json")[1].split("```")[0]
             
             res_json = ujson.loads(content)
 
