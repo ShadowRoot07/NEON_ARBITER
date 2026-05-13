@@ -1,33 +1,29 @@
-import statistics
+import numpy as np
+from core.math_engine import calculate_linear_regression
 
 class TrendAnalyzer:
     @staticmethod
-    def get_volatility(data):
-        """Calcula volatilidad protegida."""
-        if len(data) < 2: return 0.0
-        try:
-            # Si todos los precios son iguales, la desviación es 0
-            if len(set(data)) == 1: return 0.0
-            return statistics.stdev(data)
-        except Exception:
-            return 0.0
+    def get_market_climate(prices):
+        """
+        Clasifica el mercado en: TRENDING, RANGING o CHAOS.
+        Basado en Pendiente, R2 y Volatilidad Relativa.
+        """
+        if len(prices) < 100:
+            return "WARMING_UP"
 
-    @staticmethod
-    def identify_momentum(data):
-        """Determina la aceleración con mayor sensibilidad."""
-        if len(data) < 10: return "NEUTRAL"
-
-        recent = data[-5:]
-        older = data[-10:-5]
-
-        # Evitamos divisiones por cero o promedios vacíos
-        recent_avg = sum(recent) / len(recent)
-        older_avg = sum(older) / len(older)
-
-        diff = (recent_avg - older_avg) / older_avg if older_avg != 0 else 0
+        slope, r2 = calculate_linear_regression(prices[-100:])
         
-        # Umbral mínimo para considerar aceleración (0.01%)
-        if diff > 0.0001: return "ACCELERATING_UP"
-        if diff < -0.0001: return "ACCELERATING_DOWN"
-        return "STABLE"
+        # 1. Detectar Caos (Volatilidad explosiva)
+        recent_std = np.std(prices[-10:])
+        long_std = np.std(prices[-100:])
+        if recent_std > (long_std * 2.5):
+            return "CHAOS"
+
+        # 2. Detectar Tendencia Fuerte
+        # Si el ajuste es bueno (R2 alto) y la pendiente no es plana
+        if r2 > 0.65:
+            return "TRENDING_UP" if slope > 0 else "TRENDING_DOWN"
+
+        # 3. Detectar Rango Lateral (R2 bajo o pendiente plana)
+        return "RANGING"
 

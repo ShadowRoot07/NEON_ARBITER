@@ -38,25 +38,41 @@ class TradingLogic:
         if precio_actual <= pos['sl']:
             self.cerrar_posicion_test(precio_actual, "TRAILING_STOP")
 
-    def abrir_posicion_test(self, precio):
+    def abrir_posicion_test(self, precio, clima="RANGING"):
         # 1. Validaciones previas
         if not self.can_trade():
             self.logger.warning("⛔ Límite de pérdida diario alcanzado.")
             return
 
-        if self.balance < 10.0: 
-            self.logger.warning(f"💸 Balance insuficiente: ${self.balance:.2f}")
+        if self.balance < 10.0:
+            self.logger.warning(f"💸 Balance insuficiente para operar.")
             return
 
-        # 2. Cálculos de posición
-        self.inventory = self.balance / precio
-        self.active_position = {
-            'entry': precio, 
-            'sl': precio * (1 - self.stop_loss_pct)
-        }
-        self.balance = 0.0
+        # 2. Gestión de Riesgo Dinámica por Clima
+        # Si el clima es Tendencia, permitimos un SL un poco más amplio para no ser sacados por ruido
+        # Si es Rango, el SL debe ser cortísimo porque si sale del rango la tesis falló.
+        current_sl_pct = self.stop_loss_pct
+        if clima == "TRENDING_UP":
+            current_sl_pct = self.stop_loss_pct * 1.5 # Un poco más de aire
+        elif clima == "RANGING":
+            current_sl_pct = self.stop_loss_pct * 0.8 # Más ajustado
 
-        # 3. Persistencia en DB (Ahora con datos reales)
+        # 3. Cálculo de monto (Tu idea del 30% o el total si es poco)
+        monto_a_invertir = self.balance * 0.30 
+        if monto_a_invertir < 11.0: # Mínimo de Binance
+            monto_a_invertir = self.balance if self.balance >= 11.0 else 0.0
+            
+        if monto_a_invertir <= 0: return
+
+        self.inventory = monto_a_invertir / precio
+        self.active_position = {
+            'entry': precio,
+            'sl': precio * (1 - current_sl_pct),
+            'clima_origen': clima
+        }
+        self.balance -= monto_a_invertir
+
+        # 4. Registro en DB
         try:
             Session = sessionmaker(bind=db_engine)
             with Session() as session:
@@ -70,9 +86,9 @@ class TradingLogic:
                 session.add(nuevo_trade)
                 session.commit()
         except Exception as e:
-            self.logger.error(f"❌ Error al registrar compra en DB: {e}")
+            self.logger.error(f"❌ Error DB: {e}")
 
-        self.logger.info(f"🛒 EJECUTADO: {self.inventory:.6f} BTC | Costo: ${precio:,.2f}")
+        self.logger.info(f"🛒 COMPRA: {self.inventory:.6f} BTC | SL: {current_sl_pct*100:.2f}% | Clima: {clima}")
 
     def cerrar_posicion_test(self, precio, motivo="IA"):
         if self.inventory <= 0: return

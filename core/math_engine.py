@@ -50,3 +50,37 @@ def calcular_monto_seguro(balance_disponible, precio_activo, min_usd=11.0):
     cantidad = monto_a_usar / precio_activo
     return cantidad
 
+def calculate_linear_regression(prices):
+    """
+    Calcula la pendiente (slope) y el coeficiente de determinación (R^2).
+    m > 0: Tendencia Alcista | R2 > 0.7: Tendencia Fuerte.
+    """
+    if len(prices) < 10:
+        return 0.0, 0.0
+    
+    y = np.array(prices)
+    x = np.arange(len(y))
+    
+    # Cálculo de regresión lineal simple
+    slope, intercept = np.polyfit(x, y, 1)
+    
+    # Cálculo de R-Squared (Bondad de ajuste)
+    predict = slope * x + intercept
+    error_res = np.sum((y - predict) ** 2)
+    error_tot = np.sum((y - np.mean(y)) ** 2)
+    r_squared = 1 - (error_res / error_tot) if error_tot != 0 else 0
+    
+    return slope, r_squared
+
+def calculate_z_score(prices):
+    """Mide cuántas desviaciones estándar está el precio de su media."""
+    if len(prices) < 20:
+        return 0.0
+    
+    mean = np.mean(prices)
+    std = np.std(prices)
+    
+    if std == 0: return 0.0
+    
+    return (prices[-1] - mean) / std
+
