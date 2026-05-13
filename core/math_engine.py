@@ -2,9 +2,11 @@ import numpy as np
 
 def calculate_rsi(prices, period=14):
     """Calcula el RSI usando la fórmula de suavizado de Welles Wilder."""
-    if len(prices) < period:
-        return 50.0 # Valor neutral si no hay suficientes datos
+    if len(prices) <= period:
+        return 50.0
     
+    # Convertir deque a numpy array para velocidad
+    prices = np.array(prices)
     deltas = np.diff(prices)
     seed = deltas[:period+1]
     up = seed[seed >= 0].sum() / period
