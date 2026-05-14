@@ -27,3 +27,12 @@ class TrendAnalyzer:
         # 3. Detectar Rango Lateral (R2 bajo o pendiente plana)
         return "RANGING"
 
+    @staticmethod
+    def identify_momentum(prices):
+        """Calcula el momentum simple basado en las últimas velas."""
+        if len(prices) < 5:
+            return 0.0
+        # Cambio porcentual entre el precio actual y hace 5 velas
+        momentum = ((prices[-1] - prices[-5]) / prices[-5]) * 100
+        return momentum
+

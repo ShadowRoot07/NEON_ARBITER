@@ -90,38 +90,28 @@ class TradingLogic:
 
         self.logger.info(f"🛒 COMPRA: {self.inventory:.6f} BTC | SL: {current_sl_pct*100:.2f}% | Clima: {clima}")
 
-    def cerrar_posicion_test(self, precio, motivo="IA"):
-        if self.inventory <= 0: return
-        
-        valor_venta = self.inventory * precio
-        pnl = valor_venta - (self.inventory * self.active_position['entry'])
-        cantidad_vendida = self.inventory # Guardamos para el registro
+    def cerrar_posicion_test(self, precio, motivo="EXIT"):
+        if not self.active_position:
+            return
 
-        # 1. Actualizar estado interno
-        self.daily_pnl += pnl
-        self.balance = valor_venta
+        # 1. Calcular cuánto dinero recibimos por la venta
+        monto_venta = self.inventory * precio
+        
+        # 2. Calcular la ganancia o pérdida neta
+        monto_inicial = self.inventory * self.active_position['entry']
+        pnl_operacion = monto_venta - monto_inicial
+        
+        # --- EL ARREGLO CRÍTICO AQUÍ ---
+        # Sumamos el dinero de la venta al balance que ya teníamos (el 70% restante)
+        self.balance += monto_venta 
+        # -------------------------------
+
+        self.daily_pnl += pnl_operacion
         self.inventory = 0.0
         self.active_position = None
 
-        # 2. Persistencia en DB de la Venta
-        try:
-            Session = sessionmaker(bind=db_engine)
-            with Session() as session:
-                venta_trade = Trades(
-                    timestamp=datetime.now(),
-                    symbol="BTCUSDT",
-                    side="SELL",
-                    amount=cantidad_vendida,
-                    price=precio
-                )
-                session.add(venta_trade)
-                session.commit()
-        except Exception as e:
-            self.logger.error(f"❌ Error al registrar venta en DB: {e}")
-
-        color = "\033[1;32m" if pnl >= 0 else "\033[1;31m"
-        self.logger.info(f"✅ VENTA ({motivo}): ${precio:,.2f} | PnL: {pnl:+.2f}")
-        print(f"{color}>>> RESULTADO OPERACIÓN: ${pnl:+.2f} ({motivo}) | PnL Diario: {self.daily_pnl:+.2f}\033[0m")
+        self.logger.info(f"✅ VENTA ({motivo}): ${precio:,.2f} | PnL: {pnl_operacion:+.2f}")
+        print(f">>> RESULTADO OPERACIÓN: ${pnl_operacion:+.2f} ({motivo}) | PnL Diario: {self.daily_pnl:.2f}")
 
     def sincronizar_estado(self, precio_actual):
         """

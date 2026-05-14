@@ -33,7 +33,7 @@ class AlgorithmicScalper(BaseStrategy):
             "z_score": z_score,
             "price": data[-1],
             "correlation": correlation_score,
-            "momentum": self.analyzer.identify_momentum(data)
+            "momentum": TrendAnalyzer.identify_momentum(data)
         }
 
     def should_execute(self, analysis, climate):

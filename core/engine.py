@@ -74,15 +74,22 @@ class Engine:
                         if self.tick_count % 20 == 0:
                             precios_lista = list(self.price_buffer)
                             clima_actual = TrendAnalyzer.get_market_climate(precios_lista)
-                            total = self.trading.balance + (self.trading.inventory * price)
+                            
+                            # CÁLCULOS DE VALOR REAL
+                            valor_en_crypto = self.trading.inventory * price
+                            total_equity = self.trading.balance + valor_en_crypto
+                            
                             pnl_c = "\033[32m" if self.trading.daily_pnl >= 0 else "\033[31m"
                             
                             # Color para el clima
                             c_map = {"TRENDING_UP": "\033[32m", "TRENDING_DOWN": "\033[31m", "RANGING": "\033[34m", "CHAOS": "\033[33m"}
                             c_color = c_map.get(clima_actual, "\033[0m")
                             
+                            # LOG MEJORADO: Total es lo que importa, Cash es lo que sobra
                             print(f"📊 [BTC: ${price:,.2f}] Clima: {c_color}{clima_actual}\033[0m | "
-                                  f"Bal: ${total:.2f} | PnL Diar: {pnl_c}${self.trading.daily_pnl:.2f}\033[0m")
+                                  f"TOTAL: ${total_equity:.2f} | "
+                                  f"Cash: ${self.trading.balance:.2f} | "
+                                  f"PnL Diar: {pnl_c}${self.trading.daily_pnl:.2f}\033[0m")
 
                     else:
                         if symbol in self.market_buffers:

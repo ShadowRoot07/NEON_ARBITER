@@ -20,9 +20,17 @@ def main():
     args, _ = parser.parse_known_args()
 
     if args.comando == 'bot_on':
-        # Pasamos el flag --scalper al Engine
+        import asyncio
+        # Instanciamos el motor
         bot = Engine(test_balance=args.test, is_scalper=args.scalper)
-        bot.start()
+        
+        try:
+            # En lugar de bot.start(), usamos asyncio para ejecutar la tarea asíncrona
+            asyncio.run(bot.run_bot())
+        except KeyboardInterrupt:
+            logger.info("🛑 Bot detenido por el usuario (Ctrl+C).")
+        except Exception as e:
+            logger.error(f"❌ Error fatal al ejecutar el bot: {e}")
 
     elif args.comando == 'bot_off':
         print("Buscando proceso activo para detener...")
