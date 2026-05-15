@@ -18,9 +18,12 @@ class Config:
         self.max_daily_loss = 2.0  
         self.ai_history_limit = 5  
         # -----------------------------
+# En config.py
+        if not self.binance_api_key:
+            self.logger.warning("⚠️ Binance API Key faltante.")
+        elif not self.groq_api_key:
+            self.logger.warning("⚠️ Groq API Key faltante (IA desactivada).")
 
-        if not self.binance_api_key or not self.groq_api_key:
-            self.logger.warning("⚠️ API Keys incompletas.")
         else:
             self.logger.info("🔑 API Keys cargadas correctamente.")
 
