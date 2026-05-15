@@ -10,11 +10,14 @@ class Config:
         self.binance_api_key = os.environ.get('BINANCE_API_KEY')
         self.binance_api_secret = os.environ.get('BINANCE_API_SECRET')
         self.groq_api_key = os.environ.get('GROQ_API_KEY')
+        
+        # URL de Neon.tech (se toma del .env)
+        self.database_url = os.environ.get('DATABASE_URL')
 
-        # --- NUEVOS PARÁMETROS DE CONTROL ---
-        self.max_daily_loss = 2.0  # % Máximo de pérdida diaria permitido
-        self.ai_history_limit = 5  # Cuántas decisiones pasadas recuerda la IA
-        # ------------------------------------
+        # --- PARÁMETROS DE CONTROL ---
+        self.max_daily_loss = 2.0  
+        self.ai_history_limit = 5  
+        # -----------------------------
 
         if not self.binance_api_key or not self.groq_api_key:
             self.logger.warning("⚠️ API Keys incompletas.")

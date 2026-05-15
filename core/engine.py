@@ -21,7 +21,7 @@ class Engine:
 
         self.tick_count = 0
         self.price_buffer = deque(maxlen=3600)
-        self.tick_interval = 2 if is_scalper else 5 # ¡Mucho más rápido ahora!
+        self.tick_interval = 30 if not is_scalper else 2
         self.Session = sessionmaker(bind=db_engine)
 
     async def run_bot(self):
@@ -29,6 +29,9 @@ class Engine:
 
         # 1. Warm-up: Sincronización e Historial para el Clima
         self.logger.info("📡 Descargando últimas 100 velas para análisis de clima...")
+        start_time = datetime.now()
+        
+        # 1. Warm-up (Mantenemos tu lógica igual...)
         historico = await self.client.get_historical_data(symbol="BTCUSDT", limit=100)
         for p in historico: 
             self.price_buffer.append(p)
@@ -41,6 +44,19 @@ class Engine:
         while True:
             try:
                 async for data in self.client.connect():
+                    symbol = data['s_name']
+                    price = float(data['c'])
+
+                    if duration_mins:
+                        elapsed = (datetime.now() - start_time).total_seconds() / 60
+                        if elapsed >= duration_mins:
+                            self.logger.info(f"⏰ Tiempo de sesión agotado ({duration_mins} min). Guardando y saliendo...")
+                            # Persistencia final obligatoria
+                            last_price = float(data['c'])
+                            self.save_current_state(self.trading.get_total_equity(last_price))
+                            return # Esto cierra el bot limpiamente
+                    # -------------------------
+                    
                     symbol = data['s_name']
                     price = float(data['c'])
 
@@ -58,8 +74,15 @@ class Engine:
                             if self.tick_count % self.tick_interval == 0:
                                 precios_lista = list(self.price_buffer)
                                 clima = TrendAnalyzer.get_market_climate(precios_lista)
+        
+                                # FILTRO: Si el mercado está muerto, no gastamos CPU ni pedimos análisis
+                                if clima == "RANGING_DEAD":
+                                    if self.tick_count % 100 == 0: # Avisar cada tanto
+                                        self.logger.info("💤 Mercado lateral sin volatilidad. Esperando...")
+                                        continue
+
                                 analysis = self.strategy.analyze(self.price_buffer, self.market_buffers)
-                                
+
                                 if analysis:
                                     decision, confianza = self.strategy.should_execute(analysis, clima)
 
@@ -74,23 +97,21 @@ class Engine:
                         if self.tick_count % 20 == 0:
                             precios_lista = list(self.price_buffer)
                             clima_actual = TrendAnalyzer.get_market_climate(precios_lista)
+
+                            # USAR LA NUEVA FUNCIÓN DE EQUITY
+                            total_equity = self.trading.get_total_equity(price)
                             
-                            # CÁLCULOS DE VALOR REAL
-                            valor_en_crypto = self.trading.inventory * price
-                            total_equity = self.trading.balance + valor_en_crypto
-                            
+                            # PERSISTENCIA PREVENTIVA (Guardar en cada ciclo de monitor)
+                            self.save_current_state(total_equity)
+
                             pnl_c = "\033[32m" if self.trading.daily_pnl >= 0 else "\033[31m"
-                            
-                            # Color para el clima
-                            c_map = {"TRENDING_UP": "\033[32m", "TRENDING_DOWN": "\033[31m", "RANGING": "\033[34m", "CHAOS": "\033[33m"}
+                            c_map = {"TRENDING_UP": "\033[32m", "TRENDING_DOWN": "\033[31m", "RANGING": "\033[34m"}
                             c_color = c_map.get(clima_actual, "\033[0m")
-                            
-                            # LOG MEJORADO: Total es lo que importa, Cash es lo que sobra
-                            print(f"📊 [BTC: ${price:,.2f}] Clima: {c_color}{clima_actual}\033[0m | "
+
+                            print(f"📊 [{self.trading.mode}] [BTC: ${price:,.2f}] Clima: {c_color}{clima_actual}\033[0m | "
                                   f"TOTAL: ${total_equity:.2f} | "
                                   f"Cash: ${self.trading.balance:.2f} | "
                                   f"PnL Diar: {pnl_c}${self.trading.daily_pnl:.2f}\033[0m")
-
                     else:
                         if symbol in self.market_buffers:
                             self.market_buffers[symbol].append(price)
@@ -99,3 +120,14 @@ class Engine:
                 self.logger.warning(f"🔄 Reintentando conexión... Error: {e}")
                 await asyncio.sleep(5)
 
+    def save_current_state(self, total_equity):
+        """Guarda el estado en la DB para que GitHub Actions lo herede"""
+        with self.Session() as session:
+            new_state = BotState(
+                total_balance=self.trading.balance,
+                daily_pnl=self.trading.daily_pnl,
+                current_mode=self.trading.mode,
+                is_active=1
+            )
+            session.add(new_state)
+            session.commit()

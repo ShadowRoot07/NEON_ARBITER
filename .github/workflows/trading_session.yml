@@ -1,0 +1,33 @@
+name: Neon Arbiter Session
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Se ejecuta cada hora en punto
+  workflow_dispatch:      # Permite ejecutarlo manualmente desde GitHub
+
+jobs:
+  trade:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Neon Arbiter Session
+        env:
+          BINANCE_API_KEY: ${{ secrets.BINANCE_API_KEY }}
+          BINANCE_API_SECRET: ${{ secrets.BINANCE_API_SECRET }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          # Corre por 45 minutos para dejar margen de seguridad
+          python main.py bot_on --duration 45
+

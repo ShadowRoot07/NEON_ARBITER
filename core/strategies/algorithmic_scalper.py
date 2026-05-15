@@ -37,39 +37,25 @@ class AlgorithmicScalper(BaseStrategy):
         }
 
     def should_execute(self, analysis, climate):
-        """
-        Ajusta la agresividad según el clima del mercado.
-        """
-        if not analysis or climate == "CHAOS" or climate == "WARMING_UP":
+        if not analysis or climate in ["CHAOS", "WARMING_UP"]:
             return "HOLD", 0.0
 
         rsi = analysis['rsi']
         z_score = analysis['z_score']
 
-        # --- ESTRATEGIA PARA MERCADO LATERAL (RANGING) ---
-        # Basada en Reversión a la Media
-        if climate == "RANGING":
-            # Si el precio está 2 desviaciones abajo y RSI bajo, es compra probable
-            if z_score < -2.0 and rsi < 35:
-                return "BUY", 0.90
-            # Si el precio está 2 desviaciones arriba o RSI muy alto, es venta
-            if z_score > 2.0 or rsi > 70:
-                return "SELL", 0.85
-
-        # --- ESTRATEGIA PARA TENDENCIA ALCISTA (TRENDING_UP) ---
-        if climate == "TRENDING_UP":
-            # Comprar en "pullbacks" (pequeñas bajadas dentro de la subida)
-            if analysis['ma_fast'] > analysis['ma_slow'] and rsi < 50:
-                return "BUY", 0.80
-            # Venta preventiva si el RSI se dispara demasiado
-            if rsi > 75:
-                return "SELL", 0.80
-
-        # --- ESTRATEGIA PARA TENDENCIA BAJISTA (TRENDING_DOWN) ---
+        # COMPRA: Z-Score bajo (sobreventa local) + RSI recuperándose
+        if climate in ["RANGING", "TRENDING_UP"]:
+            if z_score < -2.0 and rsi < 40:
+                return "BUY", 0.85
+        
+        # VENTA: Solo vendemos si hay señales de agotamiento real
         if climate == "TRENDING_DOWN":
-            # En tendencia bajista no compramos, solo buscamos salir si estamos dentro
-            if rsi > 55:
-                return "SELL", 0.95
+            return "SELL", 0.95 # Salir rápido si la tendencia se invierte
+
+        # En RANGING o TRENDING_UP, NO vendemos por clima. 
+        # Dejamos que el TP o el Trailing SL de trading_logic hagan su trabajo.
+        if rsi > 80: # Solo venta de emergencia por sobrecompra extrema
+            return "SELL", 0.80
 
         return "HOLD", 0.0
 

@@ -18,17 +18,19 @@ def main():
     parser.add_argument('--test', type=float)
     parser.add_argument('--scalper', action='store_true')
     args, _ = parser.parse_known_args()
+    parser.add_argument('--duration', type=int, help="Duración de la sesión en minutos")
 
+# Luego, en la ejecución del bot:
     if args.comando == 'bot_on':
         import asyncio
-        # Instanciamos el motor
         bot = Engine(test_balance=args.test, is_scalper=args.scalper)
         
         try:
-            # En lugar de bot.start(), usamos asyncio para ejecutar la tarea asíncrona
-            asyncio.run(bot.run_bot())
+            # Pasamos la duración al motor
+            asyncio.run(bot.run_bot(duration_mins=args.duration))
         except KeyboardInterrupt:
-            logger.info("🛑 Bot detenido por el usuario (Ctrl+C).")
+            logger.info("🛑 Bot detenido por el usuario.")
+
         except Exception as e:
             logger.error(f"❌ Error fatal al ejecutar el bot: {e}")
 
