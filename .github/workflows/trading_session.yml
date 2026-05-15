@@ -2,11 +2,12 @@ name: Neon Arbiter Session
 
 on:
   schedule:
-    - cron: '0 * * * *' # Se ejecuta cada hora en punto
-  workflow_dispatch:      # Permite ejecutarlo manualmente desde GitHub
+    - cron: '0 * * * *'
+  workflow_dispatch:
 
 jobs:
   trade:
+    if: github.ref == 'refs/heads/main' # <--- SOLO EN MAIN
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -18,16 +19,20 @@ jobs:
           python-version: '3.13'
 
       - name: Install Dependencies
-        run: |
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Run Neon Arbiter Session
         env:
           BINANCE_API_KEY: ${{ secrets.BINANCE_API_KEY }}
           BINANCE_API_SECRET: ${{ secrets.BINANCE_API_SECRET }}
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python main.py bot_on --duration 45
+
+      - name: Commit and Push Logs
         run: |
-          # Corre por 45 minutos para dejar margen de seguridad
-          python main.py bot_on --duration 45
+          git config --global user.name "Neon-Arbiter-Bot"
+          git config --global user.email "bot@neonarbiter.com"
+          git add logs/*.txt
+          git commit -m "🚀 Auto-Log: Session $(date +'%Y-%m-%d %H:%M')" || echo "No changes to commit"
+          git push
 

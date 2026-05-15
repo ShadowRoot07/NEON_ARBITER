@@ -4,11 +4,23 @@ import argparse
 import logging
 from core.engine import Engine
 from tui.app import NeonApp as App
+from datetime import datetime
+
+# --- CONFIGURACIÓN DE LOGS DINÁMICOS ---
+if not os.path.exists('logs'):
+    os.makedirs('logs')
+
+# Nombre del archivo con fecha y hora: logs/2026-05-15_14-30.txt
+log_filename = f"logs/{datetime.now().strftime('%Y-%m-%d_%H-%M')}.txt"
 
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s [%(name)s] %(message)s',
-    datefmt='%H:%M:%S'
+    datefmt='%H:%M:%S',
+    handlers=[
+        logging.FileHandler(log_filename), # Escribe en el archivo txt
+        logging.StreamHandler()            # Mantiene la salida en terminal (Termux)
+    ]
 )
 logger = logging.getLogger("NEON_MAIN")
 
