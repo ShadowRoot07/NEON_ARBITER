@@ -28,7 +28,8 @@ class Config:
             self.logger.info("🔑 API Keys cargadas correctamente.")
 
         self.api_endpoints = {
-            'binance': 'wss://stream.binance.com:9443/ws/btcusdt@ticker',
+            'binance': 'wss://stream.binance.us:9443/ws/btcusdt@ticker', # Opción US
+            # O intenta con el dominio de la API general:
+            # 'binance': 'wss://data-stream.binance.com/ws/btcusdt@ticker' 
             'groq': 'https://api.groq.com/openai/v1/chat/completions'
         }
-
