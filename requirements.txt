@@ -1,7 +1,7 @@
 # --- Core Frameworks ---
 sqlalchemy==1.4.39
 alembic==1.8.1
-textual==0.13.0
+textual>=0.40.0
 
 # --- Networking & API ---
 aiohttp>=3.10.0
@@ -14,7 +14,7 @@ psycopg2-binary>=2.9.10
 python-dotenv==1.0.0
 numpy>=1.26.0
 
-# --- Build Tools (Safe for Python 3.13) ---
+# --- Build Tools ---
 setuptools
 wheel
 
