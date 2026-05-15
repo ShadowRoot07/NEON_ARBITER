@@ -10,7 +10,7 @@ websockets==10.3
 ujson==5.4.0
 
 # --- Database & Utilities ---
-psycopg2-binary==2.9.9
+psycopg2-binary>=2.9.10
 python-dotenv==1.0.0
 numpy>=1.26.0
 

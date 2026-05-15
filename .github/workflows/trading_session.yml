@@ -3,17 +3,22 @@ name: Neon Arbiter Session
 on:
   push:
     branches:
-      - main # Se activará cada vez que hagas push o merge a main
+      - main
   schedule:
     - cron: '0 * * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write  # CRÍTICO: Para permitir el push de los logs
 
 jobs:
   trade:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # Actualizado a v4
+        with:
+          fetch-depth: 0 # Trae todo el historial para evitar conflictos en el push
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -23,7 +28,7 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install setuptools wheel # <--- ESTO SOLUCIONA EL CRASH
+          pip install setuptools wheel
           pip install -r requirements.txt
 
       - name: Run Neon Arbiter Session
@@ -31,13 +36,18 @@ jobs:
           BINANCE_API_KEY: ${{ secrets.BINANCE_API_KEY }}
           BINANCE_API_SECRET: ${{ secrets.BINANCE_API_SECRET }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: python main.py bot_on --duration 45
+        run: |
+          python main.py bot_on --test 100 --duration 45
 
       - name: Commit and Push Logs
         run: |
           git config --global user.name "Neon-Arbiter-Bot"
           git config --global user.email "bot@neonarbiter.com"
+          
+          # Actualizar por si hubo cambios mientras el bot corría
+          git pull origin main --rebase 
+          
           git add logs/*.txt
-          git commit -m "🚀 Auto-Log: Session $(date +'%Y-%m-%d %H:%M')" || echo "No changes to commit"
+          git commit -m "🚀 Auto-Log: Session $(date +'%Y-%m-%d %H:%M')" || echo "No hay logs nuevos para subir"
           git push
 
