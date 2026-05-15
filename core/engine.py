@@ -24,41 +24,38 @@ class Engine:
         self.tick_interval = 30 if not is_scalper else 2
         self.Session = sessionmaker(bind=db_engine)
 
-    async def run_bot(self):
+    async def run_bot(self, duration_mins=None):
         self.logger.info(f"🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)")
 
         # 1. Warm-up: Sincronización e Historial para el Clima
         self.logger.info("📡 Descargando últimas 100 velas para análisis de clima...")
         start_time = datetime.now()
-        
-        # 1. Warm-up (Mantenemos tu lógica igual...)
+
         historico = await self.client.get_historical_data(symbol="BTCUSDT", limit=100)
-        for p in historico: 
+        for p in historico:
             self.price_buffer.append(p)
-        
-        if historico: 
+
+        if historico:
             self.trading.sincronizar_estado(historico[-1])
 
         from core.analyzers.trend_analyzer import TrendAnalyzer
-        
+
         while True:
             try:
                 async for data in self.client.connect():
                     symbol = data['s_name']
                     price = float(data['c'])
 
+                    # --- CONTROL DE TIEMPO DE SESIÓN ---
                     if duration_mins:
                         elapsed = (datetime.now() - start_time).total_seconds() / 60
                         if elapsed >= duration_mins:
                             self.logger.info(f"⏰ Tiempo de sesión agotado ({duration_mins} min). Guardando y saliendo...")
                             # Persistencia final obligatoria
-                            last_price = float(data['c'])
-                            self.save_current_state(self.trading.get_total_equity(last_price))
-                            return # Esto cierra el bot limpiamente
-                    # -------------------------
-                    
-                    symbol = data['s_name']
-                    price = float(data['c'])
+                            total_equity = self.trading.get_total_equity(price)
+                            self.save_current_state(total_equity)
+                            return # Cierre limpio del bot
+                    # ----------------------------------
 
                     if symbol == "BTCUSDT":
                         self.price_buffer.append(price)
@@ -74,10 +71,10 @@ class Engine:
                             if self.tick_count % self.tick_interval == 0:
                                 precios_lista = list(self.price_buffer)
                                 clima = TrendAnalyzer.get_market_climate(precios_lista)
-        
-                                # FILTRO: Si el mercado está muerto, no gastamos CPU ni pedimos análisis
+
+                                # FILTRO: Si el mercado está muerto
                                 if clima == "RANGING_DEAD":
-                                    if self.tick_count % 100 == 0: # Avisar cada tanto
+                                    if self.tick_count % 100 == 0:
                                         self.logger.info("💤 Mercado lateral sin volatilidad. Esperando...")
                                         continue
 
@@ -87,9 +84,8 @@ class Engine:
                                     decision, confianza = self.strategy.should_execute(analysis, clima)
 
                                     if decision == 'BUY' and not self.trading.active_position:
-                                        # Pasamos el clima para que el trading ajuste el SL
                                         self.trading.abrir_posicion_test(price, clima=clima)
-                                        
+
                                     elif decision == 'SELL' and self.trading.active_position:
                                         self.trading.cerrar_posicion_test(price, f"ALGO_{clima}")
 
@@ -97,11 +93,8 @@ class Engine:
                         if self.tick_count % 20 == 0:
                             precios_lista = list(self.price_buffer)
                             clima_actual = TrendAnalyzer.get_market_climate(precios_lista)
-
-                            # USAR LA NUEVA FUNCIÓN DE EQUITY
                             total_equity = self.trading.get_total_equity(price)
-                            
-                            # PERSISTENCIA PREVENTIVA (Guardar en cada ciclo de monitor)
+
                             self.save_current_state(total_equity)
 
                             pnl_c = "\033[32m" if self.trading.daily_pnl >= 0 else "\033[31m"
