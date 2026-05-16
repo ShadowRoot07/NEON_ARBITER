@@ -1,17 +1,14 @@
 import asyncio
-import websockets
-import ujson
 import logging
 import httpx
 
 class BinanceClient:
     def __init__(self):
         # Monedas a monitorear para el sentimiento del mercado
-        self.symbols = ["btcusdt", "ethusdt", "solusdt"]
-        # URL para streams combinados
-        streams = "/".join([f"{s}@ticker" for s in self.symbols])
-        self.ws_url = f"wss://stream.binance.com:9443/stream?streams={streams}"
+        self.symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
         self.rest_url = 'https://api.binance.com/api/v3/klines'
+        # Endpoint REST para precios múltiples instantáneos
+        self.ticker_url = 'https://api.binance.com/api/v3/ticker/price'
         self.logger = logging.getLogger("NEON.API_BINANCE")
 
     async def get_historical_data(self, symbol="BTCUSDT", limit=100):
@@ -28,19 +25,44 @@ class BinanceClient:
             return []
 
     async def connect(self):
-        while True:
-            try:
-                async with websockets.connect(self.ws_url) as ws:
-                    self.logger.info(f"✅ Conexión Multi-Stream establecida: {self.symbols}")
-                    while True:
-                        raw_msg = await ws.recv()
-                        msg = ujson.loads(raw_msg)
-                        # Al usar streams combinados, los datos vienen en msg['data']
-                        data = msg.get('data', {})
-                        # Inyectamos el símbolo para que el Engine sepa de quién es el precio
-                        data['s_name'] = data['s'] 
-                        yield data
-            except (websockets.ConnectionClosed, Exception) as e:
-                self.logger.warning(f"🔄 Reconexión en 5s: {e}")
-                await asyncio.sleep(5)
+        """
+        Sustitución del Plan A (REST Polling). 
+        Simula un generador WebSocket consultando la API REST cada 2 segundos.
+        """
+        self.logger.info(f"🛰️ Iniciando Modo REST Polling para: {self.symbols}")
+        
+        # Mapeo para transformar los símbolos al formato esperado por el Engine
+        symbols_json = f'["' + '","'.join(self.symbols) + '"]'
+        params = {"symbols": symbols_json}
+
+        async with httpx.AsyncClient() as client:
+            while True:
+                try:
+                    response = await client.get(self.ticker_url, params=params)
+                    
+                    if response.status_code == 451:
+                        self.logger.error("🚫 Bloqueo geográfico estricto detectado en REST (HTTP 451).")
+                        raise Exception("HTTP 451: Región restringida por Binance.")
+
+                    if response.status_code == 200:
+                        data_list = response.json() # Retorna una lista de dicts: [{'symbol': 'BTCUSDT', 'price': '...'}]
+                        
+                        for item in data_list:
+                            # Construimos la estructura exacta que el motor espera del stream original
+                            yield {
+                                's_name': item['symbol'],
+                                'c': item['price']
+                            }
+                    else:
+                        self.logger.warning(f"⚠️ API Binance respondió con código: {response.status_code}")
+
+                    # Frecuencia de muestreo (2 segundos es óptimo para no saturar la cuota de peticiones)
+                    await asyncio.sleep(2)
+
+                except httpx.RequestError as exc:
+                    self.logger.warning(f"🔄 Error de red en Polling REST: {exc}. Reintentando en 5s...")
+                    await asyncio.sleep(5)
+                except Exception as e:
+                    self.logger.error(f"❌ Error crítico en ciclo REST: {e}")
+                    await asyncio.sleep(5)
 
