@@ -26,10 +26,8 @@ class Config:
 
         else:
             self.logger.info("🔑 API Keys cargadas correctamente.")
-
         self.api_endpoints = {
-            # Intentamos con el dominio de la API REST que suele ser más abierto que el WS
-            'binance': 'https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT',
+            'binance': self.binance_api_key, # Mapeo de control interno
             'groq': 'https://api.groq.com/openai/v1/chat/completions'
         }
 
