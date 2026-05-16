@@ -74,7 +74,7 @@ class BinanceClient:
         for _ in range(min(15, len(self.proxies))):
             proxy = self._get_current_proxy()
             try:
-                async with httpx.AsyncClient(proxies=proxy, timeout=8.0) as client:
+                async with httpx.AsyncClient(proxy=proxy, timeout=8.0) as client:
                     response = await client.get(self.rest_url, params=params)
                     if response.status_code == 200:
                         data = response.json()
@@ -104,9 +104,8 @@ class BinanceClient:
             proxy = self._get_current_proxy()
             
             try:
-                async with httpx.AsyncClient(proxies=proxy, timeout=7.0) as client:
+                async with httpx.AsyncClient(proxy=proxy, timeout=7.0) as client:
                     response = await client.get(self.ticker_url, params=params)
-                    
                     if response.status_code == 451:
                         self.logger.warning(f"🚫 Bloqueo regional (451) en {proxy}. Purgando...")
                         self._rotate_proxy()
