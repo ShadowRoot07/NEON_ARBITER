@@ -43,18 +43,17 @@ class AlgorithmicScalper(BaseStrategy):
         rsi = analysis['rsi']
         z_score = analysis['z_score']
 
-        # COMPRA: Z-Score bajo (sobreventa local) + RSI recuperándose
-        if climate in ["RANGING", "TRENDING_UP"]:
+        # COMPRA: Z-Score bajo (sobreventa local). Ahora permitimos RANGING_DEAD si somos un Scalper
+        if climate in ["RANGING", "TRENDING_UP", "RANGING_DEAD"]:
             if z_score < -2.0 and rsi < 40:
                 return "BUY", 0.85
-        
-        # VENTA: Solo vendemos si hay señales de agotamiento real
-        if climate == "TRENDING_DOWN":
-            return "SELL", 0.95 # Salir rápido si la tendencia se invierte
 
-        # En RANGING o TRENDING_UP, NO vendemos por clima. 
-        # Dejamos que el TP o el Trailing SL de trading_logic hagan su trabajo.
-        if rsi > 80: # Solo venta de emergencia por sobrecompra extrema
+        # VENTA: Salir rápido si la tendencia se invierte
+        if climate == "TRENDING_DOWN":
+            return "SELL", 0.95 
+
+        # Venta de emergencia por sobrecompra extrema (aplica a Rangos y tendencias alcistas)
+        if rsi > 80: 
             return "SELL", 0.80
 
         return "HOLD", 0.0

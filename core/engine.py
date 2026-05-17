@@ -6,7 +6,7 @@ from api.binance_client import BinanceClient
 from config import Config
 from core.trading_logic import TradingLogic
 from core.strategies.algorithmic_scalper import AlgorithmicScalper # Nueva Estrategia
-from database.schema import AIAudit, sessionmaker, engine as db_engine
+from database.schema import BotState, AIAudit, sessionmaker, engine as db_engine
 from datetime import datetime
 
 class Engine:
@@ -39,9 +39,10 @@ class Engine:
             self.trading.sincronizar_estado(historico[-1])
 
         from core.analyzers.trend_analyzer import TrendAnalyzer
-
+        
         while True:
             try:
+                # Iteramos directo sobre el generador asíncrono
                 async for data in self.client.connect():
                     symbol = data['s_name']
                     price = float(data['c'])
@@ -51,10 +52,9 @@ class Engine:
                         elapsed = (datetime.now() - start_time).total_seconds() / 60
                         if elapsed >= duration_mins:
                             self.logger.info(f"⏰ Tiempo de sesión agotado ({duration_mins} min). Guardando y saliendo...")
-                            # Persistencia final obligatoria
                             total_equity = self.trading.get_total_equity(price)
                             self.save_current_state(total_equity)
-                            return # Cierre limpio del bot
+                            return 
                     # ----------------------------------
 
                     if symbol == "BTCUSDT":
@@ -68,15 +68,21 @@ class Engine:
                             self.trading.ejecutar_simulacion(price)
 
                             # 2. Análisis Matemático por Intervalo
+                            # 2. Análisis Matemático por Intervalo
                             if self.tick_count % self.tick_interval == 0:
                                 precios_lista = list(self.price_buffer)
-                                clima = TrendAnalyzer.get_market_climate(precios_lista)
+                                # PASAMOS EL FLAG: is_scalper influye en la sensibilidad
+                                clima = TrendAnalyzer.get_market_climate(precios_lista, is_scalper=self.is_scalper)
 
-                                # FILTRO: Si el mercado está muerto
+                                # FILTRO PROTECTOR: Solo congela el bot con 'continue' en MODO NORMAL (no scalper)
                                 if clima == "RANGING_DEAD":
-                                    if self.tick_count % 100 == 0:
-                                        self.logger.info("💤 Mercado lateral sin volatilidad. Esperando...")
+                                    if not self.is_scalper:
+                                        if self.tick_count % 100 == 0:
+                                            self.logger.info("💤 Mercado lateral sin volatilidad. Esperando...")
                                         continue
+                                    else:
+                                        if self.tick_count % 100 == 0:
+                                            self.logger.info("🎯 [SCALPER] Operando micro-rango lateral con Z-Score.")
 
                                 analysis = self.strategy.analyze(self.price_buffer, self.market_buffers)
 
@@ -89,10 +95,11 @@ class Engine:
                                     elif decision == 'SELL' and self.trading.active_position:
                                         self.trading.cerrar_posicion_test(price, f"ALGO_{clima}")
 
-                        # Monitor visual cada 20 ticks
+                        # Monitor visual en la consola de Termux
                         if self.tick_count % 20 == 0:
                             precios_lista = list(self.price_buffer)
-                            clima_actual = TrendAnalyzer.get_market_climate(precios_lista)
+                            # También pasamos el flag en el print del monitor visual
+                            clima_actual = TrendAnalyzer.get_market_climate(precios_lista, is_scalper=self.is_scalper)
                             total_equity = self.trading.get_total_equity(price)
 
                             self.save_current_state(total_equity)
@@ -110,8 +117,17 @@ class Engine:
                             self.market_buffers[symbol].append(price)
 
             except Exception as e:
-                self.logger.warning(f"🔄 Reintentando conexión... Error: {e}")
-                await asyncio.sleep(5)
+                # Si el generador asíncrono cae por desconexión en el cel, se atrapa aquí
+                self.logger.warning(f"⚠️ Stream interrumpido en bucle principal: {e}. Sincronizando de nuevo...")
+                await asyncio.sleep(3)
+                
+                # RE-SINCRONIZACIÓN DE EMERGENCIA: Volvemos a bajar datos frescos para no operar con buffers desfasados
+                historico = await self.client.get_historical_data(symbol="BTCUSDT", limit=50)
+                if historico:
+                    self.price_buffer.clear()
+                    for p in historico:
+                        self.price_buffer.append(p)
+                    self.trading.sincronizar_estado(historico[-1])
 
     def save_current_state(self, total_equity):
         """Guarda el estado en la DB para que GitHub Actions lo herede"""
