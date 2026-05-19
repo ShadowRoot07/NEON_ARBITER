@@ -1,0 +1,11 @@
+16:01:26 [NEON.CONFIG] 🔑 API Keys cargadas correctamente.
+16:01:26 [NEON.ENGINE] 🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)
+16:01:26 [NEON.ENGINE] 📡 Descargando últimas 500 velas para análisis de clima macro...
+16:01:26 [NEON.API_BINANCE] 📥 Descargando historial macro de 500 velas para BTCUSDT...
+16:01:30 [httpx] HTTP Request: GET https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=500 "HTTP/1.1 200 OK"
+16:01:31 [NEON.TRADING] 💰 Balance recuperado de Neon: $60.00 | PnL Hoy: $0.00
+16:01:31 [NEON.TRADING] 🔄 RECOBRANDO POSICIÓN ACTIVA: Compra previa detectada a $76,932.68
+16:01:31 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+16:01:32 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+16:01:32 [NEON.TRADING] ⚡ [VENTA SIM] Motivo: STOP_LOSS | Entrada: $76,932.68 | Salida: $76,560.30 | PnL Trade: $-0.19 (-0.48%)
+16:04:24 [NEON_MAIN] 🛑 Bot detenido por el usuario.

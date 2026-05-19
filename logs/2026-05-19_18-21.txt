@@ -1,0 +1,71 @@
+18:21:26 [NEON.CONFIG] 🔑 API Keys cargadas correctamente.
+18:21:26 [NEON.ENGINE] 🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)
+18:21:26 [NEON.ENGINE] 📡 Descargando últimas 500 velas para análisis de clima macro...
+18:21:26 [NEON.API_BINANCE] 📥 Descargando historial macro de 500 velas para BTCUSDT...
+18:21:30 [httpx] HTTP Request: GET https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=500 "HTTP/1.1 200 OK"
+18:21:30 [NEON.TRADING] 🆕 No se encontró un estado previo en BotState. Usando valores por defecto.
+18:21:31 [NEON.TRADING] 🆕 No existen posiciones colgadas en Trades. Operando balance limpio.
+18:21:31 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+18:21:33 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+18:24:53 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:26:33 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:27:42 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (sent 1011 (internal error) keepalive ping timeout; no close frame received). Reintentando en 2s... (Intento 1)
+18:27:44 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+18:27:46 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+18:28:10 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000521 BTC | SL: 0.30% | TP: 0.60%
+18:28:29 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:30:08 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:31:27 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (sent 1011 (internal error) keepalive ping timeout; no close frame received). Reintentando en 2s... (Intento 1)
+18:31:29 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+18:31:37 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+18:35:04 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:35:06 [NEON.ENGINE] 🚨 [SCALPER] Tendencia bajista macro o quiebre de mínimos detectado. Bloqueando compras.
+18:35:06 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (received 1008 (policy violation) Pong timeout; then sent 1008 (policy violation) Pong timeout). Reintentando en 2s... (Intento 1)
+18:35:08 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+18:35:09 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+18:35:49 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:37:29 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:39:10 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:42:47 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:42:49 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (received 1008 (policy violation) Pong timeout; then sent 1008 (policy violation) Pong timeout). Reintentando en 2s... (Intento 1)
+18:42:51 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+18:42:52 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+18:43:35 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:45:42 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:46:56 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:48:36 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:50:18 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:51:59 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:52:53 [NEON.TRADING] 🛡️ [BREAKEVEN] Posición protegida al precio de entrada: $76,780.17
+18:53:38 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:55:37 [NEON.TRADING] ⚡ [VENTA SIM] Motivo: BREAKEVEN_EXIT | Entrada: $76,780.17 | Salida: $76,769.13 | PnL Trade: $-0.01 (-0.01%)
+18:58:38 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:00:21 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:02:00 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:03:40 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:09:08 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:09:10 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000520 BTC | SL: 0.30% | TP: 0.60%
+19:09:11 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (received 1008 (policy violation) Pong timeout; then sent 1008 (policy violation) Pong timeout). Reintentando en 2s... (Intento 1)
+19:09:13 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+19:09:15 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+19:09:45 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:11:26 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:13:08 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (no close frame received or sent). Reintentando en 2s... (Intento 1)
+19:13:10 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+19:13:10 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida ([Errno 7] No address associated with hostname). Reintentando en 4s... (Intento 2)
+19:13:14 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+19:13:14 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida ([Errno 7] No address associated with hostname). Reintentando en 8s... (Intento 3)
+19:13:22 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+19:13:22 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida ([Errno 7] No address associated with hostname). Reintentando en 16s... (Intento 4)
+19:13:38 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+19:13:38 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida ([Errno 7] No address associated with hostname). Reintentando en 30s... (Intento 5)
+19:14:08 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+19:14:08 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida ([Errno 7] No address associated with hostname). Reintentando en 30s... (Intento 6)
+19:14:38 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+19:14:38 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida ([Errno 7] No address associated with hostname). Reintentando en 30s... (Intento 7)
+19:15:08 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+19:15:10 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+19:15:11 [NEON.TRADING] 🛡️ [BREAKEVEN] Posición protegida al precio de entrada: $76,890.43
+19:16:57 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:18:39 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:21:48 [NEON.ENGINE] ⏰ Tiempo de sesión agotado (60 min). Guardando y saliendo...

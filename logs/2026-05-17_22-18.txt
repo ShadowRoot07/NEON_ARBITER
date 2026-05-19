@@ -1,0 +1,76 @@
+22:18:00 [NEON.CONFIG] 🔑 API Keys cargadas correctamente.
+22:18:00 [NEON.ENGINE] 🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)
+22:18:00 [NEON.ENGINE] 📡 Descargando últimas 100 velas para análisis de clima...
+22:18:00 [NEON.API_BINANCE] 📥 Descargando historial local para BTCUSDT...
+22:18:08 [NEON.API_BINANCE] ❌ Error en historial: 
+22:18:08 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:18:18 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (timed out during opening handshake). Reintentando en 2s... (Intento 1)
+22:18:20 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:18:30 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (timed out during opening handshake). Reintentando en 4s... (Intento 2)
+22:18:34 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:18:44 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (timed out during opening handshake). Reintentando en 8s... (Intento 3)
+22:18:52 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:18:58 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+22:21:10 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000512 BTC | SL: 0.30% | TP: 0.60%
+22:21:39 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING_DEAD): $78,088.43 | PnL: +0.00
+22:22:05 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000512 BTC | SL: 0.30% | TP: 0.60%
+22:24:56 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING_DEAD): $78,005.77 | PnL: -0.05
+22:25:01 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000513 BTC | SL: 0.30% | TP: 0.60%
+22:28:55 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+22:28:57 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING_DEAD): $77,989.90 | PnL: +0.00
+22:29:00 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000513 BTC | SL: 0.30% | TP: 0.60%
+22:29:04 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (received 1008 (policy violation) Pong timeout; then sent 1008 (policy violation) Pong timeout). Reintentando en 2s... (Intento 1)
+22:29:06 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:29:16 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (timed out during opening handshake). Reintentando en 4s... (Intento 2)
+22:29:20 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:29:25 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+22:29:46 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING_DEAD): $78,017.99 | PnL: +0.01
+22:30:06 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (sent 1011 (internal error) keepalive ping timeout; no close frame received). Reintentando en 2s... (Intento 1)
+22:30:08 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:30:18 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (timed out during opening handshake). Reintentando en 4s... (Intento 2)
+22:30:22 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:30:32 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (timed out during opening handshake). Reintentando en 8s... (Intento 3)
+22:30:40 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:30:50 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (timed out during opening handshake). Reintentando en 16s... (Intento 4)
+22:31:06 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:31:08 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+22:32:08 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000512 BTC | SL: 0.30% | TP: 0.60%
+22:33:35 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING_DEAD): $78,049.92 | PnL: -0.01
+22:34:53 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+22:35:01 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000512 BTC | SL: 0.30% | TP: 0.60%
+22:35:29 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING_DEAD): $78,111.25 | PnL: +0.00
+22:36:08 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (sent 1011 (internal error) keepalive ping timeout; no close frame received). Reintentando en 2s... (Intento 1)
+22:36:10 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:36:20 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (timed out during opening handshake). Reintentando en 4s... (Intento 2)
+22:36:24 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:36:29 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+22:36:34 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000384 BTC | SL: 0.30% | TP: 0.60%
+22:37:55 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING): $78,004.00 | PnL: -0.00
+22:39:16 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000513 BTC | SL: 0.30% | TP: 0.60%
+22:39:17 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING_DEAD): $78,000.58 | PnL: +0.01
+22:39:44 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000512 BTC | SL: 0.30% | TP: 0.60%
+22:40:17 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (sent 1011 (internal error) keepalive ping timeout; no close frame received). Reintentando en 2s... (Intento 1)
+22:40:19 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:40:29 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (timed out during opening handshake). Reintentando en 4s... (Intento 2)
+22:40:33 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:40:42 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+22:40:44 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING): $78,080.12 | PnL: +0.01
+22:41:05 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000384 BTC | SL: 0.30% | TP: 0.60%
+22:42:50 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+22:44:30 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+22:45:49 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING_DEAD): $78,008.33 | PnL: -0.02
+22:46:08 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000513 BTC | SL: 0.30% | TP: 0.60%
+22:46:15 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+22:46:22 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING_DEAD): $78,016.00 | PnL: +0.00
+22:47:40 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000513 BTC | SL: 0.30% | TP: 0.60%
+22:47:58 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+22:49:11 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING_DEAD): $78,005.31 | PnL: -0.00
+22:49:41 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+22:50:03 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000513 BTC | SL: 0.30% | TP: 0.60%
+22:51:36 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (sent 1011 (internal error) keepalive ping timeout; no close frame received). Reintentando en 2s... (Intento 1)
+22:51:38 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:51:48 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (timed out during opening handshake). Reintentando en 4s... (Intento 2)
+22:51:52 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:51:54 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+22:52:56 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING): $77,914.26 | PnL: -0.05
+22:53:28 [NEON_MAIN] 🛑 Bot detenido por el usuario.
