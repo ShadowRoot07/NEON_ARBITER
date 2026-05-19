@@ -170,16 +170,37 @@ class Engine:
                             self.market_buffers[symbol].append(price)
 
             except Exception as e:
-                self.logger.warning(f"⚠️ Stream interrumpido en bucle principal: {e}. Sincronizando de nuevo...")
-                await asyncio.sleep(3)
+                self.logger.warning(f"⚠️ Stream interrumpido en bucle principal: {e}. Activando protocolo de reconexión...")
+                await asyncio.sleep(4)
 
-                # RE-SINCRONIZACIÓN DE EMERGENCIA MACRO: 50 velas para estabilizar el buffer rápido
-                historico = await self.client.get_historical_data(symbol="BTCUSDT", limit=50)
-                if historico:
-                    self.price_buffer.clear()
-                    for p in historico:
-                        self.price_buffer.append(p)
-                    self.trading.sincronizar_estado(historico[-1])
+                try:
+                    # 1. PURGA Y RECONEXIÓN CRÍTICA MACRO (500 velas completas para desinfectar buffers)
+                    self.logger.info("🔄 Re-descargando 500 periodos macro para limpiar buffers tras el corte de red...")
+                    historico = await self.client.get_historical_data(symbol="BTCUSDT", limit=500)
+                    
+                    if historico:
+                        # Limpiamos el buffer por completo para borrar la "congelación" de precios del corte de internet
+                        self.price_buffer.clear()
+                        for p in historico:
+                            self.price_buffer.append(p)
+                        
+                        precio_actual_post_corte = historico[-1]
+                        
+                        # 2. Sincronizamos el estado financiero con los datos limpios de la DB
+                        self.trading.sincronizar_estado(precio_actual_post_corte)
+                        
+                        # 3. EVALUACIÓN DE INTEGRIDAD EN APAGÓN
+                        # Si veníamos con una posición abierta antes de moverte de habitación, verificamos de inmediato
+                        # si el precio saltó por encima o por debajo de los stops mientras estuvimos sin internet.
+                        if self.trading.active_position:
+                            self.logger.info("🕵️ Analizando si se ejecutaron stops o targets de la posición activa durante el apagón...")
+                            self.trading.ejecutar_simulacion(precio_actual_post_corte)
+                            
+                    self.logger.info("⚡ [SISTEMA BLINDADO] Conexión estabilizada y buffers purgados con éxito.")
+
+                except Exception as ex_reconnect:
+                    self.logger.error(f"❌ Fallo en el intento de estabilización: {ex_reconnect}. Reintentando en el próximo ciclo...")
+                    await asyncio.sleep(5)
 
     def save_current_state(self, total_equity):
         """Guarda el estado en la DB para persistencia"""

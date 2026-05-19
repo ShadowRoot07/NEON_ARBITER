@@ -115,6 +115,7 @@ class TradingLogic:
 
         self.logger.info(f"🛒 COMPRA EN DB: {self.inventory:.6f} BTC | SL: {current_sl_pct*100:.2f}% | TP: {take_profit_pct*100:.2f}%")
 
+
     def ejecutar_simulacion(self, precio_actual):
         if not self.active_position:
             return
@@ -130,14 +131,16 @@ class TradingLogic:
         if self.mode == "SCALPER":
             rendimiento = (precio_actual - precio_entrada) / precio_entrada
 
-            # 1. Fase de Breakeven: Si sube un +0.15%, protegemos la entrada contra comisiones
-            if rendimiento >= 0.0015 and pos['sl'] < precio_entrada:
-                pos['sl'] = precio_entrada
-                self.logger.info(f"🛡️ [BREAKEVEN] Posición protegida al precio de entrada: ${precio_entrada:,.2f}")
+            # 1. Fase de Breakeven Blindado: Si sube un +0.15%, protegemos la entrada 
+            # sumando un +0.02% para absorber micro-deslizamientos y comisiones simblock
+            target_sl_breakeven = precio_entrada * (1 + 0.0002)
+            if rendimiento >= 0.0015 and pos['sl'] < target_sl_breakeven:
+                pos['sl'] = target_sl_breakeven
+                self.logger.info(f"🛡️ [BREAKEVEN BLINDADO] Ajustado stop de seguridad a: ${target_sl_breakeven:,.2f}")
 
-            # 2. Fase de Trailing Scalper: Si supera el +0.35%, el SL persigue al precio a una distancia corta (0.10%)
+            # 2. Fase de Trailing Scalper: Si supera el +0.35%, el SL persigue al precio (distancia corta 0.10%)
             elif rendimiento >= 0.0035:
-                nuevo_sl_scalper = precio_actual * (1 - 0.0010) # Distancia de respiro del 0.10%
+                nuevo_sl_scalper = precio_actual * (1 - 0.0010)
                 if nuevo_sl_scalper > pos['sl']:
                     pos['sl'] = nuevo_sl_scalper
 
@@ -149,10 +152,10 @@ class TradingLogic:
 
         # D. Verificar Ejecución del Stop Loss (Sea Duro, Breakeven o Trailing)
         if precio_actual <= pos['sl']:
-            # Identificamos el motivo exacto para los logs de auditoría en Termux
-            if pos['sl'] == precio_entrada:
+            # Identificación matemática precisa del motivo de salida
+            if pos['sl'] >= precio_entrada:
                 motivo_salida = "BREAKEVEN_EXIT"
-            elif pos['sl'] > precio_entrada:
+            elif pos['sl'] > precio_entrada * (1 + 0.0002):
                 motivo_salida = "TRAILING_SCALPER"
             else:
                 motivo_salida = "STOP_LOSS"
@@ -160,7 +163,7 @@ class TradingLogic:
             self.cerrar_posicion_test(precio_actual, motivo_salida)
 
     def sincronizar_estado(self, precio_actual):
-        """Recupera el estado exacto de la DB para heredar balances y posiciones entre ejecuciones"""
+        """Recupera el estado exacto de la DB heredando balances y posiciones reales sin inventar stops"""
         Session = sessionmaker(bind=db_engine)
 
         with Session() as session:
@@ -177,9 +180,11 @@ class TradingLogic:
             last_trade = session.query(Trades).order_by(Trades.id.desc()).first()
 
             if last_trade and last_trade.side == "BUY":
-                self.logger.info(f"🔄 RECOBRANDO POSICIÓN ACTIVA: Compra previa detectada a ${last_trade.price:,.2f}")
+                self.logger.info(f"🔄 [RECONEXIÓN] Recuperando posición activa desde el precio exacto de DB: ${last_trade.price:,.2f}")
 
                 self.inventory = last_trade.amount
+                
+                # Respetamos milimétricamente el porcentaje de stop loss original configurado en el arranque
                 sl = last_trade.price * (1 - self.stop_loss_pct)
                 tp = last_trade.price * (1 + (self.stop_loss_pct * 2.0))
 
@@ -188,9 +193,12 @@ class TradingLogic:
                     'sl': sl,
                     'tp': tp
                 }
-                print(f"📡 Estado sincronizado. Posición restaurada: {self.inventory:.6f} BTC | SL: ${sl:,.2f}")
+                self.logger.info(f"📡 Estado sincronizado con éxito. Posición restaurada: {self.inventory:.6f} BTC | SL original: ${sl:,.2f}")
             else:
+                self.active_position = None
+                self.inventory = 0.0
                 self.logger.info("🆕 No existen posiciones colgadas en Trades. Operando balance limpio.")
+
 
     def cerrar_posicion_test(self, precio_actual, motivo="EXIT"):
         """Cierra la posición simulada actual actualizando balances, inventario y guardando en DB."""
