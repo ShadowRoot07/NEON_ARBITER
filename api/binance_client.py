@@ -3,21 +3,17 @@ import logging
 import websockets
 import ujson
 import httpx
+import time  # <--- NUEVO IMPORT
 
 class BinanceClient:
     def __init__(self):
         self.symbols = ["btcusdt", "ethusdt", "solusdt"]
         self.rest_url = 'https://api.binance.com/api/v3/klines'
-        # Stream combinado en tiempo real de Binance (WSS)
         streams = "/".join([f"{s}@ticker" for s in self.symbols])
         self.ws_url = f"wss://stream.binance.com:9443/stream?streams={streams}"
         self.logger = logging.getLogger("NEON.API_BINANCE")
 
     async def get_historical_data(self, symbol="BTCUSDT", limit=500):
-        """
-        Descarga directa de las velas históricas por HTTP REST (Carga el buffer a 500 periodos).
-        Evita el WARMING_UP ciego en el arranque del bot.
-        """
         self.logger.info(f"📥 Descargando historial macro de {limit} velas para {symbol}...")
         params = {"symbol": symbol, "interval": "1m", "limit": limit}
         try:
@@ -25,7 +21,6 @@ class BinanceClient:
                 response = await client.get(self.rest_url, params=params, timeout=15.0)
                 if response.status_code == 200:
                     data = response.json()
-                    # Retornamos los precios de cierre (Candle índice 4)
                     return [float(candle[4]) for candle in data]
                 else:
                     self.logger.error(f"⚠️ Error HTTP al bajar historial: {response.status_code}")
@@ -35,35 +30,39 @@ class BinanceClient:
             return []
 
     async def connect(self):
-        """
-        Generador asíncrono WebSocket nativo y resistente a desconexiones en móviles.
-        Envía los deltas de precio y volumen acumulado para procesamiento en el Engine.
-        """
         retries = 0
-        base_delay = 2  # Segundos iniciales de espera tras una caída
-        max_delay = 30  # Techo máximo de espera para reintentos
+        base_delay = 2  
+        max_delay = 30  
 
         while True:
             try:
                 self.logger.info(f"🔌 Conectando a los streams en tiempo real de Binance...")
 
-                # Configuramos ping_interval y ping_timeout para cortes de red rápidos en Termux
+                # Ajustes agresivos para móviles: si la red muere, cerramos el socket rápido
                 async with websockets.connect(
                     self.ws_url,
-                    ping_interval=20,
-                    ping_timeout=10
+                    ping_interval=10,  # Reducido a 10s para detectar cortes más rápido
+                    ping_timeout=5     # Si en 5s no responde el pong de la vecina, se asume caída
                 ) as ws:
                     self.logger.info(f"⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: {self.symbols}")
-                    retries = 0  # Reseteamos el contador de fallos
+                    retries = 0  
 
                     while True:
                         raw_msg = await ws.recv()
+                        local_receive_time = time.time() * 1000 # Tiempo del celular en milisegundos
                         msg = ujson.loads(raw_msg)
 
                         data = msg.get('data', {})
                         if data:
-                            # Inyectamos la llave s_name que el Engine espera nativamente
                             data['s_name'] = data['s']
+                            
+                            # --- CÁLCULO PASIVO DE LATENCIA DE RED ---
+                            server_time = data.get('E', local_receive_time)
+                            latency = local_receive_time - server_time
+                            # Si el reloj del celular está descalibrado unos ms, evitamos latencias negativas
+                            data['latency_ms'] = max(0.0, latency) 
+                            # ------------------------------------------
+                            
                             yield data
 
             except (websockets.ConnectionClosed, Exception) as e:
@@ -74,3 +73,4 @@ class BinanceClient:
                     f"Reintentando en {delay}s... (Intento {retries})"
                 )
                 await asyncio.sleep(delay)
+

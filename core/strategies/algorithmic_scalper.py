@@ -13,14 +13,11 @@ class AlgorithmicScalper(BaseStrategy):
         data = list(buffer)
         if len(data) < 30: return None
 
-        # Cálculos Técnicos Locales
         rsi = calculate_rsi(data, period=self.rsi_period)
         ma_fast = calculate_moving_average(data, period=self.fast_ma)
         ma_slow = calculate_moving_average(data, period=self.slow_ma)
         z_score = calculate_z_score(data)
 
-        # Retornamos el diccionario base. El Engine le inyectará de forma
-        # nativa las llaves 'rvol', 'eth_corr' y 'solusdt_corr'.
         return {
             "rsi": rsi,
             "ma_fast": ma_fast,
@@ -30,42 +27,60 @@ class AlgorithmicScalper(BaseStrategy):
             "momentum": TrendAnalyzer.identify_momentum(data)
         }
 
-    def should_execute(self, analysis, climate):
-        # Si el mercado está en caos, calentando o en TENDENCIA BAJISTA MACRO, prohibido comprar
-        if not analysis or climate in ["CHAOS", "WARMING_UP", "TRENDING_DOWN"]:
+    def should_execute(self, analysis, climate_tuple):
+        """
+        Gatillo adaptativo que muta según la longevidad y compresión del precio.
+        climate_tuple es enviado por el Engine como un desempaquetado de: (clima, longevidad)
+        """
+        if not analysis:
+            return "HOLD", 0.0
+
+        # Desempaquetamos la nueva tupla con contexto temporal
+        climate, longevidad = climate_tuple
+
+        if climate in ["CHAOS", "WARMING_UP", "TRENDING_DOWN"]:
             return "HOLD", 0.0
 
         rsi = analysis['rsi']
         z_score = analysis['z_score']
         momentum = analysis['momentum']
-        
-        # Recuperamos las nuevas dimensiones inyectadas de manera segura
+
         rvol = analysis.get('rvol', 1.0)
         eth_corr = analysis.get('eth_corr', 1.0)
-        sol_corr = analysis.get('sol_corr', 1.0)
 
-        # GATILLO DE COMPRA AJUSTADO (Con filtros de volumen y correlación institucional)
+        # Umbral crítico para declarar acumulación masiva de energía en el rango lateral
+        es_rango_viejo_y_comprimido = (climate == "RANGING_DEAD" or climate == "RANGING") and longevidad > 150
+
+        # ===================================================================
+        # 🔥 ESCENARIO A: MODO GATILLO BREAKOUT (Cazar la explosión del Rango Viejo)
+        # ===================================================================
+        if es_rango_viejo_y_comprimido:
+            # Si el rango es viejo, operar reversión a la media es un suicidio táctico. 
+            # Buscamos dirección de quiebre alcista con volumen institucional masivo.
+            if momentum > 0.04 and rvol > 2.10 and eth_corr > 0.70:
+                # Si el precio rompe hacia arriba con más del doble de volumen normal, nos subimos a la ola
+                return "BUY", 0.98
+            
+            return "HOLD", 0.0
+
+        # ===================================================================
+        # 🛒 ESCENARIO B: MODO SCALPING TRADICIONAL (Reversión en Rangos Jóvenes)
+        # ===================================================================
         if climate in ["RANGING", "TRENDING_UP", "RANGING_DEAD"]:
-            # Si el mercado está muy plano (RANGING_DEAD), exigimos menos margen pero más precisión
+            # Filtros dinámicos según el grado de congelamiento del canal
             target_z = -1.5 if climate == "RANGING_DEAD" else -2.2
             target_rsi = 40 if climate == "RANGING_DEAD" else 35
 
-            # 1. VALIDACIÓN BASE TRADICIONAL: Z-Score y RSI en suelo + Frenado de velocidad (Momentum)
             if z_score < target_z and rsi < target_rsi and momentum > -0.02:
-                
-                # 2. FILTRO DE GASOLINA (RVOL): Asegurar que el rebote tiene volumen institucional real
-                # Exigimos que el volumen actual sea un 20% superior al promedio (RVOL > 1.20)
+                # Filtro institucional de volumen mínimo para rebote
                 if rvol < 1.20:
-                    # El log de esto se puede omitir para evitar inundar la TUI de Termux, pero bloquea el gatillo
                     return "HOLD", 0.0
 
-                # 3. FILTRO DE BETA DE RED (CORRELACIÓN): Evitar divergencias trampa
-                # Si Bitcoin da compra, pero Ethereum está cayendo en dirección opuesta (correlación rota), abortamos
+                # Filtro de correlación macro con Ethereum para evitar trampas
                 if eth_corr < 0.50:
                     return "HOLD", 0.0
 
-                # Si pasa todos los filtros de realidad cuantitativos, la orden es matemáticamente óptima
                 return "BUY", 0.95
 
-        # Las salidas (VENTAS) quedan 100% delegadas a la matemática de trading_logic (TP/SL)
         return "HOLD", 0.0
+

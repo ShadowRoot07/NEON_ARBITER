@@ -1,0 +1,58 @@
+00:48:24 [NEON.CONFIG] 🔑 API Keys cargadas correctamente.
+00:48:24 [NEON.ENGINE] 🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)
+00:48:24 [NEON.ENGINE] 📡 Descargando últimas 500 velas para análisis de clima macro...
+00:48:24 [NEON.API_BINANCE] 📥 Descargando historial macro de 500 velas para BTCUSDT...
+00:48:29 [httpx] HTTP Request: GET https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=500 "HTTP/1.1 200 OK"
+00:48:29 [NEON.TRADING] 🆕 No se encontró un estado previo en BotState. Usando valores por defecto.
+00:48:29 [NEON.TRADING] 🆕 No existen posiciones colgadas en Trades. Operando balance limpio.
+00:48:30 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+00:48:31 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+00:51:35 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+00:51:39 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000521 BTC | SL: 0.30% | TP: 0.60%
+00:51:39 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (received 1008 (policy violation) Pong timeout; then sent 1008 (policy violation) Pong timeout). Reintentando en 2s... (Intento 1)
+00:51:41 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+00:51:43 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+00:52:23 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+00:53:07 [NEON.ENGINE] 🚨 [SCALPER] Tendencia bajista macro o quiebre de mínimos detectado. Bloqueando compras.
+00:55:58 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+00:55:59 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (received 1008 (policy violation) Pong timeout; then sent 1008 (policy violation) Pong timeout). Reintentando en 2s... (Intento 1)
+00:56:01 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+00:56:05 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+00:58:21 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+00:59:13 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+01:01:11 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (received 1008 (policy violation) Pong timeout; then sent 1008 (policy violation) Pong timeout). Reintentando en 2s... (Intento 1)
+01:01:13 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+01:01:15 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+01:01:33 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+01:06:11 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+01:06:11 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (received 1008 (policy violation) Pong timeout; then sent 1008 (policy violation) Pong timeout). Reintentando en 2s... (Intento 1)
+01:06:13 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+01:06:19 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+01:11:59 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+01:12:16 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (received 1008 (policy violation) Pong timeout; then sent 1008 (policy violation) Pong timeout). Reintentando en 2s... (Intento 1)
+01:12:18 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+01:12:27 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+01:12:27 [NEON.TRADING] 🛡️ [BREAKEVEN BLINDADO] Ajustado stop de seguridad a: $76,746.80
+01:13:17 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+01:16:35 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+01:16:35 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (received 1008 (policy violation) Pong timeout; then sent 1008 (policy violation) Pong timeout). Reintentando en 2s... (Intento 1)
+01:16:37 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+01:16:39 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+01:18:11 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+01:31:09 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (received 1008 (policy violation) Pong timeout; then sent 1008 (policy violation) Pong timeout). Reintentando en 2s... (Intento 1)
+01:31:11 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+01:31:12 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+01:31:12 [NEON.TRADING] ⚡ [VENTA SIM] Motivo: BREAKEVEN_EXIT | Entrada: $76,731.45 | Salida: $76,618.89 | PnL Trade: $-0.06 (-0.15%)
+01:35:00 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+01:35:03 [NEON.TRADING] 🛒 COMPRA EN DB: 0.000521 BTC | SL: 0.30% | TP: 0.60%
+01:35:03 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (received 1008 (policy violation) Pong timeout; then sent 1008 (policy violation) Pong timeout). Reintentando en 2s... (Intento 1)
+01:35:05 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+01:35:07 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+01:35:48 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+01:36:24 [NEON.ENGINE] 🚨 [SCALPER] Tendencia bajista macro o quiebre de mínimos detectado. Bloqueando compras.
+01:44:38 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (received 1008 (policy violation) Pong timeout; then sent 1008 (policy violation) Pong timeout). Reintentando en 2s... (Intento 1)
+01:44:40 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+01:44:42 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+01:44:52 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+01:46:33 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+01:49:48 [NEON.ENGINE] ⏰ Tiempo de sesión agotado (60 min). Guardando y saliendo...
