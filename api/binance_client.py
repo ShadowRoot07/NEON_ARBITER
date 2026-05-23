@@ -13,9 +13,10 @@ class BinanceClient:
         self.ws_url = f"wss://stream.binance.com:9443/stream?streams={streams}"
         self.logger = logging.getLogger("NEON.API_BINANCE")
 
-    async def get_historical_data(self, symbol="BTCUSDT", limit=500):
-        self.logger.info(f"📥 Descargando historial macro de {limit} velas para {symbol}...")
-        params = {"symbol": symbol, "interval": "1m", "limit": limit}
+
+    async def get_historical_data(self, symbol="BTCUSDT", interval="1m", limit=500):
+        self.logger.info(f"📥 Descargando historial macro de {limit} velas ({interval}) para {symbol}...")
+        params = {"symbol": symbol, "interval": interval, "limit": limit}
         try:
             async with httpx.AsyncClient() as client:
                 response = await client.get(self.rest_url, params=params, timeout=15.0)

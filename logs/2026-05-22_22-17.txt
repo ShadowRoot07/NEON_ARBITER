@@ -1,0 +1,26 @@
+22:17:13 [NEON.CONFIG] 🔑 API Keys cargadas correctamente.
+22:17:13 [NEON.ENGINE] 🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)
+22:17:13 [NEON.ENGINE] 📡 Descargando últimas 500 velas para análisis de clima macro...
+22:17:13 [NEON.API_BINANCE] 📥 Descargando historial macro de 500 velas para BTCUSDT...
+22:17:17 [httpx] HTTP Request: GET https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=500 "HTTP/1.1 200 OK"
+22:17:17 [NEON.TRADING] 🆕 No se encontró un estado previo en BotState. Usando valores por defecto.
+22:17:17 [NEON.TRADING] 🆕 No existen posiciones colgadas en Trades. Operando balance limpio.
+22:17:18 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:17:20 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+22:18:51 [NEON.TRADING] 🛒 COMPRA EN DB: 0.005273 BTC | SL: 0.30% | TP: 0.60%
+22:23:17 [NEON.ENGINE] ⚠️ [ESCUDO] Red degradada detectada (Latencia: 85837ms). Congelando compras.
+22:23:17 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (received 1008 (policy violation) Pong timeout; then sent 1008 (policy violation) Pong timeout). Reintentando en 2s... (Intento 1)
+22:23:19 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:23:21 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+22:23:25 [NEON.ENGINE] ✅ [ESCUDO] Conexión estabilizada (Latencia: 0ms). Reactivando gatillos.
+22:28:44 [NEON.ENGINE] ⚠️ [ESCUDO] Red degradada detectada (Latencia: 5343ms). Congelando compras.
+22:28:47 [NEON.ENGINE] ✅ [ESCUDO] Conexión estabilizada (Latencia: 0ms). Reactivando gatillos.
+22:42:06 [NEON.ENGINE] ⚠️ [ESCUDO] Red degradada detectada (Latencia: 6226ms). Congelando compras.
+22:42:20 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (sent 1011 (internal error) keepalive ping timeout; no close frame received). Reintentando en 2s... (Intento 1)
+22:42:22 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+22:42:28 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+22:42:32 [NEON.ENGINE] ✅ [ESCUDO] Conexión estabilizada (Latencia: 0ms). Reactivando gatillos.
+22:44:15 [NEON.TRADING] ⚡ [VENTA SIM] Motivo: STOP_LOSS | Entrada: $75,858.47 | Salida: $75,567.70 | PnL Trade: $-1.53 (-0.38%)
+22:45:03 [NEON.ENGINE] ⚠️ [ESCUDO] Red degradada detectada (Latencia: 25427ms). Congelando compras.
+22:45:06 [NEON.ENGINE] ✅ [ESCUDO] Conexión estabilizada (Latencia: 0ms). Reactivando gatillos.
+22:47:14 [NEON.ENGINE] ⏰ Tiempo de sesión agotado (30 min). Guardando y saliendo...

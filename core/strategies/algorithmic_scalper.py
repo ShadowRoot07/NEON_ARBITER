@@ -27,16 +27,23 @@ class AlgorithmicScalper(BaseStrategy):
             "momentum": TrendAnalyzer.identify_momentum(data)
         }
 
-    def should_execute(self, analysis, climate_tuple):
+    def should_execute(self, analysis, climate_tuple, macro_trend="SIDEWAYS"):
         """
-        Gatillo adaptativo que muta según la longevidad y compresión del precio.
-        climate_tuple es enviado por el Engine como un desempaquetado de: (clima, longevidad)
+        Gatillo adaptativo optimizado con el Sentido de Inercia Macro.
+        macro_trend es inyectado desde el estado asíncrono del Engine ('BULLISH', 'BEARISH', 'SIDEWAYS').
         """
         if not analysis:
             return "HOLD", 0.0
 
-        # Desempaquetamos la nueva tupla con contexto temporal
+        # Desempaquetamos la tupla con contexto temporal de ticks
         climate, longevidad = climate_tuple
+
+        # --- CANDADO INTERNACIONAL DE INERCIA MACRO ---
+        # Si la tendencia en velas de 15m/1H es bajista, operar reversiones al alza es sumamente peligroso.
+        # Bloqueamos cualquier intento de COMPRA (Long) para proteger capital de cuchillos cayendo.
+        if macro_trend == "BEARISH":
+            return "HOLD", 0.0
+        # -----------------------------------------------
 
         if climate in ["CHAOS", "WARMING_UP", "TRENDING_DOWN"]:
             return "HOLD", 0.0
@@ -55,12 +62,12 @@ class AlgorithmicScalper(BaseStrategy):
         # 🔥 ESCENARIO A: MODO GATILLO BREAKOUT (Cazar la explosión del Rango Viejo)
         # ===================================================================
         if es_rango_viejo_y_comprimido:
-            # Si el rango es viejo, operar reversión a la media es un suicidio táctico. 
+            # Si el rango es viejo, operar reversión a la media es un suicidio táctico.
             # Buscamos dirección de quiebre alcista con volumen institucional masivo.
             if momentum > 0.04 and rvol > 2.10 and eth_corr > 0.70:
                 # Si el precio rompe hacia arriba con más del doble de volumen normal, nos subimos a la ola
                 return "BUY", 0.98
-            
+
             return "HOLD", 0.0
 
         # ===================================================================
@@ -78,6 +85,11 @@ class AlgorithmicScalper(BaseStrategy):
 
                 # Filtro de correlación macro con Ethereum para evitar trampas
                 if eth_corr < 0.50:
+                    return "HOLD", 0.0
+
+                # OPTIMIZACIÓN EXTRA: Si el mercado macro está lateral (SIDEWAYS), exigimos
+                # un Z-Score un poco más estricto para evitar falsas salidas.
+                if macro_trend == "SIDEWAYS" and z_score > -1.8 and climate == "RANGING":
                     return "HOLD", 0.0
 
                 return "BUY", 0.95

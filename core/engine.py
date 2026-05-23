@@ -11,6 +11,7 @@ from core.strategies.algorithmic_scalper import AlgorithmicScalper
 from database.schema import BotState, AIAudit, sessionmaker, engine as db_engine
 from datetime import datetime
 from core.math_engine import calculate_rvol, calculate_pearson_correlation
+from core.analyzers.macro_analyzer import MacroAnalyzer
 
 class Engine:
     def __init__(self, test_balance=None, is_scalper=False):
@@ -45,6 +46,8 @@ class Engine:
         self.last_math_time = 0.0
         self.last_print_time = 0.0
 
+        self.macro_analyzer = MacroAnalyzer(self.client)
+
     async def run_bot(self, duration_mins=None):
         self.logger.info(f"🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)")
 
@@ -57,6 +60,18 @@ class Engine:
 
         if historico:
             self.trading.sincronizar_estado(historico[-1])
+            # --- LANZAMIENTO DE LA BRÚJULA EN SEGUNDO PLANO (CERO PARÁLISIS) ---
+            # Definimos el intervalo macro: 15 minutos para scalper, 1 hora para swing tradicional
+            macro_interval_str = "15m" if self.is_scalper else "1h"
+
+            async def macro_background_loop():
+                while True:
+                    await self.macro_analyzer.update_trend(symbol="BTCUSDT", interval=macro_interval_str)
+                    await asyncio.sleep(60) # Se ejecuta de forma aislada cada 1 minuto
+
+            # asyncio.create_task delega la ejecución al loop de fondo sin bloquear los ticks entrantes
+            asyncio.create_task(macro_background_loop())
+            # -------------------------------------------------------------------
 
         from core.analyzers.trend_analyzer import TrendAnalyzer
 
@@ -126,7 +141,7 @@ class Engine:
                             rendimiento_actual = (price - pos['entry']) / pos['entry']
 
                             # EVALUACIÓN DE ESCENARIOS REALISTAS
-                            if rendimiento_actual >= 0.0006: 
+                            if rendimiento_actual >= 0.0006:
                                 self.logger.info("🚨 [CONTINGENCIA] Saliendo con ganancias seguras antes de quedar a ciegas.")
                                 self.trading.forzar_cierre_panico(price)
                         # ===================================================================
@@ -167,8 +182,12 @@ class Engine:
                                     analysis['eth_corr'] = eth_corr
                                     analysis['sol_corr'] = sol_corr
 
-                                    # Pasamos la tupla completa clima_contexto a la estrategia
-                                    decision, confianza = self.strategy.should_execute(analysis, clima_contexto)
+                                    # Pasamos la tupla completa clima_contexto y el estado de la brújula macro a la estrategia
+                                    decision, confianza = self.strategy.should_execute(
+                                        analysis, 
+                                        clima_contexto,
+                                        macro_trend=self.macro_analyzer.current_macro_trend
+                                    )
 
                                     if decision == 'BUY' and not self.trading.active_position:
                                         self.trading.abrir_posicion_test(price, clima=clima_actual)
@@ -215,6 +234,21 @@ class Engine:
                     historico = await self.client.get_historical_data(symbol="BTCUSDT", limit=500)
 
                     if historico:
+                        self.trading.sincronizar_estado(historico[-1])
+
+                        # --- LANZAMIENTO DE LA BRÚJULA EN SEGUNDO PLANO (CERO PARÁLISIS) ---
+                        # Definimos el intervalo macro: 15 minutos para scalper, 1 hora para swing tradicional
+                        macro_interval_str = "15m" if self.is_scalper else "1h"
+
+                        async def macro_background_loop():
+                            while True:
+                                await self.macro_analyzer.update_trend(symbol="BTCUSDT", interval=macro_interval_str)
+                                await asyncio.sleep(60) # Se ejecuta de forma aislada cada 1 minuto
+
+                        # asyncio.create_task delega la ejecución al loop de fondo sin bloquear los ticks entrantes
+                        asyncio.create_task(macro_background_loop())
+                        # -------------------------------------------------------------------
+
                         self.price_buffer.clear()
                         for p in historico:
                             self.price_buffer.append(p)
