@@ -76,12 +76,23 @@ def calculate_rvol(volume_deltas, period=50):
     return float(volume_deltas[-1] / mean_volume)
 
 def calculate_pearson_correlation(prices_a, prices_b, period=50):
-    if len(prices_a) < period or len(prices_b) < period:
-        return 1.0
-    arr_a = np.asarray(prices_a, dtype=np.float64)[-period:]
-    arr_b = np.asarray(prices_b, dtype=np.float64)[-period:]
+    # Forzamos que ambos tengan al menos el mínimo de periodos requeridos
+    len_a = len(prices_a)
+    len_b = len(prices_b)
+    
+    if len_a < period or len_b < period:
+        return 1.0  # Retorno seguro si un buffer está vacío por reconexión
+
+    # Cortamos basándonos en la menor cantidad de elementos disponibles para evitar desfases extremos
+    min_len = min(len_a, len_b, period)
+    
+    arr_a = np.asarray(prices_a, dtype=np.float64)[-min_len:]
+    arr_b = np.asarray(prices_b, dtype=np.float64)[-min_len:]
+    
+    # Parche de seguridad por si el precio está totalmente plano (std == 0)
     if np.std(arr_a) == 0 or np.std(arr_b) == 0:
         return 1.0
+        
     correlation_matrix = np.corrcoef(arr_a, arr_b)
     return float(correlation_matrix[0, 1])
 

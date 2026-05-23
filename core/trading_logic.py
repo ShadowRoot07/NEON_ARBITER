@@ -62,7 +62,7 @@ class TradingLogic:
                     return
             self.modo_conservador = False
 
-    def abrir_posicion_test(self, precio, clima="RANGING"):
+    def abrir_posicion_test(self, precio, clima="RANGING", confianza=0.0):
         self.obtener_autocontexto_db()
 
         # can_trade() ya evalúa si self.net_unstable está activo
@@ -93,17 +93,28 @@ class TradingLogic:
             'entry': precio,
             'sl': precio * (1 - current_sl_pct),
             'tp': precio * (1 + take_profit_pct),
-            'clima_origen': clima
+            'clima_origen': clima,
+            'confianza_origen': confianza  # Guardado en el diccionario de la posición viva
         }
         self.balance -= monto_a_invertir
 
         Session = sessionmaker(bind=db_engine)
         with Session() as session:
+            # Guardamos el registro del trade en la tabla de operaciones
             nuevo_trade = Trades(symbol="BTCUSDT", side="BUY", amount=self.inventory, price=precio)
             session.add(nuevo_trade)
+            
+            # --- NUEVA AUDITORÍA DEL GATILLO UNIFICADO (Paso 4) ---
+            registro_auditoria = AIAudit(decision=f"ALGO_BUY_{clima}", confidence=float(confianza))
+            session.add(registro_auditoria)
+            # ------------------------------------------------------
+            
             session.commit()
 
-        self.logger.info(f"🛒 COMPRA EN DB: {self.inventory:.6f} BTC | SL: {current_sl_pct*100:.2f}% | TP: {take_profit_pct*100:.2f}%")
+        self.logger.info(
+            f"🛒 COMPRA EN DB: {self.inventory:.6f} BTC | SL: {current_sl_pct*100:.2f}% | "
+            f"TP: {take_profit_pct*100:.2f}% | GATILLO UNIFICADO (Confianza: {confianza*100:.1f}%)"
+        )
 
     def ejecutar_simulacion(self, precio_actual):
         if not self.active_position:

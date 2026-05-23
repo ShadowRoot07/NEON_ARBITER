@@ -27,23 +27,29 @@ class AlgorithmicScalper(BaseStrategy):
             "momentum": TrendAnalyzer.identify_momentum(data)
         }
 
-    def should_execute(self, analysis, climate_tuple, macro_trend="SIDEWAYS"):
+    def should_execute(self, analysis, climate_tuple, **kwargs):
         """
-        Gatillo adaptativo optimizado con el Sentido de Inercia Macro.
-        macro_trend es inyectado desde el estado asíncrono del Engine ('BULLISH', 'BEARISH', 'SIDEWAYS').
+        🎯 GATILLO SUPREMO UNIFICADO (PASO 4)
+        Combina de forma ponderada: Clima Multi-Tick + Inercia Macro + Libro de Órdenes + Dominancia.
         """
         if not analysis:
             return "HOLD", 0.0
 
-        # Desempaquetamos la tupla con contexto temporal de ticks
+        # Extracción segura de los sensores del Paso 2 y Paso 3 vía kwargs
+        macro_trend = kwargs.get("macro_trend", "SIDEWAYS")
+        book_pressure = kwargs.get("book_pressure", 1.0)
+        btc_dom_drain = kwargs.get("btc_dom_drain", False)
+
+        # Desempaquetamos la tupla con contexto temporal de ticks (Paso 1)
         climate, longevidad = climate_tuple
 
-        # --- CANDADO INTERNACIONAL DE INERCIA MACRO ---
-        # Si la tendencia en velas de 15m/1H es bajista, operar reversiones al alza es sumamente peligroso.
-        # Bloqueamos cualquier intento de COMPRA (Long) para proteger capital de cuchillos cayendo.
+        # --- CANDADO INTERNACIONAL DE INERCIA MACRO (Paso 1) ---
         if macro_trend == "BEARISH":
             return "HOLD", 0.0
-        # -----------------------------------------------
+
+        # --- CANDADO DE FUERZA RELATIVA / DOMINANCIA (Paso 3) ---
+        if btc_dom_drain:
+            return "HOLD", 0.0
 
         if climate in ["CHAOS", "WARMING_UP", "TRENDING_DOWN"]:
             return "HOLD", 0.0
@@ -62,11 +68,11 @@ class AlgorithmicScalper(BaseStrategy):
         # 🔥 ESCENARIO A: MODO GATILLO BREAKOUT (Cazar la explosión del Rango Viejo)
         # ===================================================================
         if es_rango_viejo_y_comprimido:
-            # Si el rango es viejo, operar reversión a la media es un suicidio táctico.
-            # Buscamos dirección de quiebre alcista con volumen institucional masivo.
             if momentum > 0.04 and rvol > 2.10 and eth_corr > 0.70:
-                # Si el precio rompe hacia arriba con más del doble de volumen normal, nos subimos a la ola
-                return "BUY", 0.98
+                # Confirmamos que el quiebre alcista esté respaldado por el libro institucional
+                if book_pressure < 1.10:
+                    return "HOLD", 0.0
+                return "BUY", 0.98  # Retorna decisión y nivel de confianza alto
 
             return "HOLD", 0.0
 
@@ -74,25 +80,23 @@ class AlgorithmicScalper(BaseStrategy):
         # 🛒 ESCENARIO B: MODO SCALPING TRADICIONAL (Reversión en Rangos Jóvenes)
         # ===================================================================
         if climate in ["RANGING", "TRENDING_UP", "RANGING_DEAD"]:
-            # Filtros dinámicos según el grado de congelamiento del canal
             target_z = -1.5 if climate == "RANGING_DEAD" else -2.2
             target_rsi = 40 if climate == "RANGING_DEAD" else 35
 
             if z_score < target_z and rsi < target_rsi and momentum > -0.02:
-                # Filtro institucional de volumen mínimo para rebote
-                if rvol < 1.20:
+                if rvol < 1.20 or eth_corr < 0.50:
                     return "HOLD", 0.0
 
-                # Filtro de correlación macro con Ethereum para evitar trampas
-                if eth_corr < 0.50:
+                # --- CANDADO DE RAYOS X (Paso 2) ---
+                if book_pressure < 1.0:
                     return "HOLD", 0.0
 
-                # OPTIMIZACIÓN EXTRA: Si el mercado macro está lateral (SIDEWAYS), exigimos
-                # un Z-Score un poco más estricto para evitar falsas salidas.
                 if macro_trend == "SIDEWAYS" and z_score > -1.8 and climate == "RANGING":
                     return "HOLD", 0.0
 
-                return "BUY", 0.95
+                # Si todo alinea pero la presión es justa, bajamos levemente la confianza
+                confianza = 0.95 if book_pressure >= 1.20 else 0.85
+                return "BUY", confianza
 
         return "HOLD", 0.0
 

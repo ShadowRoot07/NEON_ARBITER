@@ -12,6 +12,7 @@ from database.schema import BotState, AIAudit, sessionmaker, engine as db_engine
 from datetime import datetime
 from core.math_engine import calculate_rvol, calculate_pearson_correlation
 from core.analyzers.macro_analyzer import MacroAnalyzer
+from core.analyzers.orderbook_analyzer import OrderBookAnalyzer
 
 class Engine:
     def __init__(self, test_balance=None, is_scalper=False):
@@ -47,6 +48,7 @@ class Engine:
         self.last_print_time = 0.0
 
         self.macro_analyzer = MacroAnalyzer(self.client)
+        self.orderbook_analyzer = OrderBookAnalyzer()
 
     async def run_bot(self, duration_mins=None):
         self.logger.info(f"🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)")
@@ -61,15 +63,13 @@ class Engine:
         if historico:
             self.trading.sincronizar_estado(historico[-1])
             # --- LANZAMIENTO DE LA BRÚJULA EN SEGUNDO PLANO (CERO PARÁLISIS) ---
-            # Definimos el intervalo macro: 15 minutos para scalper, 1 hora para swing tradicional
             macro_interval_str = "15m" if self.is_scalper else "1h"
 
             async def macro_background_loop():
                 while True:
                     await self.macro_analyzer.update_trend(symbol="BTCUSDT", interval=macro_interval_str)
-                    await asyncio.sleep(60) # Se ejecuta de forma aislada cada 1 minuto
+                    await asyncio.sleep(60)
 
-            # asyncio.create_task delega la ejecución al loop de fondo sin bloquear los ticks entrantes
             asyncio.create_task(macro_background_loop())
             # -------------------------------------------------------------------
 
@@ -79,6 +79,13 @@ class Engine:
             try:
                 async for data in self.client.connect():
                     current_time = time.time()
+
+                    # --- FILTRO ENRUTADOR DEL PASO 2 ---
+                    if data.get('e') == 'depthUpdate':
+                        self.orderbook_analyzer.process_depth_update(data)
+                        continue
+                    # ------------------------------------
+
                     symbol = data['s_name']
                     price = float(data['c'])
                     raw_volume = float(data['v'])
@@ -114,19 +121,17 @@ class Engine:
                         # ===================================================================
                         tick_latency = data.get('latency_ms', 0.0)
 
-                        # Inicializamos contadores dinámicos si no existen en el objeto
                         if not hasattr(self, 'unstable_ticks_counter'):
                             self.unstable_ticks_counter = 0
                             self.stable_ticks_counter = 0
 
-                        if tick_latency > 1200.0:  # Techo de retraso: 1.2 segundos
+                        if tick_latency > 1200.0:
                             self.unstable_ticks_counter += 1
                             self.stable_ticks_counter = 0
                         else:
                             self.stable_ticks_counter += 1
                             self.unstable_ticks_counter = 0
 
-                        # GESTIÓN DE ESTADOS DE ALERTA
                         if self.unstable_ticks_counter >= 3 and not self.trading.net_unstable:
                             self.trading.net_unstable = True
                             self.logger.warning(f"⚠️ [ESCUDO] Red degradada detectada (Latencia: {tick_latency:.0f}ms). Congelando compras.")
@@ -135,12 +140,10 @@ class Engine:
                             self.trading.net_unstable = False
                             self.logger.info(f"✅ [ESCUDO] Conexión estabilizada (Latencia: {tick_latency:.0f}ms). Reactivando gatillos.")
 
-                        # CEREBRO DE CONTINGENCIA (Si el internet está dañado y estamos en medio de un trade)
                         if self.trading.net_unstable and self.trading.active_position:
                             pos = self.trading.active_position
                             rendimiento_actual = (price - pos['entry']) / pos['entry']
 
-                            # EVALUACIÓN DE ESCENARIOS REALISTAS
                             if rendimiento_actual >= 0.0006:
                                 self.logger.info("🚨 [CONTINGENCIA] Saliendo con ganancias seguras antes de quedar a ciegas.")
                                 self.trading.forzar_cierre_panico(price)
@@ -149,48 +152,63 @@ class Engine:
                         if self.trading.test_mode:
                             self.trading.ejecutar_simulacion(price)
 
-                            # DOWNSAMPLING CRÍTICO: ¿Toca hacer cálculos matemáticos pesados?
+                            # DOWNSAMPLING CRÍTICO
                             if (current_time - self.last_math_time) >= self.math_interval:
                                 self.last_math_time = current_time
 
-                                # Convertimos los deques a numpy arrays de golpe
                                 btc_prices_arr = np.array(self.price_buffer, dtype=np.float64)
                                 btc_vol_arr = np.array(self.volume_buffers["BTCUSDT"], dtype=np.float64)
                                 eth_prices_arr = np.array(self.market_buffers["ETHUSDT"], dtype=np.float64)
                                 sol_prices_arr = np.array(self.market_buffers["SOLUSDT"], dtype=np.float64)
 
-                                # --- MODIFICACIÓN REQUERIDA (BLOQUE MATEMÁTICO) ---
-                                # Desempaquetamos la tupla (clima, longevidad) que viene del TrendAnalyzer
                                 clima_contexto = TrendAnalyzer.get_market_climate(list(self.price_buffer), is_scalper=self.is_scalper)
                                 clima_actual = clima_contexto[0]
 
-                                # FILTROS PROTECTORES MULTI-TICK
                                 if clima_actual == "RANGING_DEAD" and not self.is_scalper:
                                     continue
                                 elif clima_actual == "TRENDING_DOWN" and self.is_scalper:
                                     continue
 
-                                # Llamamos a nuestras funciones matemáticas vectorizadas
                                 btc_rvol = calculate_rvol(btc_vol_arr)
                                 eth_corr = calculate_pearson_correlation(btc_prices_arr, eth_prices_arr)
                                 sol_corr = calculate_pearson_correlation(btc_prices_arr, sol_prices_arr)
 
-                                # Análisis de estrategia
+                                # ===================================================================
+                                # ⚡ PASO 3: CÓMPUTO VECTORIAL DE DOMINANCIA EN TIEMPO REAL (ALTS VS BTC)
+                                # ===================================================================
+                                btc_dom_drain = False
+                                if len(eth_prices_arr) >= 20 and len(sol_prices_arr) >= 20:
+                                    # Calculamos rendimientos recientes (últimos 20 ticks) de forma ultra-rápida
+                                    ret_btc = (btc_prices_arr[-1] - btc_prices_arr[-20]) / btc_prices_arr[-20]
+                                    ret_eth = (eth_prices_arr[-1] - eth_prices_arr[-20]) / eth_prices_arr[-20]
+                                    ret_sol = (sol_prices_arr[-1] - sol_prices_arr[-20]) / sol_prices_arr[-20]
+                                    
+                                    # Si BTC sube pero el promedio de las alts baja, la liquidez está siendo succionada
+                                    mean_alts_ret = (ret_eth + ret_sol) / 2.0
+                                    if ret_btc > 0.0005 and mean_alts_ret < -0.0002:
+                                        btc_dom_drain = True
+                                # ===================================================================
+
                                 analysis = self.strategy.analyze(self.price_buffer, self.market_buffers)
                                 if analysis:
                                     analysis['rvol'] = btc_rvol
                                     analysis['eth_corr'] = eth_corr
                                     analysis['sol_corr'] = sol_corr
 
-                                    # Pasamos la tupla completa clima_contexto y el estado de la brújula macro a la estrategia
+                                    current_book_pressure = self.orderbook_analyzer.market_pressure.get("BTCUSDT", 1.0)
+
+                                    # --- PASO 4: INTERCONEXIÓN EN GATILLO SUPREMO ---
                                     decision, confianza = self.strategy.should_execute(
-                                        analysis, 
+                                        analysis,
                                         clima_contexto,
-                                        macro_trend=self.macro_analyzer.current_macro_trend
+                                        macro_trend=self.macro_analyzer.current_macro_trend,
+                                        book_pressure=current_book_pressure,
+                                        btc_dom_drain=btc_dom_drain
                                     )
 
                                     if decision == 'BUY' and not self.trading.active_position:
-                                        self.trading.abrir_posicion_test(price, clima=clima_actual)
+                                        self.trading.abrir_posicion_test(price, clima=clima_actual, confianza=confianza)
+
                                     elif decision == 'SELL' and self.trading.active_position:
                                         self.trading.cerrar_posicion_test(price, f"ALGO_{clima_actual}")
 
@@ -201,9 +219,8 @@ class Engine:
                             btc_prices_arr = np.array(self.price_buffer, dtype=np.float64)
                             btc_vol_arr = np.array(self.volume_buffers["BTCUSDT"], dtype=np.float64)
                             eth_prices_arr = np.array(self.market_buffers["ETHUSDT"], dtype=np.float64)
+                            sol_prices_arr = np.array(self.market_buffers["SOLUSDT"], dtype=np.float64)
 
-                            # --- MODIFICACIÓN REQUERIDA (BLOQUE MONITOR) ---
-                            # Desempaquetamos la tupla aquí también para el renderizado
                             clima_actual, longevidad_actual = TrendAnalyzer.get_market_climate(list(self.price_buffer), is_scalper=self.is_scalper)
                             total_equity = self.trading.get_total_equity(price)
 
@@ -211,14 +228,17 @@ class Engine:
 
                             btc_rvol = calculate_rvol(btc_vol_arr)
                             eth_corr = calculate_pearson_correlation(btc_prices_arr, eth_prices_arr)
+                            btc_press = self.orderbook_analyzer.market_pressure.get("BTCUSDT", 1.0)
+
+                            # Bandera visual rápida para monitorear el drenado de liquidez en la terminal
+                            dom_status = "⚠️DRAIN" if (len(eth_prices_arr) >= 20 and len(sol_prices_arr) >= 20 and ((btc_prices_arr[-1] - btc_prices_arr[-20])/btc_prices_arr[-20]) > 0.0005 and ((eth_prices_arr[-1] - eth_prices_arr[-20])/eth_prices_arr[-20] + (sol_prices_arr[-1] - sol_prices_arr[-20])/sol_prices_arr[-20])/2.0 < -0.0002) else "OK"
 
                             pnl_c = "\033[32m" if self.trading.daily_pnl >= 0 else "\033[31m"
                             c_map = {"TRENDING_UP": "\033[32m", "TRENDING_DOWN": "\033[31m", "RANGING": "\033[34m", "RANGING_DEAD": "\033[33m"}
                             c_color = c_map.get(clima_actual, "\033[0m")
 
-                            # Renderizamos incluyendo el contador de ticks de longevidad (longevidad_actual)
                             print(f"📊 [{self.trading.mode}] [BTC: ${price:,.2f}] Clima: {c_color}{clima_actual} ({longevidad_actual}t)\033[0m | "
-                                  f"RVOL: {btc_rvol:.2f} | CorrETH: {eth_corr:.2f} | "
+                                  f"RVOL: {btc_rvol:.2f} | Muros: {btc_press:.2f}x | Dom: {dom_status} | "
                                   f"TOTAL: ${total_equity:.2f} | PnL Diar: {pnl_c}${self.trading.daily_pnl:.2f}\033[0m")
 
                     else:
@@ -235,19 +255,14 @@ class Engine:
 
                     if historico:
                         self.trading.sincronizar_estado(historico[-1])
-
-                        # --- LANZAMIENTO DE LA BRÚJULA EN SEGUNDO PLANO (CERO PARÁLISIS) ---
-                        # Definimos el intervalo macro: 15 minutos para scalper, 1 hora para swing tradicional
                         macro_interval_str = "15m" if self.is_scalper else "1h"
 
                         async def macro_background_loop():
                             while True:
                                 await self.macro_analyzer.update_trend(symbol="BTCUSDT", interval=macro_interval_str)
-                                await asyncio.sleep(60) # Se ejecuta de forma aislada cada 1 minuto
+                                await asyncio.sleep(60)
 
-                        # asyncio.create_task delega la ejecución al loop de fondo sin bloquear los ticks entrantes
                         asyncio.create_task(macro_background_loop())
-                        # -------------------------------------------------------------------
 
                         self.price_buffer.clear()
                         for p in historico:

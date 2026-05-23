@@ -9,8 +9,13 @@ class BinanceClient:
     def __init__(self):
         self.symbols = ["btcusdt", "ethusdt", "solusdt"]
         self.rest_url = 'https://api.binance.com/api/v3/klines'
-        streams = "/".join([f"{s}@ticker" for s in self.symbols])
-        self.ws_url = f"wss://stream.binance.com:9443/stream?streams={streams}"
+        
+        # --- NUEVA SUSCRIPCIÓN COMBINADA: TICKER + DEPTH (5 NIVELES) ---
+        ticker_streams = [f"{s}@ticker" for s in self.symbols]
+        depth_streams = [f"{s}@depth5" for s in self.symbols]
+        all_streams = "/".join(ticker_streams + depth_streams)
+        
+        self.ws_url = f"wss://stream.binance.com:9443/stream?streams={all_streams}"
         self.logger = logging.getLogger("NEON.API_BINANCE")
 
 
