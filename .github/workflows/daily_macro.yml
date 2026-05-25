@@ -22,8 +22,8 @@ jobs:
     - name: ⚡ Instalar dependencias del sistema y caché
       run: |
         python -m pip install --upgrade pip
-        # Instalamos solo lo crítico que necesita el notifier y fetcher para ser ultra veloces
-        pip install httpx python-dotenv
+        # Eliminamos python-dotenv ya que no se usará en la nube
+        pip install httpx
 
     - name: 🧠 Ejecutar Oráculo Spica (Análisis Fundamental y Despacho)
       env:
