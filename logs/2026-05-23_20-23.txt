@@ -1,0 +1,2 @@
+20:23:34 [NEON.CONFIG] 🔑 API Keys cargadas correctamente.
+20:23:34 [NEON_MAIN] ❌ Error fatal al ejecutar el bot: Engine.run_bot() got an unexpected keyword argument 'duration_mins'
