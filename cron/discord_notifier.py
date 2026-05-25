@@ -108,9 +108,14 @@ class NeonMacroNotifier:
             logger.error(f"❌ Error crítico en el notifier: {e}")
 
 if __name__ == "__main__":
-    from dotenv import load_dotenv
-    load_dotenv()
-    
+    # Intentamos cargar dotenv de forma segura (solo para entorno local en Termux)
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+        logging.info("📝 Entorno local detectado: Variables cargadas desde el archivo .env")
+    except ImportError:
+        logging.info("🛰️ Entorno de producción/Nube detectado: Usando variables de entorno nativas")
+
     logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(message)s')
     notifier = NeonMacroNotifier()
     asyncio.run(notifier.analyze_and_notify())
