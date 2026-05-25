@@ -6,7 +6,8 @@ from api.binance_client import BinanceClient
 from config import Config
 from core.trading_logic import TradingLogic
 from core.strategies.algorithmic_scalper import AlgorithmicScalper # Nueva Estrategia
-from database.schema import AIAudit, sessionmaker, engine as db_engine
+from database.schema import Trades, AIAudit, BotState, sessionmaker, engine as db_engine
+
 from datetime import datetime
 
 class Engine:
@@ -24,7 +25,8 @@ class Engine:
         self.tick_interval = 30 if not is_scalper else 2
         self.Session = sessionmaker(bind=db_engine)
 
-    async def run_bot(self):
+
+    async def run_bot(self, duration_mins=None):
         self.logger.info(f"🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)")
 
         # 1. Warm-up: Sincronización e Historial para el Clima

@@ -29,8 +29,9 @@ def main():
     parser.add_argument('comando', choices=['bot_on', 'bot_off', 'tui'])
     parser.add_argument('--test', type=float)
     parser.add_argument('--scalper', action='store_true')
-    args, _ = parser.parse_known_args()
     parser.add_argument('--duration', type=int, help="Duración de la sesión en minutos")
+    
+    args, _ = parser.parse_known_args() 
 
 # Luego, en la ejecución del bot:
     if args.comando == 'bot_on':

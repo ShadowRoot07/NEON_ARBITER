@@ -1,3 +1,3 @@
 # NEON ARBITER
 
-Bot de trading super poderoso.
+Bot de trading super poderoso... Se desarrollo el bot interno de deiscord...
