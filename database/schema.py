@@ -16,21 +16,29 @@ except ModuleNotFoundError:
 cfg = Config()
 
 # Lógica de conexión híbrida
+# Lógica de conexión híbrida
 db_uri = cfg.database_url
 
 if db_uri and db_uri.startswith("postgres"):
-    # Ajuste para compatibilidad con SQLAlchemy y Neon (SSL requerido)
+    # 1. Asegurar el prefijo correcto que exige SQLAlchemy >= 1.4
+    if db_uri.startswith("postgres://"):
+        db_uri = db_uri.replace("postgres://", "postgresql://", 1)
+
+    # 2. Limpieza de SSL: Si no tiene los parámetros en el string, los inyectamos limpiamente
     if "sslmode" not in db_uri:
         connector = "&" if "?" in db_uri else "?"
         db_uri += f"{connector}sslmode=require"
-    
-    # SQLAlchemy a veces requiere 'postgresql://' en lugar de 'postgres://'
-    db_uri = db_uri.replace("postgres://", "postgresql://")
-    engine = create_engine(db_uri, pool_pre_ping=True)
+
+    # 3. Crear el engine usando la variable corregida 'db_uri'
+    engine = create_engine(
+        db_uri,
+        connect_args={"sslmode": "require"},
+        pool_pre_ping=True  # Descarta conexiones muertas del pooler automáticamente
+    )
+
 else:
     # Fallback a local si no hay URL de nube o estás offline
     engine = create_engine('sqlite:///database.db')
-
 Base = declarative_base()
 
 class MarketData(Base):

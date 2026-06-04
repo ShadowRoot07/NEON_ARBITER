@@ -1,0 +1,46 @@
+18:53:18 [NEON.CONFIG] 🔑 API Keys cargadas correctamente.
+18:53:18 [NEON.ENGINE] 🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)
+18:53:18 [NEON.ENGINE] 📡 Descargando últimas 100 velas para análisis de clima...
+18:53:18 [NEON.API_BINANCE] 📥 Descargando historial local para BTCUSDT...
+18:53:22 [httpx] HTTP Request: GET https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=100 "HTTP/1.1 200 OK"
+18:53:22 [NEON.TRADING] 🆕 No se encontró un estado previo en BotState. Usando valores por defecto.
+18:53:22 [NEON.TRADING] 🆕 No existen posiciones colgadas en Trades. Operando balance limpio.
+18:53:23 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+18:53:24 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+18:55:11 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:56:55 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:58:36 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:00:23 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:02:13 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:04:00 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:05:41 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:07:26 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:09:10 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:10:51 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:12:34 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:14:17 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:15:58 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:17:40 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:19:23 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:21:03 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:22:44 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:24:25 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:26:05 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:27:50 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:29:32 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:31:14 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:32:43 [NEON.TRADING] 🛒 COMPRA EN DB: 0.004056 BTC | SL: 0.30% | TP: 0.60%
+19:32:57 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:33:10 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING_DEAD): $73,979.66 | PnL: +0.03
+19:34:42 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:36:23 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:38:04 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:39:46 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:41:31 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:43:13 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:44:56 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:46:37 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:48:21 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:50:03 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:51:51 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:53:18 [NEON.ENGINE] ⏰ Tiempo de sesión agotado (60 min). Guardando y saliendo...

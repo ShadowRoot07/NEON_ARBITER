@@ -1,0 +1,8 @@
+22:55:35 [NEON.CONFIG] 🔑 API Keys cargadas correctamente.
+22:55:35 [NEON.ENGINE] 🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)
+22:55:35 [NEON.ENGINE] 📡 Intentando descargar últimas 100 velas para análisis de clima...
+22:55:35 [NEON.API_BINANCE] 📥 Generando historial base de calentamiento para BTCUSDT (100 velas)...
+22:55:36 [NEON.TRADING] 🆕 No se encontró un estado previo en BotState. Usando valores por defecto.
+22:55:36 [NEON.TRADING] 🆕 No existen posiciones colgadas en Trades. Operando balance limpio.
+22:55:36 [NEON.ENGINE] ✅ Historial cargado y sincronizado con éxito.
+22:55:36 [NEON_MAIN] ❌ Error fatal al ejecutar el bot: cannot import name 'trend_analyzer' from 'core.analyzers.trend_analyzer' (/data/data/com.termux/files/home/BIG-Projects/NEON_ARBITER/core/analyzers/trend_analyzer.py)

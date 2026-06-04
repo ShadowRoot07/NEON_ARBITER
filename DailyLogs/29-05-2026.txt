@@ -1,0 +1,216 @@
+┌─❖ ShadowOS in …/NEON_ARBITER on ⎇ feature/neon-core-fix via                                                                  └─█  python main.py bot_on --test 1000 --scalper --duration 60
+19:09:45 [NEON.CONFIG] 🔑 API Keys cargadas correctamente.
+19:09:45 [NEON.ENGINE] 🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)
+19:09:45 [NEON.ENGINE] 📡 Descargando últimas 100 velas para análisis de clima...                                               19:09:45 [NEON.API_BINANCE] 📥 Descargando historial local para BTCUSDT...
+19:09:49 [httpx] HTTP Request: GET https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=100 "HTTP/1.1 200 OK" 19:09:49 [NEON.TRADING] 🆕 No se encontró un estado previo en BotState. Usando valores por defecto.
+19:09:49 [NEON.TRADING] 🆕 No existen posiciones colgadas en Trades. Operando balance limpio.
+19:09:49 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+19:09:55 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+📊 [DAY] [BTC: $73,469.93] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,477.80] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00                             📊 [DAY] [BTC: $73,483.45] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,457.58] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:11:54 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (sent 1011 (internal error) keepalive ping timeout; no close frame received). Reintentando en 2s... (Intento 1)                       19:11:56 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+19:11:59 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+19:12:02 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,457.59] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,432.01] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,445.21] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,445.21] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,428.01] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:13:42 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,428.01] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,439.02] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,428.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,428.01] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,417.32] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:15:23 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,448.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,420.02] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,410.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,399.54] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,399.54] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:17:04 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,410.02] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,376.01] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,332.00] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,337.79] Clima: TRENDING_DOWN | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,368.33] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,326.01] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,239.36] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,272.32] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,284.88] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,314.00] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:20:24 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,314.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,301.18] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,281.49] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,289.94] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,306.66] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:22:04 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,289.93] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,288.67] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,308.05] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,303.16] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,317.08] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:23:45 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,316.64] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,321.61] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,325.96] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,329.69] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,333.67] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,346.67] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,346.67] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,336.07] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,335.28] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,332.20] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:27:09 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,327.44] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,340.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,339.99] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,340.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,333.35] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:28:51 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,333.34] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,333.35] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,308.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,311.49] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,344.63] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:30:33 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,344.65] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,346.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,410.00] Clima: TRENDING_UP | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,426.68] Clima: TRENDING_UP | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,447.14] Clima: TRENDING_UP | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:32:13 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,437.50] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,457.58] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,470.06] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,520.00] Clima: TRENDING_UP | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,564.98] Clima: TRENDING_UP | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,544.80] Clima: TRENDING_UP | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,546.51] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,558.56] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,564.01] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,611.05] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:35:33 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,619.18] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,611.04] Clima: TRENDING_UP | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,612.36] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,626.74] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,628.93] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:37:13 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,625.68] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,663.07] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,676.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,707.48] Clima: TRENDING_UP | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,707.31] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:38:53 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,720.65] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,696.09] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,710.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,695.59] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,727.94] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,708.06] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,722.75] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,722.75] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,706.73] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,691.24] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:42:14 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,692.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,697.10] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,691.24] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,691.25] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,673.61] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:43:55 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,672.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,670.01] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,666.53] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,682.93] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,682.94] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:45:36 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,698.24] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,711.99] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,694.01] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,669.99] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,659.02] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:47:16 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,659.02] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,679.99] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,660.01] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,649.90] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,649.90] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:48:58 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,649.91] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,655.92] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,650.59] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,666.49] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,663.20] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:50:38 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,653.94] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,623.72] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,637.69] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,637.70] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,614.71] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:52:20 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,608.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,607.35] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,621.08] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,621.09] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,643.41] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:54:01 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,626.01] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,618.82] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,596.83] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,584.17] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,619.99] Clima: TRENDING_DOWN | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:55:41 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,608.82] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,590.80] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,558.69] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,565.03] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,532.00] Clima: TRENDING_DOWN | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,536.00] Clima: TRENDING_DOWN | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,536.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,542.29] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,517.11] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,532.67] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+19:59:02 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,534.50] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,534.51] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,534.51] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,533.77] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,546.60] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+20:00:54 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,562.62] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,566.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,566.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,580.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,568.52] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+20:02:22 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,569.25] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,554.02] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,556.48] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,540.68] Clima: TRENDING_DOWN | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,532.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+20:04:04 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,526.01] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,522.67] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,546.00] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,568.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,573.15] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+20:05:45 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,561.07] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,604.00] Clima: TRENDING_UP | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,588.97] Clima: TRENDING_UP | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,588.96] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,605.19] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+20:07:25 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $73,607.09] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,607.06] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,604.65] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,644.55] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,663.08] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,627.27] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $73,639.12] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+20:09:45 [NEON.ENGINE] ⏰ Tiempo de sesión agotado (60 min). Guardando y saliendo...
+

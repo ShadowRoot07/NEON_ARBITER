@@ -1,0 +1,53 @@
+┌─❖ ShadowOS in …/NEON_ARBITER on ⎇ feature/neon-core-fix via                                                        └─█  python main.py bot_on --test 1000 --scalper --duration 60
+23:45:00 [NEON.CONFIG] 🔑 API Keys cargadas correctamente. 23:45:00 [NEON.ENGINE] 🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)                                        23:45:00 [NEON.ENGINE] 📡 Descargando últimas 100 velas para análisis de clima...
+23:45:00 [NEON.API_BINANCE] 📥 Descargando historial local para BTCUSDT...                                            23:45:04 [httpx] HTTP Request: GET https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=100 "HTTP/1.1 200 OK"
+23:45:04 [NEON.TRADING] 🆕 No se encontró un estado previo en BotState. Usando valores por defecto.                   23:45:04 [NEON.TRADING] 🆕 No existen posiciones colgadas en Trades. Operando balance limpio.
+23:45:04 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+23:45:06 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+📊 [DAY] [BTC: $66,746.00] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,724.00] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,724.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,725.84] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+23:46:45 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $66,720.26] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,715.21] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,714.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,720.25] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,765.21] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,794.01] Clima: TRENDING_UP | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,764.44] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,772.67] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,797.99] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,770.00] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+23:50:05 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $66,771.67] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,780.43] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,765.99] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,766.00] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,738.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+23:51:45 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+📊 [DAY] [BTC: $66,747.99] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,725.84] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,706.68] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,714.00] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,742.95] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,714.01] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,718.35] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,752.00] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,757.45] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,763.57] Clima: RANGING_DEAD | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,779.77] Clima: TRENDING_UP | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+📊 [DAY] [BTC: $66,771.60] Clima: RANGING | TOTAL: $1000.00 | Cash: $1000.00 | PnL Diar: $0.00
+23:55:40 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (no close frame received or sent). Reintentando en 2s... (Intento 1)
+23:55:42 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+23:55:42 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida ([Errno 7] No address associated with hostname). Reintentando en 4s... (Intento 2)
+23:55:46 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+23:55:46 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida ([Errno 7] No address associated with hostname). Reintentando en 8s... (Intento 3)
+23:55:54 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+23:55:54 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida ([Errno 7] No address associated with hostname). Reintentando en 16s... (Intento 4)
+23:56:10 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+23:56:10 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida ([Errno 7] No address associated with hostname). Reintentando en 30s... (Intento 5)
+23:56:40 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+23:56:40 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida ([Errno 7] No address associated with hostname). Reintentando en 30s... (Intento 6)
+^C23:56:42 [NEON_MAIN] 🛑 Bot detenido por el usuario.
+

@@ -1,0 +1,64 @@
+18:39:46 [NEON.CONFIG] 🔑 API Keys cargadas correctamente.
+18:39:46 [NEON.ENGINE] 🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)
+18:39:46 [NEON.ENGINE] 📡 Descargando últimas 100 velas para análisis de clima...
+18:39:46 [NEON.API_BINANCE] 📥 Descargando historial local para BTCUSDT...
+18:39:51 [httpx] HTTP Request: GET https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=100 "HTTP/1.1 200 OK"
+18:39:51 [NEON.TRADING] 🆕 No se encontró un estado previo en BotState. Usando valores por defecto.
+18:39:52 [NEON.TRADING] 🆕 No existen posiciones colgadas en Trades. Operando balance limpio.
+18:39:52 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+18:39:57 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+18:40:57 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (sent 1011 (internal error) keepalive ping timeout; no close frame received). Reintentando en 2s... (Intento 1)
+18:40:59 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+18:41:05 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+18:42:23 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:43:57 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:45:39 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:49:00 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:50:40 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:52:22 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:57:26 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+18:59:06 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:00:46 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:02:28 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:04:47 [NEON.TRADING] 🛒 COMPRA EN DB: 0.004081 BTC | SL: 0.30% | TP: 0.60%
+19:05:01 [NEON.TRADING] ✅ VENTA EN DB (ALGO_TRENDING_DOWN): $73,542.26 | PnL: +0.13
+19:05:48 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:07:29 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:09:09 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:10:38 [NEON.TRADING] 🛒 COMPRA EN DB: 0.004083 BTC | SL: 0.30% | TP: 0.60%
+19:10:42 [NEON.TRADING] ✅ VENTA EN DB (ALGO_TRENDING_DOWN): $73,482.63 | PnL: -0.00
+19:10:54 [NEON.TRADING] 🛒 COMPRA EN DB: 0.004083 BTC | SL: 0.30% | TP: 0.60%
+19:11:19 [NEON.TRADING] ✅ VENTA EN DB (ALGO_TRENDING_DOWN): $73,459.77 | PnL: -0.09
+19:11:25 [NEON.TRADING] 🛒 COMPRA EN DB: 0.004084 BTC | SL: 0.30% | TP: 0.60%
+19:11:56 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING_DEAD): $73,483.06 | PnL: +0.10
+19:12:29 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:13:28 [NEON.TRADING] 🛒 COMPRA EN DB: 0.004084 BTC | SL: 0.30% | TP: 0.60%
+19:14:09 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:14:14 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING_DEAD): $73,467.23 | PnL: +0.01
+19:15:34 [NEON.TRADING] 🛒 COMPRA EN DB: 0.004085 BTC | SL: 0.30% | TP: 0.60%
+19:15:52 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:16:58 [NEON.TRADING] ✅ VENTA EN DB (ALGO_RANGING_DEAD): $73,466.79 | PnL: +0.11
+19:17:34 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:19:19 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:19:43 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (sent 1011 (internal error) keepalive ping timeout; no close frame received). Reintentando en 2s... (Intento 1)
+19:19:45 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+19:19:48 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+19:21:18 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:22:58 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:24:39 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:26:58 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (sent 1011 (internal error) keepalive ping timeout; no close frame received). Reintentando en 2s... (Intento 1)
+19:27:00 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+19:27:04 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+19:28:21 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (sent 1011 (internal error) keepalive ping timeout; no close frame received). Reintentando en 2s... (Intento 1)
+19:28:23 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+19:28:25 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+19:28:59 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:30:39 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:32:21 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:33:55 [NEON.API_BINANCE] 🔌 [OFFLINE] Conexión perdida (sent 1011 (internal error) keepalive ping timeout; no close frame received). Reintentando en 2s... (Intento 1)
+19:33:57 [NEON.API_BINANCE] 🔌 Conectando a los streams en tiempo real de Binance...
+19:34:02 [NEON.API_BINANCE] ⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: ['btcusdt', 'ethusdt', 'solusdt']
+19:36:05 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:37:46 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:39:31 [NEON.ENGINE] 🎯 [SCALPER] Operando micro-rango lateral con Z-Score.
+19:39:47 [NEON.ENGINE] ⏰ Tiempo de sesión agotado (60 min). Guardando y saliendo...
