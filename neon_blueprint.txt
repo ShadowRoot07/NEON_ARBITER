@@ -1,0 +1,1393 @@
+=== ESTRUCTURA DEL PROYECTO ===
+.:
+DailyLogs
+LICENSE
+README.md
+__pycache__
+api
+config.py
+core
+cron
+data
+database
+debug_bypass.log
+logs
+main.py
+migrations
+neon_blueprint.txt
+purge_db.py
+requirements.txt
+tui
+
+./DailyLogs:
+02-06-2026.txt
+26-05-2026.txt
+27-05-2026.txt
+28-05-2026.txt
+29-05-2026.txt
+30-05-2026.txt
+31-05-2026.txt
+
+./__pycache__:
+config.cpython-313.pyc
+
+./api:
+__pycache__
+binance_client.py
+groq_client.py
+
+./api/__pycache__:
+binance_client.cpython-313.pyc
+groq_client.cpython-313.pyc
+
+./core:
+__pycache__
+analyzers
+auditoria_logic.py
+business_logic.py
+engine.py
+math_engine.py
+monitoreo_logic.py
+strategies
+trading_logic.py
+
+./core/__pycache__:
+engine.cpython-313.pyc
+math_engine.cpython-313.pyc
+trading_logic.cpython-313.pyc
+
+./core/analyzers:
+__pycache__
+trend_analyzer.py
+
+./core/analyzers/__pycache__:
+trend_analyzer.cpython-313.pyc
+
+./core/strategies:
+__pycache__
+algorithmic_scalper.py
+base_strategy.py
+multitimeframe_strategy.py
+
+./core/strategies/__pycache__:
+algorithmic_scalper.cpython-313.pyc
+base_strategy.cpython-313.pyc
+multitimeframe_strategy.cpython-313.pyc
+
+./cron:
+__init__.py
+__pycache__
+discord_notifier.py
+news_fetcher.py
+
+./cron/__pycache__:
+__init__.cpython-313.pyc
+discord_notifier.cpython-313.pyc
+news_fetcher.cpython-313.pyc
+
+./data:
+shadow_vault.json
+
+./database:
+__pycache__
+schema.py
+
+./database/__pycache__:
+schema.cpython-313.pyc
+
+./logs:
+2026-05-15_18-29.txt
+2026-05-15_18-39.txt
+2026-05-17_00-45.txt
+2026-05-17_00-49.txt
+2026-05-17_16-08.txt
+2026-05-23_20-20.txt
+2026-05-23_20-23.txt
+2026-05-23_20-36.txt
+2026-05-23_20-50.txt
+2026-05-23_20-57.txt
+2026-05-23_21-41.txt
+2026-05-27_01-03.txt
+2026-05-27_18-57.txt
+2026-05-28_18-39.txt
+2026-05-29_19-09.txt
+2026-05-30_18-53.txt
+2026-05-31_21-25.txt
+2026-06-02_23-45.txt
+
+./migrations:
+
+./tui:
+__pycache__
+app.py
+
+./tui/__pycache__:
+app.cpython-313.pyc
+
+=== CÓDIGO FUENTE ===
+-e 
+----------------------------------------
+FILE: ./core/math_engine.py
+----------------------------------------
+import numpy as np
+
+def calculate_rsi(prices, period=14):
+    """Calcula el RSI usando la fórmula de suavizado de Welles Wilder."""
+    if len(prices) <= period:
+        return 50.0
+    
+    # Convertir deque a numpy array para velocidad
+    prices = np.array(prices)
+    deltas = np.diff(prices)
+    seed = deltas[:period+1]
+    up = seed[seed >= 0].sum() / period
+    down = -seed[seed < 0].sum() / period
+    rs = up / down
+    rsi = np.zeros_like(prices)
+    rsi[:period] = 100. - 100. / (1. + rs)
+
+    for i in range(period, len(prices)):
+        delta = deltas[i - 1]
+        if delta > 0:
+            upval = delta
+            downval = 0.
+        else:
+            upval = 0.
+            downval = -delta
+
+        up = (up * (period - 1) + upval) / period
+        down = (down * (period - 1) + downval) / period
+        rs = up / down
+        rsi[i] = 100. - 100. / (1. + rs)
+
+    return rsi[-1] # Retornamos solo el valor más reciente
+
+def calculate_moving_average(prices, period=20):
+    """Media móvil simple optimizada."""
+    if len(prices) < period:
+        return prices[-1]
+    return np.mean(prices[-period:])
+
+def calcular_monto_seguro(balance_disponible, precio_activo, min_usd=11.0):
+    """
+    Calcula cuánto comprar asegurando que supere el mínimo de Binance (~10 USD).
+    Retorna la cantidad en la moneda base (ej. BTC).
+    """
+    if balance_disponible < min_usd:
+        return 0.0
+    
+    # Usamos un pequeño margen sobre el mínimo (11 USD)
+    monto_a_usar = max(min_usd, balance_disponible * 0.98) # Usar el 98% del balance o el min_usd
+    cantidad = monto_a_usar / precio_activo
+    return cantidad
+
+def calculate_linear_regression(prices):
+    """
+    Calcula la pendiente (slope) y el coeficiente de determinación (R^2).
+    m > 0: Tendencia Alcista | R2 > 0.7: Tendencia Fuerte.
+    """
+    if len(prices) < 10:
+        return 0.0, 0.0
+    
+    y = np.array(prices)
+    x = np.arange(len(y))
+    
+    # Cálculo de regresión lineal simple
+    slope, intercept = np.polyfit(x, y, 1)
+    
+    # Cálculo de R-Squared (Bondad de ajuste)
+    predict = slope * x + intercept
+    error_res = np.sum((y - predict) ** 2)
+    error_tot = np.sum((y - np.mean(y)) ** 2)
+    r_squared = 1 - (error_res / error_tot) if error_tot != 0 else 0
+    
+    return slope, r_squared
+
+def calculate_z_score(prices):
+    """Mide cuántas desviaciones estándar está el precio de su media."""
+    if len(prices) < 20:
+        return 0.0
+    
+    mean = np.mean(prices)
+    std = np.std(prices)
+    
+    if std == 0: return 0.0
+    
+    return (prices[-1] - mean) / std
+
+-e 
+----------------------------------------
+FILE: ./core/auditoria_logic.py
+----------------------------------------
+import logging
+from datetime import datetime
+
+class AuditoriaLogic:
+    def __init__(self, db_session=None):
+        self.logger = logging.getLogger(__name__)
+        self.session = db_session
+
+    def registrar_transaccion(self, trade_data):
+        """Registra la compra/venta en los logs y en la DB."""
+        self.logger.info(f"AUDIT: Registrando Transacción de {trade_data.get('symbol')}")
+        # Aquí iría la lógica para insertar en la tabla Trades de schema.py
+        return True
+
+    def registrar_decision(self, prompt, respuesta_ia):
+        """Guarda qué analizó la IA para auditorías futuras."""
+        self.logger.info("AUDIT: Decisión de IA guardada para análisis.")
+        return True
+
+-e 
+----------------------------------------
+FILE: ./core/business_logic.py
+----------------------------------------
+import os
+import logging
+
+# Configuración de logging
+logging.basicConfig(level=logging.INFO)
+
+# Definición de la clase BusinessLogic
+class BusinessLogic:
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+
+    def obtener_datos_de_mercado(self):
+        # Lógica para obtener datos de mercado
+        self.logger.info('Obteniendo datos de mercado...')
+        return {'precio': 100.0, 'volumen': 1000.0}
+
+    def procesar_datos_de_mercado(self, datos):
+        # Lógica para procesar datos de mercado
+        self.logger.info('Procesando datos de mercado...')
+        return {'indicador_tecnico': 50.0}
+
+    def tomar_decision_de_trading(self, datos):
+        # Lógica para tomar decisiones de trading
+        self.logger.info('Tomando decisiones de trading...')
+        return {'decision': 'comprar'}-e 
+----------------------------------------
+FILE: ./core/engine.py
+----------------------------------------
+import asyncio
+import logging
+import ujson
+from collections import deque
+from api.binance_client import BinanceClient
+from config import Config
+from core.trading_logic import TradingLogic
+from core.strategies.algorithmic_scalper import AlgorithmicScalper # Nueva Estrategia
+from database.schema import Trades, AIAudit, BotState, sessionmaker, engine as db_engine
+
+from datetime import datetime
+
+class Engine:
+    def __init__(self, test_balance=None, is_scalper=False):
+        self.logger = logging.getLogger("NEON.ENGINE")
+        self.is_scalper = is_scalper
+        self.cfg = Config()
+        self.client = BinanceClient()
+        self.trading = TradingLogic(initial_test_balance=test_balance, is_scalper=is_scalper)
+        self.strategy = AlgorithmicScalper() # Cambiado a Scalper Algorítmico
+        self.market_buffers = { "ETHUSDT": deque(maxlen=100), "SOLUSDT": deque(maxlen=100) }
+
+        self.tick_count = 0
+        self.price_buffer = deque(maxlen=3600)
+        self.tick_interval = 30 if not is_scalper else 2
+        self.Session = sessionmaker(bind=db_engine)
+
+
+    async def run_bot(self, duration_mins=None):
+        self.logger.info(f"🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)")
+
+        # 1. Warm-up: Sincronización e Historial para el Clima
+        self.logger.info("📡 Descargando últimas 100 velas para análisis de clima...")
+        start_time = datetime.now()
+
+        historico = await self.client.get_historical_data(symbol="BTCUSDT", limit=100)
+        for p in historico:
+            self.price_buffer.append(p)
+
+        if historico:
+            self.trading.sincronizar_estado(historico[-1])
+
+        from core.analyzers.trend_analyzer import TrendAnalyzer
+        
+        while True:
+            try:
+                # Iteramos directo sobre el generador asíncrono
+                async for data in self.client.connect():
+                    symbol = data['s_name']
+                    price = float(data['c'])
+
+                    # --- CONTROL DE TIEMPO DE SESIÓN ---
+                    if duration_mins:
+                        elapsed = (datetime.now() - start_time).total_seconds() / 60
+                        if elapsed >= duration_mins:
+                            self.logger.info(f"⏰ Tiempo de sesión agotado ({duration_mins} min). Guardando y saliendo...")
+                            total_equity = self.trading.get_total_equity(price)
+                            self.save_current_state(total_equity)
+                            return 
+                    # ----------------------------------
+
+                    if symbol == "BTCUSDT":
+                        self.price_buffer.append(price)
+                        self.tick_count += 1
+
+                        if not self.trading.can_trade(): continue
+
+                        if self.trading.test_mode:
+                            # 1. Gestión de salida (Trailing Stop / Stop Loss)
+                            self.trading.ejecutar_simulacion(price)
+
+                            # 2. Análisis Matemático por Intervalo
+                            # 2. Análisis Matemático por Intervalo
+                            if self.tick_count % self.tick_interval == 0:
+                                precios_lista = list(self.price_buffer)
+                                # PASAMOS EL FLAG: is_scalper influye en la sensibilidad
+                                clima = TrendAnalyzer.get_market_climate(precios_lista, is_scalper=self.is_scalper)
+
+                                # FILTRO PROTECTOR: Solo congela el bot con 'continue' en MODO NORMAL (no scalper)
+                                if clima == "RANGING_DEAD":
+                                    if not self.is_scalper:
+                                        if self.tick_count % 100 == 0:
+                                            self.logger.info("💤 Mercado lateral sin volatilidad. Esperando...")
+                                        continue
+                                    else:
+                                        if self.tick_count % 100 == 0:
+                                            self.logger.info("🎯 [SCALPER] Operando micro-rango lateral con Z-Score.")
+
+                                analysis = self.strategy.analyze(self.price_buffer, self.market_buffers)
+
+                                if analysis:
+                                    decision, confianza = self.strategy.should_execute(analysis, clima)
+
+                                    if decision == 'BUY' and not self.trading.active_position:
+                                        self.trading.abrir_posicion_test(price, clima=clima)
+
+                                    elif decision == 'SELL' and self.trading.active_position:
+                                        self.trading.cerrar_posicion_test(price, f"ALGO_{clima}")
+
+                        # Monitor visual en la consola de Termux
+                        if self.tick_count % 20 == 0:
+                            precios_lista = list(self.price_buffer)
+                            # También pasamos el flag en el print del monitor visual
+                            clima_actual = TrendAnalyzer.get_market_climate(precios_lista, is_scalper=self.is_scalper)
+                            total_equity = self.trading.get_total_equity(price)
+
+                            self.save_current_state(total_equity)
+
+                            pnl_c = "\033[32m" if self.trading.daily_pnl >= 0 else "\033[31m"
+                            c_map = {"TRENDING_UP": "\033[32m", "TRENDING_DOWN": "\033[31m", "RANGING": "\033[34m"}
+                            c_color = c_map.get(clima_actual, "\033[0m")
+
+                            print(f"📊 [{self.trading.mode}] [BTC: ${price:,.2f}] Clima: {c_color}{clima_actual}\033[0m | "
+                                  f"TOTAL: ${total_equity:.2f} | "
+                                  f"Cash: ${self.trading.balance:.2f} | "
+                                  f"PnL Diar: {pnl_c}${self.trading.daily_pnl:.2f}\033[0m")
+                    else:
+                        if symbol in self.market_buffers:
+                            self.market_buffers[symbol].append(price)
+
+            except Exception as e:
+                # Si el generador asíncrono cae por desconexión en el cel, se atrapa aquí
+                self.logger.warning(f"⚠️ Stream interrumpido en bucle principal: {e}. Sincronizando de nuevo...")
+                await asyncio.sleep(3)
+                
+                # RE-SINCRONIZACIÓN DE EMERGENCIA: Volvemos a bajar datos frescos para no operar con buffers desfasados
+                historico = await self.client.get_historical_data(symbol="BTCUSDT", limit=50)
+                if historico:
+                    self.price_buffer.clear()
+                    for p in historico:
+                        self.price_buffer.append(p)
+                    self.trading.sincronizar_estado(historico[-1])
+
+    def save_current_state(self, total_equity):
+        """Guarda el estado en la DB para que GitHub Actions lo herede"""
+        with self.Session() as session:
+            new_state = BotState(
+                total_balance=self.trading.balance,
+                daily_pnl=self.trading.daily_pnl,
+                current_mode=self.trading.mode,
+                is_active=1
+            )
+            session.add(new_state)
+            session.commit()
+-e 
+----------------------------------------
+FILE: ./core/monitoreo_logic.py
+----------------------------------------
+import os
+import logging
+
+# Configuración de logging
+logging.basicConfig(level=logging.INFO)
+
+# Definición de la clase MonitoreoLogic
+class MonitoreoLogic:
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+
+    def monitorear_indicadores_tecnicos(self, datos):
+        # Lógica para monitorear indicadores técnicos
+        self.logger.info('Monitoreando indicadores técnicos...')
+        return {'indicador_tecnico': 50.0}
+
+    def tomar_decision_en_tiempo_real(self, datos):
+        # Lógica para tomar decisiones en tiempo real
+        self.logger.info('Tomando decisiones en tiempo real...')
+        return {'decision': 'comprar'}
+-e 
+----------------------------------------
+FILE: ./core/strategies/algorithmic_scalper.py
+----------------------------------------
+from .base_strategy import BaseStrategy
+from core.math_engine import calculate_rsi, calculate_moving_average, calculate_z_score # Añadido Z-Score
+from core.analyzers.trend_analyzer import TrendAnalyzer
+
+class AlgorithmicScalper(BaseStrategy):
+    def __init__(self):
+        self.analyzer = TrendAnalyzer()
+        self.rsi_period = 14
+        self.fast_ma = 9
+        self.slow_ma = 21
+
+    def analyze(self, buffer, extra_market_data=None):
+        data = list(buffer)
+        if len(data) < 30: return None
+
+        # Cálculos Técnicos Locales
+        rsi = calculate_rsi(data, period=self.rsi_period)
+        ma_fast = calculate_moving_average(data, period=self.fast_ma)
+        ma_slow = calculate_moving_average(data, period=self.slow_ma)
+        z_score = calculate_z_score(data) # <--- CALCULO FUNDAMENTAL PARA RANGING
+
+        # Análisis de correlación (Alts)
+        correlation_score = 0
+        if extra_market_data:
+            for symbol, prices in extra_market_data.items():
+                if len(prices) > 5 and prices[-1] > prices[-5]:
+                    correlation_score += 1
+
+        return {
+            "rsi": rsi,
+            "ma_fast": ma_fast,
+            "ma_slow": ma_slow,
+            "z_score": z_score,
+            "price": data[-1],
+            "correlation": correlation_score,
+            "momentum": TrendAnalyzer.identify_momentum(data)
+        }
+
+    def should_execute(self, analysis, climate):
+        if not analysis or climate in ["CHAOS", "WARMING_UP"]:
+            return "HOLD", 0.0
+
+        rsi = analysis['rsi']
+        z_score = analysis['z_score']
+
+        # COMPRA: Z-Score bajo (sobreventa local). Ahora permitimos RANGING_DEAD si somos un Scalper
+        if climate in ["RANGING", "TRENDING_UP", "RANGING_DEAD"]:
+            if z_score < -2.0 and rsi < 40:
+                return "BUY", 0.85
+
+        # VENTA: Salir rápido si la tendencia se invierte
+        if climate == "TRENDING_DOWN":
+            return "SELL", 0.95 
+
+        # Venta de emergencia por sobrecompra extrema (aplica a Rangos y tendencias alcistas)
+        if rsi > 80: 
+            return "SELL", 0.80
+
+        return "HOLD", 0.0
+
+-e 
+----------------------------------------
+FILE: ./core/strategies/base_strategy.py
+----------------------------------------
+from abc import ABC, abstractmethod
+
+class BaseStrategy(ABC):
+    """Clase abstracta para que todas las estrategias tengan la misma estructura."""
+    
+    @abstractmethod
+    def analyze(self, buffer):
+        """Debe retornar un diccionario con el contexto para la IA."""
+        pass
+
+    @abstractmethod
+    def should_execute(self, signal, confidence):
+        """Define los filtros de seguridad (ej. confianza > 0.7)."""
+        pass
+
+-e 
+----------------------------------------
+FILE: ./core/strategies/multitimeframe_strategy.py
+----------------------------------------
+from .base_strategy import BaseStrategy
+from core.analyzers.trend_analyzer import TrendAnalyzer
+
+class MultiTimeframeStrategy(BaseStrategy):
+    def __init__(self):
+        self.analyzer = TrendAnalyzer()
+
+    def analyze(self, buffer, extra_market_data=None):
+        """
+        extra_market_data: Diccionario con { 'ETHUSDT': [precios], 'SOLUSDT': [precios] }
+        """
+        data = list(buffer)
+        if len(data) < 60: return None
+
+        micro = data[-20:]
+        avg_inicio = sum(micro[:5]) / 5
+        avg_final = sum(micro[-5:]) / 5
+
+        # --- Lógica de Sentimiento de Mercado ---
+        market_sentiment = "NEUTRAL"
+        if extra_market_data:
+            up_votes = 0
+            for symbol, prices in extra_market_data.items():
+                if len(prices) > 5 and prices[-1] > prices[0]:
+                    up_votes += 1
+            
+            if up_votes >= 2: market_sentiment = "BULLISH_CORRELATED"
+            elif up_votes == 0: market_sentiment = "BEARISH_CORRELATED"
+
+        analysis = {
+            "micro": {
+                "trend": "UP" if avg_final > avg_inicio else "DOWN",
+                "volatility": self.analyzer.get_volatility(micro),
+                "change_pct": ((avg_final - avg_inicio) / avg_inicio) * 100
+            },
+            "market_context": market_sentiment, # Nuevo campo para la IA
+            "macro": {
+                "momentum": self.analyzer.identify_momentum(data),
+                "change_pct": ((data[-1] - data[0]) / data[0]) * 100
+            }
+        }
+        return analysis
+
+    def should_execute(self, signal, confidence):
+        # Convertimos a float por seguridad si viene de la IA
+        try:
+            conf = float(confidence)
+        except:
+            conf = 0.0
+
+        if signal == "BUY":
+            # Bajamos de 0.75 a 0.65 para ser más activos en Scalping
+            umbral = 0.65 
+            result = conf >= umbral
+            if not result and conf > 0:
+                print(f"⚠️ COMPRA DESCARTADA: Confianza {conf:.2f} < {umbral}")
+            return result
+
+        if signal == "SELL":
+            # Bajamos de 0.60 a 0.55
+            umbral = 0.55
+            result = conf >= umbral
+            if not result and conf > 0:
+                print(f"⚠️ VENTA DESCARTADA: Confianza {conf:.2f} < {umbral}")
+            return result
+        
+        return False
+-e 
+----------------------------------------
+FILE: ./core/trading_logic.py
+----------------------------------------
+import logging
+from database.schema import Trades, BotState, sessionmaker, engine as db_engine
+from datetime import datetime
+
+class TradingLogic:
+    def __init__(self, initial_test_balance=None, is_scalper=False, mode="DAY"):
+        self.logger = logging.getLogger("NEON.TRADING")
+        self.test_mode = initial_test_balance is not None
+        
+        # Guardamos el balance inicial para el cálculo de límites de pérdida
+        self.initial_balance = initial_test_balance if self.test_mode else 0.0
+        self.balance = self.initial_balance
+        
+        self.inventory = 0.0
+        self.active_position = None
+        self.daily_pnl = 0.0
+        self.mode = mode 
+        self.max_loss_limit = 0.05 # 5% límite máximo de pérdida diaria
+
+        # Configuración de stops según el modo
+        if is_scalper:
+            self.stop_loss_pct, self.trailing_pct = 0.003, 0.002
+        else:
+            self.stop_loss_pct, self.trailing_pct = 0.01, 0.005 
+
+    def get_total_equity(self, current_price):
+        """Cálculo infalible del patrimonio total (Efectivo + Crypto)"""
+        valor_crypto = self.inventory * current_price
+        return self.balance + valor_crypto
+
+    def can_trade(self):
+        """Verifica si no hemos quemado el límite diario tolerado"""
+        # Evita bloquear el bot si el balance inicial no se ha cargado de la DB aún
+        if self.initial_balance == 0.0:
+            return True
+        limit = self.initial_balance * self.max_loss_limit
+        if self.daily_pnl <= -limit:
+            return False
+        return True
+
+    def abrir_posicion_test(self, precio, clima="RANGING"):
+        if not self.can_trade() or self.balance < 10.0: 
+            return
+
+        # 1. Porcentaje de inversión dinámico según el clima del mercado
+        pct_inversion = 0.60 if clima == "TRENDING_UP" else 0.30
+        monto_a_invertir = self.balance * pct_inversion
+
+        if monto_a_invertir < 11.0:
+            monto_a_invertir = self.balance if self.balance >= 11.0 else 0.0
+        if monto_a_invertir <= 0: 
+            return
+
+        # 2. SL y TP dinámicos
+        current_sl_pct = self.stop_loss_pct if clima != "TRENDING_UP" else self.stop_loss_pct * 1.5
+        take_profit_pct = current_sl_pct * 2.0 
+
+        self.inventory = monto_a_invertir / precio
+        self.active_position = {
+            'entry': precio,
+            'sl': precio * (1 - current_sl_pct),
+            'tp': precio * (1 + take_profit_pct), 
+            'clima_origen': clima
+        }
+        self.balance -= monto_a_invertir
+        
+        # Registrar la compra en la base de datos para persistencia de sesión
+        Session = sessionmaker(bind=db_engine)
+        with Session() as session:
+            nuevo_trade = Trades(symbol="BTCUSDT", side="BUY", amount=self.inventory, price=precio)
+            session.add(nuevo_trade)
+            session.commit()
+
+        self.logger.info(f"🛒 COMPRA EN DB: {self.inventory:.6f} BTC | SL: {current_sl_pct*100:.2f}% | TP: {take_profit_pct*100:.2f}%")
+
+    def ejecutar_simulacion(self, precio_actual):
+        if not self.active_position: 
+            return
+        pos = self.active_position
+
+        # A. Verificar Take Profit (TP)
+        if precio_actual >= pos.get('tp', float('inf')):
+            self.cerrar_posicion_test(precio_actual, "TAKE_PROFIT")
+            return
+
+        # B. Trailing Stop Loss
+        if precio_actual > pos['entry']:
+            nuevo_sl_potencial = precio_actual * (1 - self.trailing_pct)
+            if nuevo_sl_potencial > pos['sl']:
+                pos['sl'] = nuevo_sl_potencial
+
+        # C. Verificar Stop Loss (SL)
+        if precio_actual <= pos['sl']:
+            self.cerrar_posicion_test(precio_actual, "STOP_LOSS/TRAILING")
+
+    def cerrar_posicion_test(self, precio, motivo="EXIT"):
+        if not self.active_position:
+            return
+
+        monto_venta = self.inventory * precio
+        monto_inicial = self.inventory * self.active_position['entry']
+        pnl_operacion = monto_venta - monto_inicial
+
+        self.balance += monto_venta
+        self.daily_pnl += pnl_operacion
+        
+        # Registrar la venta en la base de datos para cerrar el ciclo
+        Session = sessionmaker(bind=db_engine)
+        with Session() as session:
+            nueva_venta = Trades(symbol="BTCUSDT", side="SELL", amount=self.inventory, price=precio)
+            session.add(nueva_venta)
+            session.commit()
+
+        self.inventory = 0.0
+        self.active_position = None
+
+        self.logger.info(f"✅ VENTA EN DB ({motivo}): ${precio:,.2f} | PnL: {pnl_operacion:+.2f}")
+        print(f">>> RESULTADO OPERACIÓN: ${pnl_operacion:+.2f} ({motivo}) | PnL Diario: {self.daily_pnl:.2f}")
+
+    def sincronizar_estado(self, precio_actual):
+        """Recupera el estado exacto de la DB para heredar balances y posiciones entre ejecuciones"""
+        Session = sessionmaker(bind=db_engine)
+
+        with Session() as session:
+            # 1. Recuperar balance general e historial de pérdidas diarias del BotState
+            state = session.query(BotState).order_by(BotState.id.desc()).first()
+            if state:
+                self.balance = state.total_balance
+                # Si es la primera ejecución simulada, establecemos el balance inicial recuperado
+                if self.initial_balance == 0.0:
+                    self.initial_balance = state.total_balance
+                self.daily_pnl = state.daily_pnl
+                self.logger.info(f"💰 Balance recuperado de Neon: ${self.balance:.2f} | PnL Hoy: ${self.daily_pnl:.2f}")
+            else:
+                self.logger.info("🆕 No se encontró un estado previo en BotState. Usando valores por defecto.")
+
+            # 2. Recomponer la posición si la última operación fue una compra sin cerrar
+            last_trade = session.query(Trades).order_by(Trades.id.desc()).first()
+
+            if last_trade and last_trade.side == "BUY":
+                self.logger.info(f"🔄 RECOBRANDO POSICIÓN ACTIVA: Compra previa detectada a ${last_trade.price:,.2f}")
+                
+                self.inventory = last_trade.amount
+                sl = last_trade.price * (1 - self.stop_loss_pct)
+                tp = last_trade.price * (1 + (self.stop_loss_pct * 2.0))
+                
+                self.active_position = {
+                    'entry': last_trade.price,
+                    'sl': sl,
+                    'tp': tp
+                }
+                print(f"📡 Estado sincronizado. Posición restaurada: {self.inventory:.6f} BTC | SL: ${sl:,.2f}")
+            else:
+                self.logger.info("🆕 No existen posiciones colgadas en Trades. Operando balance limpio.")
+
+-e 
+----------------------------------------
+FILE: ./core/analyzers/trend_analyzer.py
+----------------------------------------
+import numpy as np
+from core.math_engine import calculate_linear_regression
+
+class TrendAnalyzer:
+    @staticmethod
+    def get_market_climate(prices, is_scalper=False):
+        if len(prices) < 100: return "WARMING_UP"
+
+        # Calculamos la desviación estándar como % del precio (volatilidad relativa)
+        volatilidad = (np.std(prices[-20:]) / np.mean(prices[-20:])) * 100
+
+        # Ajuste dinámico de umbral: El Scalper tolera micro-volatilidad de segundos
+        umbral_minimo = 0.01 if is_scalper else 0.05
+
+        if volatilidad < umbral_minimo:
+            return "RANGING_DEAD"
+
+        slope, r2 = calculate_linear_regression(prices[-100:])
+
+        if r2 > 0.70: 
+            return "TRENDING_UP" if slope > 0 else "TRENDING_DOWN"
+
+        return "RANGING"
+
+    @staticmethod
+    def identify_momentum(prices):
+        """Calcula el momentum simple basado en las últimas velas."""
+        if len(prices) < 5:
+            return 0.0
+        # Cambio porcentual entre el precio actual y hace 5 velas
+        momentum = ((prices[-1] - prices[-5]) / prices[-5]) * 100
+        return momentum
+
+-e 
+----------------------------------------
+FILE: ./api/binance_client.py
+----------------------------------------
+import asyncio
+import logging
+import websockets
+import ujson
+import httpx
+
+class BinanceClient:
+    def __init__(self):
+        self.symbols = ["btcusdt", "ethusdt", "solusdt"]
+        self.rest_url = 'https://api.binance.com/api/v3/klines'
+        # Stream combinado en tiempo real de Binance (WSS)
+        streams = "/".join([f"{s}@ticker" for s in self.symbols])
+        self.ws_url = f"wss://stream.binance.com:9443/stream?streams={streams}"
+        self.logger = logging.getLogger("NEON.API_BINANCE")
+
+    async def get_historical_data(self, symbol="BTCUSDT", limit=100):
+        """Descarga directa y limpia de las velas históricas por HTTP REST (Local)."""
+        self.logger.info(f"📥 Descargando historial local para {symbol}...")
+        params = {"symbol": symbol, "interval": "1m", "limit": limit}
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.get(self.rest_url, params=params)
+                if response.status_code == 200:
+                    data = response.json()
+                    return [float(candle[4]) for candle in data]
+                else:
+                    self.logger.error(f"⚠️ Error HTTP al bajar historial: {response.status_code}")
+                    return []
+        except Exception as e:
+            self.logger.error(f"❌ Error en historial: {e}")
+            return []
+
+    async def connect(self):
+        """
+        Generador asíncrono WebSocket nativo y ultra-resistente a desconexiones.
+        Implementa Backoff Exponencial y detección de caídas por latencia.
+        """
+        retries = 0
+        base_delay = 2  # Segundos iniciales de espera tras una caída
+        max_delay = 30  # Techo máximo de espera para reintentos
+
+        while True:
+            try:
+                self.logger.info(f"🔌 Conectando a los streams en tiempo real de Binance...")
+                
+                # Configuramos ping_interval y ping_timeout para detectar cortes de red rápido en el celular
+                async with websockets.connect(
+                    self.ws_url, 
+                    ping_interval=20, 
+                    ping_timeout=10
+                ) as ws:
+                    self.logger.info(f"⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: {self.symbols}")
+                    retries = 0 # Reseteamos el contador de fallos al conectar con éxito
+                    
+                    while True:
+                        raw_msg = await ws.recv()
+                        msg = ujson.loads(raw_msg)
+                        
+                        data = msg.get('data', {})
+                        if data:
+                            # Inyectamos de forma nativa la llave que tu Engine espera
+                            data['s_name'] = data['s']
+                            yield data
+
+            except (websockets.ConnectionClosed, Exception) as e:
+                retries += 1
+                delay = min(base_delay ** retries, max_delay)
+                self.logger.warning(
+                    f"🔌 [OFFLINE] Conexión perdida ({e}). "
+                    f"Reintentando en {delay}s... (Intento {retries})"
+                )
+                await asyncio.sleep(delay)
+
+-e 
+----------------------------------------
+FILE: ./api/groq_client.py
+----------------------------------------
+import aiohttp
+import ujson
+
+class GroqClient:
+    def __init__(self, api_key):
+        self.url = 'https://api.groq.com/openai/v1/chat/completions'
+        self.api_key = api_key
+
+    async def get_decision(self, prompt, model="llama-3.1-8b-instant"): # Modelo cambiado por defecto
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": "Eres un experto trader de alta frecuencia. Responde solo JSON."},
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.1,
+            "response_format": {"type": "json_object"}
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.post(self.url, headers=headers, json=payload) as resp:
+                data = await resp.json()
+                if "choices" not in data:
+                    # Si hay error de Rate Limit, lo lanzamos para que engine lo maneje
+                    if "error" in data:
+                        raise Exception(f"GROQ_ERROR: {data['error'].get('code', 'unknown')}")
+                return data
+
+-e 
+----------------------------------------
+FILE: ./database/schema.py
+----------------------------------------
+from sqlalchemy import create_engine, Column, Integer, Float, String, DateTime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from datetime import datetime
+import os
+
+# Importamos la configuración para leer la URL
+try:
+    from config import Config
+except ModuleNotFoundError:
+    import sys
+    import os
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+    from config import Config
+
+cfg = Config()
+
+# Lógica de conexión híbrida
+db_uri = cfg.database_url
+
+if db_uri and db_uri.startswith("postgres"):
+    # Ajuste para compatibilidad con SQLAlchemy y Neon (SSL requerido)
+    if "sslmode" not in db_uri:
+        connector = "&" if "?" in db_uri else "?"
+        db_uri += f"{connector}sslmode=require"
+    
+    # SQLAlchemy a veces requiere 'postgresql://' en lugar de 'postgres://'
+    db_uri = db_uri.replace("postgres://", "postgresql://")
+    engine = create_engine(db_uri, pool_pre_ping=True)
+else:
+    # Fallback a local si no hay URL de nube o estás offline
+    engine = create_engine('sqlite:///database.db')
+
+Base = declarative_base()
+
+class MarketData(Base):
+    __tablename__ = 'market_data'
+    id = Column(Integer, primary_key=True)
+    timestamp = Column(DateTime, default=datetime.now)
+    open = Column(Float)
+    high = Column(Float)
+    low = Column(Float)
+    close = Column(Float)
+    volume = Column(Float)
+
+class Trades(Base):
+    __tablename__ = 'trades'
+    id = Column(Integer, primary_key=True)
+    timestamp = Column(DateTime, default=datetime.now)
+    symbol = Column(String)
+    side = Column(String)
+    amount = Column(Float)
+    price = Column(Float)
+
+class AIAudit(Base):
+    __tablename__ = 'ai_audit'
+    id = Column(Integer, primary_key=True)
+    timestamp = Column(DateTime, default=datetime.now)
+    decision = Column(String)
+    confidence = Column(Float)
+
+class BotState(Base):
+    __tablename__ = 'bot_state'
+    id = Column(Integer, primary_key=True)
+    last_update = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    total_balance = Column(Float)
+    daily_pnl = Column(Float)
+    current_mode = Column(String)
+    is_active = Column(Integer)
+
+# Crear tablas si no existen (en local o en la nube)
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+
+-e 
+----------------------------------------
+FILE: ./tui/app.py
+----------------------------------------
+from textual.app import App, ComposeResult
+from textual.widgets import Header, Footer, RichLog, Static
+from textual.containers import Container, Vertical
+
+class NeonHeader(Static):
+    """Encabezado Cyberpunk."""
+    def on_mount(self) -> None:
+        self.update(" [bold #00ff00]⚡ NEON ARBITER v1.0[/bold #00ff00] | [cyan]Shadow_Grimorio Edition[/cyan] ")
+
+class NeonApp(App):
+    """Interfaz TUI mejorada."""
+    CSS = """
+    Screen {
+        background: #050505;
+    }
+    .header {
+        color: #00ff00;
+        background: #111;
+        height: 3;
+        content-align: center middle;
+        border-bottom: double #00ff00;
+        margin-bottom: 1;
+    }
+    RichLog {
+        border: solid #333;
+        background: #000;
+        color: #eee;
+        padding: 1;
+    }
+    """
+
+    BINDINGS = [("q", "quit", "Salir"), ("c", "clear", "Limpiar Logs")]
+
+    def compose(self) -> ComposeResult:
+        yield NeonHeader(classes="header")
+        yield Vertical(
+            RichLog(highlight=True, markup=True, id="main_log"),
+            classes="container"
+        )
+        yield Footer()
+
+    def on_mount(self) -> None:
+        log = self.query_one(RichLog)
+        log.write("[bold green]SISTEMA INICIADO...[/bold green]")
+        log.write("[blue]Conectando con Oráculo Spica...[/blue]")
+
+    def action_clear(self) -> None:
+        self.query_one(RichLog).clear()
+
+if __name__ == '__main__':
+    app = NeonApp()
+    app.run()
+
+-e 
+----------------------------------------
+FILE: ./main.py
+----------------------------------------
+import sys
+import os
+import argparse
+import logging
+from core.engine import Engine
+from tui.app import NeonApp as App
+from datetime import datetime
+
+# --- CONFIGURACIÓN DE LOGS DINÁMICOS ---
+if not os.path.exists('logs'):
+    os.makedirs('logs')
+
+# Nombre del archivo con fecha y hora: logs/2026-05-15_14-30.txt
+log_filename = f"logs/{datetime.now().strftime('%Y-%m-%d_%H-%M')}.txt"
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(name)s] %(message)s',
+    datefmt='%H:%M:%S',
+    handlers=[
+        logging.FileHandler(log_filename), # Escribe en el archivo txt
+        logging.StreamHandler()            # Mantiene la salida en terminal (Termux)
+    ]
+)
+logger = logging.getLogger("NEON_MAIN")
+
+def main():
+    parser = argparse.ArgumentParser(description="NEON ARBITER")
+    parser.add_argument('comando', choices=['bot_on', 'bot_off', 'tui'])
+    parser.add_argument('--test', type=float)
+    parser.add_argument('--scalper', action='store_true')
+    parser.add_argument('--duration', type=int, help="Duración de la sesión en minutos")
+    
+    args, _ = parser.parse_known_args() 
+
+    # Luego, en la ejecución del bot:
+    if args.comando == 'bot_on':
+        import asyncio
+        bot = Engine(test_balance=args.test, is_scalper=args.scalper)
+        
+        try:
+            # Pasamos la duración al motor
+            asyncio.run(bot.run_bot(duration_mins=args.duration))
+        except KeyboardInterrupt:
+            logger.info("🛑 Bot detenido por el usuario.")
+
+        except Exception as e:
+            logger.error(f"❌ Error fatal al ejecutar el bot: {e}")
+
+    elif args.comando == 'bot_off':
+        print("Buscando proceso activo para detener...")
+        os.system("pkill -f 'python main.py bot_on'")
+        
+    elif args.comando == 'tui':
+        App().run()
+
+if __name__ == '__main__':
+    main()
+
+-e 
+----------------------------------------
+FILE: ./.config.py
+----------------------------------------
+import os
+
+class Config:
+    def __init__(self):
+        self.binance_api_key = os.environ.get('BINANCE_API_KEY')
+        self.binance_api_secret = os.environ.get('BINANCE_API_SECRET')
+        self.groq_api_key = os.environ.get('GROQ_API_KEY')
+        self.groq_api_secret = os.environ.get('GROQ_API_SECRET')
+-e 
+----------------------------------------
+FILE: ./config.py
+----------------------------------------
+import os
+import logging
+from dotenv import load_dotenv
+
+class Config:
+    def __init__(self):
+        load_dotenv()
+        self.logger = logging.getLogger("NEON.CONFIG")
+
+        self.binance_api_key = os.environ.get('BINANCE_API_KEY')
+        self.binance_api_secret = os.environ.get('BINANCE_API_SECRET')
+        self.groq_api_key = os.environ.get('GROQ_API_KEY')
+        
+        # URL de Neon.tech (se toma del .env)
+        self.database_url = os.environ.get('DATABASE_URL')
+
+        # --- PARÁMETROS DE CONTROL ---
+        self.max_daily_loss = 2.0  
+        self.ai_history_limit = 5  
+        # -----------------------------
+# En config.py
+        if not self.binance_api_key:
+            self.logger.warning("⚠️ Binance API Key faltante.")
+        elif not self.groq_api_key:
+            self.logger.warning("⚠️ Groq API Key faltante (IA desactivada).")
+
+        else:
+            self.logger.info("🔑 API Keys cargadas correctamente.")
+        self.api_endpoints = {
+            'binance': self.binance_api_key, # Mapeo de control interno
+            'groq': 'https://api.groq.com/openai/v1/chat/completions'
+        }
+
+-e 
+----------------------------------------
+FILE: ./purge_db.py
+----------------------------------------
+from database.schema import engine, Base
+import logging
+
+def reset_database():
+    print("⚠️  Iniciando purga de base de datos...")
+    # Esto borra TODO en la base de datos conectada (Local o Neon.tech)
+    Base.metadata.drop_all(engine)
+    print("✅ Tablas eliminadas.")
+    
+    # Esto las vuelve a crear con la estructura nueva
+    Base.metadata.create_all(engine)
+    print("✨ Base de datos reconstruida con éxito.")
+
+if __name__ == "__main__":
+    confirm = input("¿Estás seguro de que quieres borrar TODOS los datos? (s/n): ")
+    if confirm.lower() == 's':
+        reset_database()
+    else:
+        print("Operación cancelada.")
+
+-e 
+----------------------------------------
+FILE: ./cron/__init__.py
+----------------------------------------
+-e 
+----------------------------------------
+FILE: ./cron/discord_notifier.py
+----------------------------------------
+import os
+import httpx
+import asyncio
+import logging
+from datetime import datetime  # <-- Asegúrate de que esté así
+from cron.news_fetcher import NewsFetcher
+
+logger = logging.getLogger("NEON.DISCORD_NOTIFIER")
+
+class NeonMacroNotifier:
+    def __init__(self):
+        self.groq_key = os.getenv("GROQ_API_KEY")
+        self.webhook_url = os.getenv("DISCORD_WEBHOOK_URL")
+        # Usamos Llama 3 70B para un razonamiento analítico superior
+        self.groq_url = "https://api.groq.com/openai/v1/chat/completions"
+
+    async def analyze_and_notify(self):
+        if not self.groq_key or not self.webhook_url:
+            logger.error("❌ Faltan llaves en el .env (GROQ o DISCORD).")
+            return
+
+        # 1. Extraemos las noticias del fetcher
+        fetcher = NewsFetcher()
+        news_data = await fetcher.fetch_crypto_news(limit=10)
+        
+        if not news_data:
+            logger.warning("⚠️ No hay noticias frescas para analizar hoy.")
+            return
+
+        # Formateamos las noticias en un string compacto para el prompt
+        formatted_news = ""
+        for i, n in enumerate(news_data, 1):
+            formatted_news += f"[{i}] {n['title']}\nSummary: {n['summary']}\n\n"
+
+        # 2. Construimos el reporte con Groq
+        logger.info("🧠 Solicitando análisis predictivo de fundamentales a Groq...")
+        
+        system_prompt = (
+            "Eres el Oráculo Spica integrado en el bot de trading Neon Arbiter. Tu trabajo es analizar las noticias proporcionadas "
+            "y determinar el Sentimiento Macro del mercado (ALCISTA, BAJISTA o LATERAL/PELIGROSO) y recomendar la mejor ventana "
+            "horaria para ejecutar operaciones de Scalping basado estrictamente en el Horario de Venezuela (VET, UTC-4).\n\n"
+            "Toma en cuenta las siguientes ventanas de liquidez global adaptadas a Venezuela (VET):\n"
+            "- 08:30 AM a 11:30 AM VET (Apertura NY - Alta Liquidez)\n"
+            "- 02:00 PM a 04:00 PM VET (Cierre NY - Movimientos Agresivos)\n"
+            "- 09:00 PM a 11:30 PM VET (Apertura Asia - Volatilidad sutil)\n\n"
+            "Tu respuesta DEBE ser concisa, en español, con un tono Cyberpunk limpio y estructurada exactamente en este formato para Discord:\n"
+            "**🟢 SENTIMIENTO MACRO:** [ALCISTA/BAJISTA/LATERAL]\n"
+            "**📊 FACTOR CRÍTICO:** [Breve explicación de 2 líneas de la noticia más importante]\n"
+            "**⚡ VENTANA RECOMENDADA (VET):** [Especifica cuál de las 3 ventanas es la óptima para hoy y por qué]\n"
+            "**🛡️ NIVEL DE RIESGO:** [BAJO/MEDIO/ALTO]"
+        )
+
+        headers = {
+            "Authorization": f"Bearer {self.groq_key}",
+            "Content-Type": "application/json"
+        }
+        
+        payload = {
+            "model": "llama-3.3-70b-versatile",  #  Modelo ultra-rápido y activo en Groq
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Aquí están las noticias del día:\n\n{formatted_news}"}
+            ],
+            "temperature": 0.3
+        }
+
+        try:
+            async with httpx.AsyncClient() as client:
+                # Petición a Groq
+                response = await client.post(self.groq_url, json=payload, headers=headers, timeout=20.0)
+                if response.status_code != 200:
+                    logger.error(f"❌ Groq API Error: {response.text}")
+                    return
+                
+                ai_analysis = response.json()["choices"][0]["message"]["content"]
+
+                # 3. Despachamos el Embed estético a Discord vía Webhook
+                logger.info("🎨 Despachando reporte estético al canal de Discord...")
+                
+                discord_payload = {
+                    "username": "NEON ARBITER ORACLE",
+                    "avatar_url": "https://as2.ftcdn.net/jpg/04/37/18/97/1000_F_437189719_LtT2C9rI7daocWkV08C5FLlV3zQXGIjS.jpg",  # Un avatar genérico cyberpunk
+                    "embeds": [{
+                        "title": "🛰️ REPORTE DIARIO DE CONCIENCIA FUNDAMENTAL",
+                        "description": f"Análisis macro generado el {datetime.now().strftime('%d/%m/%Y')} para la gestión de riesgo del Scalper.",
+                        "color": 5763719,  # Color verde neón en formato decimal INT
+                        "fields": [
+                            {
+                                "name": "🧠 DICTAMEN DEL ORÁCULO SPICA",
+                                "value": ai_analysis,
+                                "inline": False
+                            }
+                        ],
+                        "footer": {
+                            "text": "Neon Arbiter v1.0 • Sistema de Libertad Financiera",
+                            "icon_url": "https://as2.ftcdn.net/jpg/04/37/18/97/1000_F_437189719_LtT2C9rI7daocWkV08C5FLlV3zQXGIjS.jpg"
+                        }
+                    }]
+                }
+
+                discord_res = await client.post(self.webhook_url, json=discord_payload, timeout=10.0)
+                if discord_res.status_code in [200, 204]:
+                    logger.info("✅ ¡Reporte macro enviado a Discord con éxito!")
+                else:
+                    logger.error(f"❌ Error al enviar a Discord: {discord_res.status_code} - {discord_res.text}")
+
+        except Exception as e:
+            logger.error(f"❌ Error crítico en el notifier: {e}")
+
+if __name__ == "__main__":
+    # Intentamos cargar dotenv de forma segura (solo para entorno local en Termux)
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+        logging.info("📝 Entorno local detectado: Variables cargadas desde el archivo .env")
+    except ImportError:
+        logging.info("🛰️ Entorno de producción/Nube detectado: Usando variables de entorno nativas")
+
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(message)s')
+    notifier = NeonMacroNotifier()
+    asyncio.run(notifier.analyze_and_notify())
+
+-e 
+----------------------------------------
+FILE: ./cron/news_fetcher.py
+----------------------------------------
+import os
+import httpx
+import logging
+from datetime import datetime
+
+logger = logging.getLogger("NEON.NEWS_FETCHER")
+
+class NewsFetcher:
+    def __init__(self):
+        # Intentamos leer del .env local o de las variables de entorno de GitHub Actions
+        self.api_key = os.getenv("CRYPTOCOMPARE_API_KEY")
+        self.url = "https://min-api.cryptocompare.com/data/v2/news/?lang=EN"
+        
+    async def fetch_crypto_news(self, limit=15):
+        """Rastrilla las últimas noticias y filtra las que impactan a BTC y el mercado general."""
+        if not self.api_key:
+            logger.error("❌ No se encontró la API Key de CryptoCompare en las variables de entorno.")
+            return []
+
+        headers = {"Authorization": f"Apikey {self.api_key}"}
+        
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.get(self.url, headers=headers, timeout=10.0)
+                
+                if response.status_code != 200:
+                    logger.error(f"❌ Error al consultar CryptoCompare: HTTP {response.status_code}")
+                    return []
+                
+                data = response.json()
+                raw_news = data.get("Data", [])
+                
+                import time # <-- Ponlo al inicio del método si prefieres
+
+                current_time = int(time.time())
+                seconds_in_24h = 86400
+                
+                sanitized_news = []
+                for article in raw_news: # Quitamos el límite inicial para evaluar más volumen
+                    title = article.get("title", "")
+                    body = article.get("body", "")
+                    categories = article.get("categories", "")
+                    source = article.get("source_info", {}).get("name", "Unknown")
+                    published_on = int(article.get("published_on", 0))
+
+                    # ⏳ FILTRO CRÍTICO: ¿Está dentro de las últimas 24 horas?
+                    if (current_time - published_on) > seconds_in_24h:
+                        continue # Si es más vieja, la ignora y salta a la siguiente
+                    
+                    keywords = ["btc", "bitcoin", "binance", "fed", "sec", "regulation", "crypto", "market"]
+                    text_to_check = (title + body + categories).lower()
+                    
+                    if any(kw in text_to_check for kw in keywords):
+                        sanitized_news.append({
+                            "title": title,
+                            "summary": body[:200] + "...",
+                            "source": source,
+                            "categories": categories
+                        })
+                        
+                    # Si ya juntamos suficientes noticias frescas, paramos para no saturar el prompt
+                    if len(sanitized_news) >= limit:
+                        break
+
+                logger.info(f"📥 Rastrilladas con éxito {len(sanitized_news)} noticias de impacto macro.")
+                return sanitized_news
+
+        except Exception as e:
+            logger.error(f"❌ Error crítico en el news_fetcher: {e}")
+            return []
+
+# Pequeño bloque de prueba local para Termux
+if __name__ == "__main__":
+    import asyncio
+    from dotenv import load_dotenv
+    load_dotenv()
+    
+    logging.basicConfig(level=logging.INFO)
+    fetcher = NewsFetcher()
+    
+    # Ejecutamos la prueba
+    result = asyncio.run(fetcher.fetch_crypto_news(limit=5))
+    print(f"\n--- Resultado de la prueba ({len(result)} artículos) ---")
+    for i, item in enumerate(result, 1):
+        print(f"[{i}] {item['title']} (Fuente: {item['source']})")
+

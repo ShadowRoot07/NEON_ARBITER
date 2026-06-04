@@ -42,19 +42,28 @@ class AlgorithmicScalper(BaseStrategy):
 
         rsi = analysis['rsi']
         z_score = analysis['z_score']
+        ma_fast = analysis['ma_fast']
+        ma_slow = analysis['ma_slow']
+        current_price = analysis['price']
 
-        # COMPRA: Z-Score bajo (sobreventa local). Ahora permitimos RANGING_DEAD si somos un Scalper
+        # FILTRO DE EMERGENCIA: Si las medias móviles están cruzadas a la baja
+        # o el precio actual está muy por debajo de la media rápida, hay caída libre.
+        is_falling_knife = ma_fast is not None and ma_slow is not None and (current_price < ma_fast or ma_fast < ma_slow)
+
+        # COMPRA: Z-Score bajo (sobreventa local).
+        # Protegemos al bot bloqueando compras en RANGING_DEAD si los spreads no valen la pena,
+        # y prohibimos comprar si el filtro detecta caída libre (falling knife).
         if climate in ["RANGING", "TRENDING_UP", "RANGING_DEAD"]:
-            if z_score < -2.0 and rsi < 40:
-                return "BUY", 0.85
+            if not is_falling_knife:  # <--- ¡EL BLINDAJE CRÍTICO!
+                if z_score < -2.0 and rsi < 40:
+                    return "BUY", 0.85
 
-        # VENTA: Salir rápido si la tendencia se invierte
-        if climate == "TRENDING_DOWN":
-            return "SELL", 0.95 
+        # VENTA: Salir rápido si la tendencia se invierte o si quedamos atrapados en caída libre
+        if climate == "TRENDING_DOWN" or is_falling_knife:
+            return "SELL", 0.95
 
         # Venta de emergencia por sobrecompra extrema (aplica a Rangos y tendencias alcistas)
-        if rsi > 80: 
+        if rsi > 80:
             return "SELL", 0.80
 
         return "HOLD", 0.0
-

@@ -1,0 +1,4 @@
+22:39:55 [NEON.CONFIG] 🔑 API Keys cargadas correctamente.
+22:39:55 [NEON.ENGINE] 🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)
+22:39:55 [NEON.ENGINE] 📡 Descargando últimas 100 velas para análisis de clima...
+22:39:55 [NEON_MAIN] ❌ Error fatal al ejecutar el bot: 'BinanceClient' object has no attribute 'get_historical_data'

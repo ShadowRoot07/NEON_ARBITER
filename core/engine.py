@@ -15,9 +15,15 @@ class Engine:
         self.logger = logging.getLogger("NEON.ENGINE")
         self.is_scalper = is_scalper
         self.cfg = Config()
-        self.client = BinanceClient()
+
+         # 1. Definimos los símbolos que va a escuchar el WebSocket de la API
+        self.symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
+
+        # 2. Se los inyectamos al constructor del cliente
+        self.client = BinanceClient(symbols=self.symbols)
+
         self.trading = TradingLogic(initial_test_balance=test_balance, is_scalper=is_scalper)
-        self.strategy = AlgorithmicScalper() # Cambiado a Scalper Algorítmico
+        self.strategy = AlgorithmicScalper()
         self.market_buffers = { "ETHUSDT": deque(maxlen=100), "SOLUSDT": deque(maxlen=100) }
 
         self.tick_count = 0
@@ -30,18 +36,45 @@ class Engine:
         self.logger.info(f"🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)")
 
         # 1. Warm-up: Sincronización e Historial para el Clima
-        self.logger.info("📡 Descargando últimas 100 velas para análisis de clima...")
+        # 1. Warm-up: Sincronización e Historial para el Clima
+        # 1. Warm-up: Sincronización e Historial para el Clima (Blindado contra fallos)
+
+        self.logger.info("📡 Intentando descargar últimas 100 velas para análisis de clima...")
         start_time = datetime.now()
+        historico = None
 
-        historico = await self.client.get_historical_data(symbol="BTCUSDT", limit=100)
-        for p in historico:
-            self.price_buffer.append(p)
+        try:
+            # Intentamos llamar al método del historial
+            if hasattr(self.client, 'get_historical_data'):
+                historico = await self.client.get_historical_data(symbol="BTCUSDT", limit=100)
 
-        if historico:
-            self.trading.sincronizar_estado(historico[-1])
+                if historico:
+                    for p in historico:
+                        self.price_buffer.append(p)
+                    self.trading.sincronizar_estado(historico[-1])
+                    self.logger.info("✅ Historial cargado y sincronizado con éxito.")
+
+            else:
+                self.logger.warning("⚠️ 'get_historical_data' no está implementado en BinanceClient. Saltando warm-up...")
+        except Exception as e:
+                # Si el generador asíncrono cae por desconexión en el cel, se atrapa aquí
+                self.logger.warning(f"⚠️ Stream interrumpido en bucle principal: {e}. Sincronizando de nuevo...")
+                await asyncio.sleep(3)
+
+                # RE-SINCRONIZACIÓN DE EMERGENCIA SEGURA
+                try:
+                    if hasattr(self.client, 'get_historical_data'):
+                        historico = await self.client.get_historical_data(symbol="BTCUSDT", limit=50)
+                        if historico:
+                            self.price_buffer.clear()
+                            for p in historico:
+                                self.price_buffer.append(p)
+                            self.trading.sincronizar_estado(historico[-1])
+                except Exception as ex_db:
+                    self.logger.warning(f"⚠️ No se pudo re-sincronizar el historial en caliente: {ex_db}")
 
         from core.analyzers.trend_analyzer import TrendAnalyzer
-        
+
         while True:
             try:
                 # Iteramos directo sobre el generador asíncrono
@@ -76,15 +109,18 @@ class Engine:
                                 # PASAMOS EL FLAG: is_scalper influye en la sensibilidad
                                 clima = TrendAnalyzer.get_market_climate(precios_lista, is_scalper=self.is_scalper)
 
-                                # FILTRO PROTECTOR: Solo congela el bot con 'continue' en MODO NORMAL (no scalper)
+                                # FILTRO PROTECTOR ACTUALIZADO:
                                 if clima == "RANGING_DEAD":
                                     if not self.is_scalper:
                                         if self.tick_count % 100 == 0:
                                             self.logger.info("💤 Mercado lateral sin volatilidad. Esperando...")
                                         continue
                                     else:
+                                        # Si es Scalper y está DEAD, significa que el spread es menor a las comisiones.
+                                        # Congelamos operaciones para evitar pérdidas por fricción de corretaje.
                                         if self.tick_count % 100 == 0:
-                                            self.logger.info("🎯 [SCALPER] Operando micro-rango lateral con Z-Score.")
+                                            self.logger.info("🎯 [SCALPER] Rango demasiado estrecho (Comisiones > Spread). Esperando volatilidad...")
+                                        continue
 
                                 analysis = self.strategy.analyze(self.price_buffer, self.market_buffers)
 
