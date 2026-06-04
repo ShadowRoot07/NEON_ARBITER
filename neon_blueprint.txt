@@ -1,134 +1,8 @@
-=== ESTRUCTURA DEL PROYECTO ===
-.:
-DailyLogs
-LICENSE
-README.md
-__pycache__
-api
-config.py
-core
-cron
-data
-database
-debug_bypass.log
-logs
-main.py
-migrations
-neon_blueprint.txt
-purge_db.py
-requirements.txt
-tui
 
-./DailyLogs:
-02-06-2026.txt
-26-05-2026.txt
-27-05-2026.txt
-28-05-2026.txt
-29-05-2026.txt
-30-05-2026.txt
-31-05-2026.txt
+========================================
+📄 ARCHIVO: ./core/math_engine.py
+========================================
 
-./__pycache__:
-config.cpython-313.pyc
-
-./api:
-__pycache__
-binance_client.py
-groq_client.py
-
-./api/__pycache__:
-binance_client.cpython-313.pyc
-groq_client.cpython-313.pyc
-
-./core:
-__pycache__
-analyzers
-auditoria_logic.py
-business_logic.py
-engine.py
-math_engine.py
-monitoreo_logic.py
-strategies
-trading_logic.py
-
-./core/__pycache__:
-engine.cpython-313.pyc
-math_engine.cpython-313.pyc
-trading_logic.cpython-313.pyc
-
-./core/analyzers:
-__pycache__
-trend_analyzer.py
-
-./core/analyzers/__pycache__:
-trend_analyzer.cpython-313.pyc
-
-./core/strategies:
-__pycache__
-algorithmic_scalper.py
-base_strategy.py
-multitimeframe_strategy.py
-
-./core/strategies/__pycache__:
-algorithmic_scalper.cpython-313.pyc
-base_strategy.cpython-313.pyc
-multitimeframe_strategy.cpython-313.pyc
-
-./cron:
-__init__.py
-__pycache__
-discord_notifier.py
-news_fetcher.py
-
-./cron/__pycache__:
-__init__.cpython-313.pyc
-discord_notifier.cpython-313.pyc
-news_fetcher.cpython-313.pyc
-
-./data:
-shadow_vault.json
-
-./database:
-__pycache__
-schema.py
-
-./database/__pycache__:
-schema.cpython-313.pyc
-
-./logs:
-2026-05-15_18-29.txt
-2026-05-15_18-39.txt
-2026-05-17_00-45.txt
-2026-05-17_00-49.txt
-2026-05-17_16-08.txt
-2026-05-23_20-20.txt
-2026-05-23_20-23.txt
-2026-05-23_20-36.txt
-2026-05-23_20-50.txt
-2026-05-23_20-57.txt
-2026-05-23_21-41.txt
-2026-05-27_01-03.txt
-2026-05-27_18-57.txt
-2026-05-28_18-39.txt
-2026-05-29_19-09.txt
-2026-05-30_18-53.txt
-2026-05-31_21-25.txt
-2026-06-02_23-45.txt
-
-./migrations:
-
-./tui:
-__pycache__
-app.py
-
-./tui/__pycache__:
-app.cpython-313.pyc
-
-=== CÓDIGO FUENTE ===
--e 
-----------------------------------------
-FILE: ./core/math_engine.py
-----------------------------------------
 import numpy as np
 
 def calculate_rsi(prices, period=14):
@@ -215,10 +89,11 @@ def calculate_z_score(prices):
     
     return (prices[-1] - mean) / std
 
--e 
-----------------------------------------
-FILE: ./core/auditoria_logic.py
-----------------------------------------
+
+========================================
+📄 ARCHIVO: ./core/auditoria_logic.py
+========================================
+
 import logging
 from datetime import datetime
 
@@ -238,10 +113,11 @@ class AuditoriaLogic:
         self.logger.info("AUDIT: Decisión de IA guardada para análisis.")
         return True
 
--e 
-----------------------------------------
-FILE: ./core/business_logic.py
-----------------------------------------
+
+========================================
+📄 ARCHIVO: ./core/business_logic.py
+========================================
+
 import os
 import logging
 
@@ -266,10 +142,11 @@ class BusinessLogic:
     def tomar_decision_de_trading(self, datos):
         # Lógica para tomar decisiones de trading
         self.logger.info('Tomando decisiones de trading...')
-        return {'decision': 'comprar'}-e 
-----------------------------------------
-FILE: ./core/engine.py
-----------------------------------------
+        return {'decision': 'comprar'}
+========================================
+📄 ARCHIVO: ./core/engine.py
+========================================
+
 import asyncio
 import logging
 import ujson
@@ -287,9 +164,15 @@ class Engine:
         self.logger = logging.getLogger("NEON.ENGINE")
         self.is_scalper = is_scalper
         self.cfg = Config()
-        self.client = BinanceClient()
+
+         # 1. Definimos los símbolos que va a escuchar el WebSocket de la API
+        self.symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
+
+        # 2. Se los inyectamos al constructor del cliente
+        self.client = BinanceClient(symbols=self.symbols)
+
         self.trading = TradingLogic(initial_test_balance=test_balance, is_scalper=is_scalper)
-        self.strategy = AlgorithmicScalper() # Cambiado a Scalper Algorítmico
+        self.strategy = AlgorithmicScalper()
         self.market_buffers = { "ETHUSDT": deque(maxlen=100), "SOLUSDT": deque(maxlen=100) }
 
         self.tick_count = 0
@@ -302,18 +185,45 @@ class Engine:
         self.logger.info(f"🚀 NEON ARBITER: MODO ALGORÍTMICO PURO (SIN IA-LATENCY)")
 
         # 1. Warm-up: Sincronización e Historial para el Clima
-        self.logger.info("📡 Descargando últimas 100 velas para análisis de clima...")
+        # 1. Warm-up: Sincronización e Historial para el Clima
+        # 1. Warm-up: Sincronización e Historial para el Clima (Blindado contra fallos)
+
+        self.logger.info("📡 Intentando descargar últimas 100 velas para análisis de clima...")
         start_time = datetime.now()
+        historico = None
 
-        historico = await self.client.get_historical_data(symbol="BTCUSDT", limit=100)
-        for p in historico:
-            self.price_buffer.append(p)
+        try:
+            # Intentamos llamar al método del historial
+            if hasattr(self.client, 'get_historical_data'):
+                historico = await self.client.get_historical_data(symbol="BTCUSDT", limit=100)
 
-        if historico:
-            self.trading.sincronizar_estado(historico[-1])
+                if historico:
+                    for p in historico:
+                        self.price_buffer.append(p)
+                    self.trading.sincronizar_estado(historico[-1])
+                    self.logger.info("✅ Historial cargado y sincronizado con éxito.")
+
+            else:
+                self.logger.warning("⚠️ 'get_historical_data' no está implementado en BinanceClient. Saltando warm-up...")
+        except Exception as e:
+                # Si el generador asíncrono cae por desconexión en el cel, se atrapa aquí
+                self.logger.warning(f"⚠️ Stream interrumpido en bucle principal: {e}. Sincronizando de nuevo...")
+                await asyncio.sleep(3)
+
+                # RE-SINCRONIZACIÓN DE EMERGENCIA SEGURA
+                try:
+                    if hasattr(self.client, 'get_historical_data'):
+                        historico = await self.client.get_historical_data(symbol="BTCUSDT", limit=50)
+                        if historico:
+                            self.price_buffer.clear()
+                            for p in historico:
+                                self.price_buffer.append(p)
+                            self.trading.sincronizar_estado(historico[-1])
+                except Exception as ex_db:
+                    self.logger.warning(f"⚠️ No se pudo re-sincronizar el historial en caliente: {ex_db}")
 
         from core.analyzers.trend_analyzer import TrendAnalyzer
-        
+
         while True:
             try:
                 # Iteramos directo sobre el generador asíncrono
@@ -348,15 +258,18 @@ class Engine:
                                 # PASAMOS EL FLAG: is_scalper influye en la sensibilidad
                                 clima = TrendAnalyzer.get_market_climate(precios_lista, is_scalper=self.is_scalper)
 
-                                # FILTRO PROTECTOR: Solo congela el bot con 'continue' en MODO NORMAL (no scalper)
+                                # FILTRO PROTECTOR ACTUALIZADO:
                                 if clima == "RANGING_DEAD":
                                     if not self.is_scalper:
                                         if self.tick_count % 100 == 0:
                                             self.logger.info("💤 Mercado lateral sin volatilidad. Esperando...")
                                         continue
                                     else:
+                                        # Si es Scalper y está DEAD, significa que el spread es menor a las comisiones.
+                                        # Congelamos operaciones para evitar pérdidas por fricción de corretaje.
                                         if self.tick_count % 100 == 0:
-                                            self.logger.info("🎯 [SCALPER] Operando micro-rango lateral con Z-Score.")
+                                            self.logger.info("🎯 [SCALPER] Rango demasiado estrecho (Comisiones > Spread). Esperando volatilidad...")
+                                        continue
 
                                 analysis = self.strategy.analyze(self.price_buffer, self.market_buffers)
 
@@ -414,10 +327,11 @@ class Engine:
             )
             session.add(new_state)
             session.commit()
--e 
-----------------------------------------
-FILE: ./core/monitoreo_logic.py
-----------------------------------------
+
+========================================
+📄 ARCHIVO: ./core/monitoreo_logic.py
+========================================
+
 import os
 import logging
 
@@ -438,10 +352,11 @@ class MonitoreoLogic:
         # Lógica para tomar decisiones en tiempo real
         self.logger.info('Tomando decisiones en tiempo real...')
         return {'decision': 'comprar'}
--e 
-----------------------------------------
-FILE: ./core/strategies/algorithmic_scalper.py
-----------------------------------------
+
+========================================
+📄 ARCHIVO: ./core/strategies/algorithmic_scalper.py
+========================================
+
 from .base_strategy import BaseStrategy
 from core.math_engine import calculate_rsi, calculate_moving_average, calculate_z_score # Añadido Z-Score
 from core.analyzers.trend_analyzer import TrendAnalyzer
@@ -486,45 +401,55 @@ class AlgorithmicScalper(BaseStrategy):
 
         rsi = analysis['rsi']
         z_score = analysis['z_score']
+        ma_fast = analysis['ma_fast']
+        ma_slow = analysis['ma_slow']
+        current_price = analysis['price']
 
-        # COMPRA: Z-Score bajo (sobreventa local). Ahora permitimos RANGING_DEAD si somos un Scalper
+        # FILTRO DE EMERGENCIA: Si las medias móviles están cruzadas a la baja
+        # o el precio actual está muy por debajo de la media rápida, hay caída libre.
+        is_falling_knife = ma_fast is not None and ma_slow is not None and (current_price < ma_fast or ma_fast < ma_slow)
+
+        # COMPRA: Z-Score bajo (sobreventa local).
+        # Protegemos al bot bloqueando compras en RANGING_DEAD si los spreads no valen la pena,
+        # y prohibimos comprar si el filtro detecta caída libre (falling knife).
         if climate in ["RANGING", "TRENDING_UP", "RANGING_DEAD"]:
-            if z_score < -2.0 and rsi < 40:
-                return "BUY", 0.85
+            if not is_falling_knife:  # <--- ¡EL BLINDAJE CRÍTICO!
+                if z_score < -2.0 and rsi < 40:
+                    return "BUY", 0.85
 
-        # VENTA: Salir rápido si la tendencia se invierte
-        if climate == "TRENDING_DOWN":
-            return "SELL", 0.95 
+        # VENTA: Salir rápido si la tendencia se invierte o si quedamos atrapados en caída libre
+        if climate == "TRENDING_DOWN" or is_falling_knife:
+            return "SELL", 0.95
 
         # Venta de emergencia por sobrecompra extrema (aplica a Rangos y tendencias alcistas)
-        if rsi > 80: 
+        if rsi > 80:
             return "SELL", 0.80
 
         return "HOLD", 0.0
 
--e 
-----------------------------------------
-FILE: ./core/strategies/base_strategy.py
-----------------------------------------
+========================================
+📄 ARCHIVO: ./core/strategies/base_strategy.py
+========================================
+
 from abc import ABC, abstractmethod
 
 class BaseStrategy(ABC):
     """Clase abstracta para que todas las estrategias tengan la misma estructura."""
-    
+
     @abstractmethod
-    def analyze(self, buffer):
-        """Debe retornar un diccionario con el contexto para la IA."""
+    def analyze(self, buffer, *args, **kwargs):
+        """Retorna el análisis técnico/contextual del mercado."""
         pass
 
     @abstractmethod
-    def should_execute(self, signal, confidence):
-        """Define los filtros de seguridad (ej. confianza > 0.7)."""
+    def should_execute(self, analysis, climate, *args, **kwargs):
+        """Define las reglas y filtros de seguridad para disparar órdenes."""
         pass
 
--e 
-----------------------------------------
-FILE: ./core/strategies/multitimeframe_strategy.py
-----------------------------------------
+========================================
+📄 ARCHIVO: ./core/strategies/multitimeframe_strategy.py
+========================================
+
 from .base_strategy import BaseStrategy
 from core.analyzers.trend_analyzer import TrendAnalyzer
 
@@ -592,10 +517,11 @@ class MultiTimeframeStrategy(BaseStrategy):
             return result
         
         return False
--e 
-----------------------------------------
-FILE: ./core/trading_logic.py
-----------------------------------------
+
+========================================
+📄 ARCHIVO: ./core/trading_logic.py
+========================================
+
 import logging
 from database.schema import Trades, BotState, sessionmaker, engine as db_engine
 from datetime import datetime
@@ -751,10 +677,11 @@ class TradingLogic:
             else:
                 self.logger.info("🆕 No existen posiciones colgadas en Trades. Operando balance limpio.")
 
--e 
-----------------------------------------
-FILE: ./core/analyzers/trend_analyzer.py
-----------------------------------------
+
+========================================
+📄 ARCHIVO: ./core/analyzers/trend_analyzer.py
+========================================
+
 import numpy as np
 from core.math_engine import calculate_linear_regression
 
@@ -763,18 +690,34 @@ class TrendAnalyzer:
     def get_market_climate(prices, is_scalper=False):
         if len(prices) < 100: return "WARMING_UP"
 
-        # Calculamos la desviación estándar como % del precio (volatilidad relativa)
-        volatilidad = (np.std(prices[-20:]) / np.mean(prices[-20:])) * 100
+        # 1. Calculamos la volatilidad relativa de los últimos 20 períodos
+        current_mean = np.mean(prices[-20:])
+        volatilidad = (np.std(prices[-20:]) / current_mean) * 100
 
-        # Ajuste dinámico de umbral: El Scalper tolera micro-volatilidad de segundos
-        umbral_minimo = 0.01 if is_scalper else 0.05
+        # 2. UMBRAL ADAPTATIVO (Capa de protección financiera)
+        # La comisión estándar de Binance es 0.1% por movimiento (0.2% por viaje completo Buy+Sell).
+        # Si eres scalper, necesitas que la volatilidad supere al menos ese costo operativo + un margen.
+        if is_scalper:
+            # Filtro dinámico: Exigimos una oscilación mínima viable (ej. 0.035% o 0.04%)
+            # Esto evita operar micro-ruido donde solo gana Binance en comisiones.
+            umbral_minimo = 0.035 
+        else:
+            umbral_minimo = 0.08
 
+        # 3. Clasificación de Clima con filtro de seguridad
         if volatilidad < umbral_minimo:
             return "RANGING_DEAD"
 
+        # 4. Análisis de Tendencia Estricto (Regresión Lineal)
         slope, r2 = calculate_linear_regression(prices[-100:])
 
-        if r2 > 0.70: 
+        if r2 > 0.70:
+            # Un filtro extra: Si la pendiente es casi horizontal, sigue siendo rango
+            # Multiplicamos por 100 para evaluar el cambio porcentual de la pendiente
+            slope_percent = (slope / current_mean) * 100
+            if abs(slope_percent) < 0.005:
+                return "RANGING"
+                
             return "TRENDING_UP" if slope > 0 else "TRENDING_DOWN"
 
         return "RANGING"
@@ -788,87 +731,97 @@ class TrendAnalyzer:
         momentum = ((prices[-1] - prices[-5]) / prices[-5]) * 100
         return momentum
 
--e 
-----------------------------------------
-FILE: ./api/binance_client.py
-----------------------------------------
+========================================
+📄 ARCHIVO: ./api/binance_client.py
+========================================
+
 import asyncio
 import logging
-import websockets
+import random
 import ujson
-import httpx
+import websockets
+
+logger = logging.getLogger("NEON.API_BINANCE")
 
 class BinanceClient:
-    def __init__(self):
-        self.symbols = ["btcusdt", "ethusdt", "solusdt"]
-        self.rest_url = 'https://api.binance.com/api/v3/klines'
-        # Stream combinado en tiempo real de Binance (WSS)
-        streams = "/".join([f"{s}@ticker" for s in self.symbols])
-        self.ws_url = f"wss://stream.binance.com:9443/stream?streams={streams}"
-        self.logger = logging.getLogger("NEON.API_BINANCE")
+    def __init__(self, symbols):
+        self.symbols = symbols
+        # Usamos el endpoint combinado para múltiples streams
+        self.uri = "wss://stream.binance.com:9443/ws"
+        self.is_running = True
 
     async def get_historical_data(self, symbol="BTCUSDT", limit=100):
-        """Descarga directa y limpia de las velas históricas por HTTP REST (Local)."""
-        self.logger.info(f"📥 Descargando historial local para {symbol}...")
-        params = {"symbol": symbol, "interval": "1m", "limit": limit}
-        try:
-            async with httpx.AsyncClient() as client:
-                response = await client.get(self.rest_url, params=params)
-                if response.status_code == 200:
-                    data = response.json()
-                    return [float(candle[4]) for candle in data]
-                else:
-                    self.logger.error(f"⚠️ Error HTTP al bajar historial: {response.status_code}")
-                    return []
-        except Exception as e:
-            self.logger.error(f"❌ Error en historial: {e}")
-            return []
+        """
+        Retorna datos históricos base para el calentamiento del buffer.
+        Para evitar bloqueos por SSL de la API REST de Binance en Termux durante el testeo,
+        generamos un set inicial estable que permita arrancar el motor técnico al tiro.
+        """
+        logger.info(f"📥 Generando historial base de calentamiento para {symbol} ({limit} velas)...")
+        # Base matemática simulada simulando el precio real de mercado en rango
+        precio_base = 67000.0 if symbol == "BTCUSDT" else (3000.0 if symbol == "ETHUSDT" else 140.0)
+        historial = []
+        for _ in range(limit):
+            precio_base += random.uniform(-15.0, 15.0)
+            historial.append(precio_base)
+        return historial
 
     async def connect(self):
         """
-        Generador asíncrono WebSocket nativo y ultra-resistente a desconexiones.
-        Implementa Backoff Exponencial y detección de caídas por latencia.
+        Generador asíncrono que actúa como stream de datos en vivo.
+        Reemplaza la llamada en engine.py: 'async for data in self.client.connect()'
         """
-        retries = 0
-        base_delay = 2  # Segundos iniciales de espera tras una caída
-        max_delay = 30  # Techo máximo de espera para reintentos
+        attempt = 0
+        max_backoff = 60
 
-        while True:
+        # Formatear streams para los símbolos asignados
+        # Ejemplo: btcusdt@kline_1m / ethusdt@kline_1m
+        streams = "/".join([f"{s.lower()}@kline_1m" for s in self.symbols])
+        full_url = f"{self.uri}/{streams}"
+
+        while self.is_running:
             try:
-                self.logger.info(f"🔌 Conectando a los streams en tiempo real de Binance...")
+                logger.info("🔌 Conectando a los streams en tiempo real de Binance...")
                 
-                # Configuramos ping_interval y ping_timeout para detectar cortes de red rápido en el celular
                 async with websockets.connect(
-                    self.ws_url, 
-                    ping_interval=20, 
+                    full_url,
+                    ping_interval=20,
                     ping_timeout=10
-                ) as ws:
-                    self.logger.info(f"⚡ [ONLINE] ¡Conectado con éxito! Monitoreando: {self.symbols}")
-                    retries = 0 # Reseteamos el contador de fallos al conectar con éxito
-                    
-                    while True:
-                        raw_msg = await ws.recv()
-                        msg = ujson.loads(raw_msg)
+                ) as websocket:
+
+                    attempt = 0
+                    logger.info("⚡ [ONLINE] ¡Conectado al WebSocket con éxito!")
+
+                    async for message in websocket:
+                        if not self.is_running:
+                            break
                         
-                        data = msg.get('data', {})
-                        if data:
-                            # Inyectamos de forma nativa la llave que tu Engine espera
-                            data['s_name'] = data['s']
-                            yield data
+                        # Desempaquetamos el mensaje JSON del stream de Binance
+                        raw_data = ujson.loads(message)
+                        
+                        # Mapeamos al formato plano que tu engine.py consume: data['s_name'] y data['c']
+                        if 's' in raw_data and 'k' in raw_data:
+                            processed_payload = {
+                                's_name': raw_data['s'],          # Símbolo (ej: BTCUSDT)
+                                'c': raw_data['k']['c']           # Precio de cierre actual de la vela
+                            }
+                            yield processed_payload
 
-            except (websockets.ConnectionClosed, Exception) as e:
-                retries += 1
-                delay = min(base_delay ** retries, max_delay)
-                self.logger.warning(
+            except (websockets.exceptions.ConnectionClosed, Exception) as e:
+                attempt += 1
+                backoff = min(2 ** attempt, max_backoff) + random.uniform(0, 1)
+                logger.warning(
                     f"🔌 [OFFLINE] Conexión perdida ({e}). "
-                    f"Reintentando en {delay}s... (Intento {retries})"
+                    f"Reintentando en {backoff:.2f}s... (Intento {attempt})"
                 )
-                await asyncio.sleep(delay)
+                await asyncio.sleep(backoff)
 
--e 
-----------------------------------------
-FILE: ./api/groq_client.py
-----------------------------------------
+    def stop(self):
+        self.is_running = False
+
+========================================
+📄 ARCHIVO: ./api/groq_client.py
+========================================
+
 import aiohttp
 import ujson
 
@@ -900,10 +853,11 @@ class GroqClient:
                         raise Exception(f"GROQ_ERROR: {data['error'].get('code', 'unknown')}")
                 return data
 
--e 
-----------------------------------------
-FILE: ./database/schema.py
-----------------------------------------
+
+========================================
+📄 ARCHIVO: ./database/schema.py
+========================================
+
 from sqlalchemy import create_engine, Column, Integer, Float, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -922,21 +876,29 @@ except ModuleNotFoundError:
 cfg = Config()
 
 # Lógica de conexión híbrida
+# Lógica de conexión híbrida
 db_uri = cfg.database_url
 
 if db_uri and db_uri.startswith("postgres"):
-    # Ajuste para compatibilidad con SQLAlchemy y Neon (SSL requerido)
+    # 1. Asegurar el prefijo correcto que exige SQLAlchemy >= 1.4
+    if db_uri.startswith("postgres://"):
+        db_uri = db_uri.replace("postgres://", "postgresql://", 1)
+
+    # 2. Limpieza de SSL: Si no tiene los parámetros en el string, los inyectamos limpiamente
     if "sslmode" not in db_uri:
         connector = "&" if "?" in db_uri else "?"
         db_uri += f"{connector}sslmode=require"
-    
-    # SQLAlchemy a veces requiere 'postgresql://' en lugar de 'postgres://'
-    db_uri = db_uri.replace("postgres://", "postgresql://")
-    engine = create_engine(db_uri, pool_pre_ping=True)
+
+    # 3. Crear el engine usando la variable corregida 'db_uri'
+    engine = create_engine(
+        db_uri,
+        connect_args={"sslmode": "require"},
+        pool_pre_ping=True  # Descarta conexiones muertas del pooler automáticamente
+    )
+
 else:
     # Fallback a local si no hay URL de nube o estás offline
     engine = create_engine('sqlite:///database.db')
-
 Base = declarative_base()
 
 class MarketData(Base):
@@ -978,10 +940,11 @@ class BotState(Base):
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
--e 
-----------------------------------------
-FILE: ./tui/app.py
-----------------------------------------
+
+========================================
+📄 ARCHIVO: ./tui/app.py
+========================================
+
 from textual.app import App, ComposeResult
 from textual.widgets import Header, Footer, RichLog, Static
 from textual.containers import Container, Vertical
@@ -1035,10 +998,11 @@ if __name__ == '__main__':
     app = NeonApp()
     app.run()
 
--e 
-----------------------------------------
-FILE: ./main.py
-----------------------------------------
+
+========================================
+📄 ARCHIVO: ./main.py
+========================================
+
 import sys
 import os
 import argparse
@@ -1098,22 +1062,11 @@ def main():
 if __name__ == '__main__':
     main()
 
--e 
-----------------------------------------
-FILE: ./.config.py
-----------------------------------------
-import os
 
-class Config:
-    def __init__(self):
-        self.binance_api_key = os.environ.get('BINANCE_API_KEY')
-        self.binance_api_secret = os.environ.get('BINANCE_API_SECRET')
-        self.groq_api_key = os.environ.get('GROQ_API_KEY')
-        self.groq_api_secret = os.environ.get('GROQ_API_SECRET')
--e 
-----------------------------------------
-FILE: ./config.py
-----------------------------------------
+========================================
+📄 ARCHIVO: ./config.py
+========================================
+
 import os
 import logging
 from dotenv import load_dotenv
@@ -1147,10 +1100,19 @@ class Config:
             'groq': 'https://api.groq.com/openai/v1/chat/completions'
         }
 
--e 
-----------------------------------------
-FILE: ./purge_db.py
-----------------------------------------
+
+========================================
+📄 ARCHIVO: ./README.md
+========================================
+
+# NEON ARBITER
+
+Bot de trading super poderoso... Se desarrollo el bot interno de deiscord...
+
+========================================
+📄 ARCHIVO: ./purge_db.py
+========================================
+
 from database.schema import engine, Base
 import logging
 
@@ -1171,14 +1133,16 @@ if __name__ == "__main__":
     else:
         print("Operación cancelada.")
 
--e 
-----------------------------------------
-FILE: ./cron/__init__.py
-----------------------------------------
--e 
-----------------------------------------
-FILE: ./cron/discord_notifier.py
-----------------------------------------
+
+========================================
+📄 ARCHIVO: ./cron/__init__.py
+========================================
+
+
+========================================
+📄 ARCHIVO: ./cron/discord_notifier.py
+========================================
+
 import os
 import httpx
 import asyncio
@@ -1301,10 +1265,11 @@ if __name__ == "__main__":
     notifier = NeonMacroNotifier()
     asyncio.run(notifier.analyze_and_notify())
 
--e 
-----------------------------------------
-FILE: ./cron/news_fetcher.py
-----------------------------------------
+
+========================================
+📄 ARCHIVO: ./cron/news_fetcher.py
+========================================
+
 import os
 import httpx
 import logging
